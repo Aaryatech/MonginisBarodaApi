@@ -18,44 +18,54 @@ import com.ats.webapi.model.Info;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
 
-
 @RestController
 public class ImageUploadController {
 
-	/*private static String SUGGESTION_URL = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/SUGGESTION/";
-	private static String COMPLAINT_URL = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/COMPLAINT/";
-	private static String NOTIFICATION_URL = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/NOTIFICATION/";
-	private static String FEEDBACK_URL = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/FEEDBACK/";
-	
-	public static final String M_SP_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/MSPCAKE/";
-	public static final String MSG_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/MSG/";
-	public static final String FR_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/FR/";
-	public static final String ITEM_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/ITEM/";
-	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/RAWMAT/";
-	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/GATEENTRY/";
-	private static final String SP_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/SPCAKE/";
-	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
-*/
-  private static String SUGGESTION_URL = "/opt/apache-tomcat-8.5.37/webapps/uploads/SUGGESTION/";
-	private static String COMPLAINT_URL = "/opt/apache-tomcat-8.5.37/webapps/uploads/COMPLAINT/";
-	private static String NOTIFICATION_URL = "/opt/apache-tomcat-8.5.37/webapps/uploads/NOTIFICATION/";
-	private static String FEEDBACK_URL = "/opt/apache-tomcat-8.5.37/webapps/uploads/FEEDBACK/";
-	
-	public static final String M_SP_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/MSPCAKE/";
-	public static final String MSG_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/MSG/";
-	public static final String FR_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/FR/";
-	public static final String ITEM_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/ITEM/";
-	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/RAWMAT/";
-	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/GATEENTRY/";
-	private static final String SP_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/SPCAKE/";
-	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploads/CUSTCHOICEPHOTOCAKE/";
+	/*
+	 * private static String SUGGESTION_URL =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/SUGGESTION/"; private static
+	 * String COMPLAINT_URL =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/COMPLAINT/"; private static
+	 * String NOTIFICATION_URL =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/NOTIFICATION/"; private static
+	 * String FEEDBACK_URL =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/FEEDBACK/";
+	 * 
+	 * public static final String M_SP_CAKE_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/MSPCAKE/"; public static final
+	 * String MSG_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/MSG/";
+	 * public static final String FR_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/FR/"; public static final
+	 * String ITEM_FOLDER = "/opt/apache-tomcat-8.5.37/webapps/uploadspune/ITEM/";
+	 * public static final String RAW_MAT_IMAGE_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/RAWMAT/"; public static final
+	 * String GATE_ENTRY_IMAGE_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/GATEENTRY/"; private static
+	 * final String SP_CAKE_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/SPCAKE/"; private static final
+	 * String CUST_CHOICE_PHOTO_CAKE_FOLDER =
+	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
+	 */
+	public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+	private static String SUGGESTION_URL = fileUploadPath + "SUGGESTION/";
+	private static String COMPLAINT_URL = fileUploadPath + "COMPLAINT/";
+	private static String NOTIFICATION_URL = fileUploadPath + "NOTIFICATION/";
+	private static String FEEDBACK_URL = fileUploadPath + "FEEDBACK/";
 
-	//private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
-	
-	
+	public static final String M_SP_CAKE_FOLDER = fileUploadPath + "MSPCAKE/";
+	public static final String MSG_FOLDER = fileUploadPath + "MSG/";
+	public static final String FR_FOLDER = fileUploadPath + "FR/";
+	public static final String ITEM_FOLDER = fileUploadPath + "ITEM/";
+	public static final String RAW_MAT_IMAGE_FOLDER = fileUploadPath + "RAWMAT/";
+	public static final String GATE_ENTRY_IMAGE_FOLDER = fileUploadPath + "GATEENTRY/";
+	private static final String SP_CAKE_FOLDER = fileUploadPath + "SPCAKE/";
+	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = fileUploadPath + "CUSTCHOICEPHOTOCAKE/";
+
+	// private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 
 	@RequestMapping(value = { "/photoUpload" }, method = RequestMethod.POST)
-	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile uploadfile , @RequestParam("imageName") String imageName,@RequestParam("type") String type) {
+	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile uploadfile,
+			@RequestParam("imageName") String imageName, @RequestParam("type") String type) {
 
 		Info info = new Info();
 
@@ -63,7 +73,7 @@ public class ImageUploadController {
 
 		try {
 
-			saveUploadedFiles(Arrays.asList(uploadfile) ,  imageName,type);
+			saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);
 
 			info.setError(false);
 			info.setMessage("File uploaded successfully");
@@ -79,75 +89,53 @@ public class ImageUploadController {
 	}
 
 	// save file
-	private void saveUploadedFiles(List<MultipartFile> files,  String imageName,String type) throws IOException {
+	private void saveUploadedFiles(List<MultipartFile> files, String imageName, String type) throws IOException {
 
 		try {
-		for (MultipartFile file : files) {
-			Path path=null;
-			if (file.isEmpty()) {
-				continue; 
+			for (MultipartFile file : files) {
+				Path path = null;
+				if (file.isEmpty()) {
+					continue;
+				}
+				if (type.equalsIgnoreCase("s")) {
+					path = Paths.get(SUGGESTION_URL + imageName);
+				} else if (type.equalsIgnoreCase("c")) {
+					path = Paths.get(COMPLAINT_URL + imageName);
+
+				} else if (type.equalsIgnoreCase("nf")) {
+					path = Paths.get(NOTIFICATION_URL + imageName);
+
+				} else if (type.equalsIgnoreCase("f")) {
+					path = Paths.get(FEEDBACK_URL + imageName);
+
+				} else if (type.equalsIgnoreCase("sp")) {
+					path = Paths.get(M_SP_CAKE_FOLDER + imageName);
+
+				} else if (type.equalsIgnoreCase("fr")) {
+					path = Paths.get(FR_FOLDER + imageName);
+
+				} else if (type.equalsIgnoreCase("item")) {
+					path = Paths.get(ITEM_FOLDER + imageName);
+
+				} else if (type.equalsIgnoreCase("ph1")) {
+					path = Paths.get(SP_CAKE_FOLDER + imageName);
+
+				} else if (type.equalsIgnoreCase("ph2")) {
+					path = Paths.get(CUST_CHOICE_PHOTO_CAKE_FOLDER + imageName);
+
+				} else if (type.equalsIgnoreCase("msg")) {
+					path = Paths.get(MSG_FOLDER + imageName);
+
+				}
+				byte[] bytes = file.getBytes();
+
+				Files.write(path, bytes);
+
 			}
-            if(type.equalsIgnoreCase("s"))
-            {
-			 path =Paths.get(SUGGESTION_URL + imageName);
-            }
-            else if(type.equalsIgnoreCase("c"))
-            {
-   			 path =Paths.get(COMPLAINT_URL + imageName);
 
-            }
-            else if(type.equalsIgnoreCase("nf"))	
-            {
-   			 path =Paths.get(NOTIFICATION_URL + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("f"))
-            {
-   			 path =Paths.get(FEEDBACK_URL + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("sp"))
-            {
-   			 path =Paths.get(M_SP_CAKE_FOLDER + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("fr"))
-            {
-   			 path =Paths.get(FR_FOLDER + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("item"))
-            {
-   			 path =Paths.get(ITEM_FOLDER + imageName);
-
-            }
-          else if(type.equalsIgnoreCase("ph1"))
-            {
-   			 path =Paths.get(SP_CAKE_FOLDER + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("ph2"))
-            {
-   			 path =Paths.get(CUST_CHOICE_PHOTO_CAKE_FOLDER + imageName);
-
-            }
-            else if(type.equalsIgnoreCase("msg"))
-            {
-   			 path =Paths.get(MSG_FOLDER + imageName);
-
-            }
-			byte[] bytes = file.getBytes();
-			
-			Files.write(path, bytes);
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-	
 	}
-	catch(Exception e)
-	{
-		e.printStackTrace();
-	}
-
-}
 }
