@@ -23,7 +23,7 @@ import com.ats.webapi.repository.GetUserDetailRepo;
 import com.ats.webapi.repository.AccessRight.AssignRoleDetailListRepository;
 import com.ats.webapi.service.AccessRightService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+   
 @RestController
 public class AccessRightApiController {
 
