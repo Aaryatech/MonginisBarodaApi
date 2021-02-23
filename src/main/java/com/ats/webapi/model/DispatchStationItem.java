@@ -33,7 +33,12 @@ public class DispatchStationItem implements Serializable{
 	
 	@Column(name="fr_name")
 	private String frName;
+	
+	private int frRouteId;//23-02-21-Sac
+	private int itemGrp2;//23-02-21-Sac
+	
 
+	
 	public int getId() {
 		return id;
 	}
@@ -90,10 +95,29 @@ public class DispatchStationItem implements Serializable{
 		this.frName = frName;
 	}
 
+	
+	
+	public int getFrRouteId() {
+		return frRouteId;
+	}
+
+	public void setFrRouteId(int frRouteId) {
+		this.frRouteId = frRouteId;
+	}
+
+	public int getItemGrp2() {
+		return itemGrp2;
+	}
+
+	public void setItemGrp2(int itemGrp2) {
+		this.itemGrp2 = itemGrp2;
+	}
+
 	@Override
 	public String toString() {
 		return "DispatchStationItem [id=" + id + ", itemId=" + itemId + ", itemName=" + itemName + ", itemMrp2="
-				+ itemMrp2 + ", orderQty=" + orderQty + ", frId=" + frId + ", frName=" + frName + "]";
+				+ itemMrp2 + ", orderQty=" + orderQty + ", frId=" + frId + ", frName=" + frName + ", frRouteId="
+				+ frRouteId + ", itemGrp2=" + itemGrp2 + "]";
 	}
 	
 }

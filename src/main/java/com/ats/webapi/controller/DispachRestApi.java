@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.AllMenus;
+import com.ats.webapi.model.DispTransferBean;
 import com.ats.webapi.model.DispatchStationItem;
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.FrList;
@@ -515,7 +516,65 @@ public class DispachRestApi {
 		System.out.println("stnList" + stnList.toString());
 		return stnList;
 	}
+//Sachin 23-02-2021
+	@RequestMapping(value = { "/getAbcDepatchReportMin1New" }, method = RequestMethod.POST)
+	@ResponseBody
+	public DispTransferBean getAbcDepatchReportMin1New(@RequestParam("date") String date,
+			@RequestParam("abcType") List<Integer> abcTypeList, @RequestParam("stationNos") List<Integer> stationNos,
+			@RequestParam("routId") int routId, @RequestParam("menuIds") List<Integer> menuIds) {
+System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
+		DispTransferBean dispRes=new DispTransferBean();
+		
+		try {
+			List<Integer> frList = new ArrayList<>();
+			if (routId == 0) {
+				frList = frListRepository.findByAbcTypeMin(abcTypeList);
+			} else {
+				frList = frListRepository.findByAbcTypeMin(abcTypeList, routId);
+			}
 
+			List<Item> items = new ArrayList<Item>();
+			try {
+				items = itemRepository.findByDelStatusOrderByItemGrp2AscItemSortIdAsc(0);
+				dispRes.setItems(items);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			List<DispatchStationItem> reportDataList = dispatchReportRepositoryForItemwiseMin
+					.getItemByFrIdAndDateMin1New(date, frList, menuIds);//Done
+			
+			dispRes.setReportDataList(reportDataList);
+			
+			List<RouteMaster> routeList = new ArrayList<>();
+			try {
+
+				routeList = routeMasterRepository.findByDelStatusAndAbcTypeInOrderByRouteNameAsc(0,abcTypeList);
+				dispRes.setRouteList(routeList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			
+			List<FranchiseForDispatch> frNameList = new ArrayList<>();
+			try {
+
+				frNameList = franchiseForDispatchRepository.getFranchiseForDispatchByFrIdList(frList);
+				dispRes.setFrNameList(frNameList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dispRes;
+		
+	}
+
+	
 	@RequestMapping(value = { "/getFranchiseForDispatchRouteID" }, method = RequestMethod.POST)
 	@ResponseBody
 	public List<FranchiseForDispatch> getFranchiseForDispatchRouteID(@RequestParam("routeId") List<Integer> routeId) {

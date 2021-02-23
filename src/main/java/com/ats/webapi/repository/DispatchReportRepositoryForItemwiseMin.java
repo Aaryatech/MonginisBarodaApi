@@ -16,7 +16,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"        i.item_name,\n" + 
 			"        i.item_mrp2,\n" + 
 			"        m_franchisee.fr_id,\n" + 
-			"        m_franchisee.fr_name,\n" + 
+			"        m_franchisee.fr_name, m_franchisee.fr_route_id,i.item_grp2\n" + 
 			"        coalesce((select\n" + 
 			"            SUM(t_order.order_qty) \n" + 
 			"        from\n" + 
@@ -54,7 +54,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"			        i.item_mrp2, \n" + 
 			"			        m_franchisee.fr_id, \n" + 
 			"			        m_franchisee.fr_name,  \n" + 
-			"			        SUM(t_order.order_qty) AS   order_qty \n" + 
+			"			        SUM(t_order.order_qty) AS   order_qty, m_franchisee.fr_route_id,i.item_grp2 \n" + 
 			"			        from \n" + 
 			"			            t_order,m_item i, \n" + 
 			"			       m_franchisee\n" + 
@@ -76,6 +76,38 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"			        item_sort_id asc \n" + 
 			"			",nativeQuery=true)
 	List<DispatchStationItem> getItemByFrIdAndDateMin1(@Param("stationNos")List<Integer> stationNos,@Param("date") String date,@Param("frList") List<Integer> frList,
+			@Param("menuIds")List<Integer> menuIds);
+	
+	//Sachin 23-02-2021
+	@Query(value="select \n" + 
+			"			        CONCAT(i.id, m_franchisee.fr_id, i.item_mrp2) AS id, \n" + 
+			"			        i.id as item_id, \n" + 
+			"			        i.item_name, \n" + 
+			"			        i.item_mrp2, \n" + 
+			"			        m_franchisee.fr_id, \n" + 
+			"			        m_franchisee.fr_name,  \n" + 
+			"			        SUM(t_order.order_qty) AS   order_qty, m_franchisee.fr_route_id,i.item_grp2 \n" + 
+			"			        from \n" + 
+			"			            t_order,m_item i, \n" + 
+			"			       m_franchisee\n" + 
+			"  \n" + 
+			"			            where \n" + 
+			"			               t_order.delivery_date=:date          \n" + 
+			"			                and  t_order.fr_id=m_franchisee.fr_id \n" + 
+			"			                and t_order.menu_id in (:menuIds)             \n" + 
+			"			                 \n" + 
+			"			            and i.id=t_order.item_id AND\n" + 
+			"			         \n" + 
+			"			          \n" + 
+			"			       i.del_status=0    \n" + 
+			"			      AND m_franchisee.fr_id IN(:frList) \n" + 
+			"                   group by  t_order.item_id,t_order.fr_id"+
+			"			    order by \n" + 
+			"			    m_franchisee.fr_id, \n" + 
+			"			        item_grp2 asc , \n" + 
+			"			        item_sort_id asc \n" + 
+			"			",nativeQuery=true)
+	List<DispatchStationItem> getItemByFrIdAndDateMin1New(@Param("date") String date,@Param("frList") List<Integer> frList,
 			@Param("menuIds")List<Integer> menuIds);
 
 }

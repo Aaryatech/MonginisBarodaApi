@@ -13,5 +13,8 @@ public interface RouteMasterRepository extends JpaRepository<RouteMaster, Intege
 	RouteMaster findByRouteId(int routeId);
 
 	List<RouteMaster> findByDelStatusAndAbcTypeOrderByRouteNameAsc(int i, int abcType);
+	
+	
+	List<RouteMaster> findByDelStatusAndAbcTypeInOrderByRouteNameAsc(int i, List<Integer> abcType);
 
 }
