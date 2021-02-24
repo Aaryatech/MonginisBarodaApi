@@ -53,6 +53,7 @@ import com.ats.webapi.repository.GetBillHeaderRepository;
 import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.ItemDiscConfiguredRepository;
+import com.ats.webapi.repository.ItemListWithDiscRepo;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.ItemResponseRepository;
 import com.ats.webapi.repository.ItemStockRepository;
@@ -421,16 +422,18 @@ public class RestApiController {
 	RouteMasterRepository routeMasterRepository;
 	@Autowired
 	SellBillDetailRepository sellBillDetailRepository;
-	
+
 	@Autowired
 	SellBillHeaderRepository sellBillHeaderRepository;
 
-
 	@Autowired
 	ConfigureFrRepository configureFrRepository;
-	
+
 	@Autowired
 	ItemListForCustomerBillRepo itemListForCustomerBillRepo;
+
+	@Autowired
+	ItemListWithDiscRepo itemListWithDiscRepo;
 
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestParam int userId, @RequestParam String curPass,
@@ -3334,6 +3337,7 @@ public class RestApiController {
 		return frMenusList;
 
 	}
+
 	@RequestMapping(value = { "/frEmpById" }, method = RequestMethod.POST)
 	@ResponseBody
 	public String frEmpById(@RequestParam("empId") int empId, @RequestParam("frId") int frId) {
@@ -3344,7 +3348,7 @@ public class RestApiController {
 		return jsonFr;
 
 	}
-	
+
 	@RequestMapping(value = "/getFrMenus", method = RequestMethod.POST)
 	public @ResponseBody List<ConfigureFranchisee> getFr(@RequestParam int frId) {
 
@@ -3373,14 +3377,17 @@ public class RestApiController {
 
 		List<Orders> orderList = new ArrayList<>();
 
-		System.out.println("input param items= " + items.toString());
-
-		System.out.println("date param = " + date.toString());
+		/*
+		 * System.out.println("input param items= " + items.toString());
+		 * 
+		 * System.out.println("date param = " + date.toString());
+		 */
 
 		try {
 			itemList = getFrItemsService.findFrItems(items);
 			try {
 				orderList = prevItemOrderService.findFrItemOrders(items, frId, date, menuId);
+				List<ItemListWithDisc> itemListwithDisc = itemListWithDiscRepo.findItemListWithDisc(items, frId);
 
 				for (int i = 0; i < itemList.size(); i++) {
 
@@ -3418,13 +3425,28 @@ public class RestApiController {
 							getFrItems.setItemQty(orderList.get(j).getOrderQty());
 							getFrItems.setMenuId(orderList.get(j).getMenuId());
 
+							break;
 						}
 
 					}
-					float discPer = 0.0f;
+					//float discPer = 0.0f;
 					try {// new change of discPer
-						discPer = itemDiscConfiguredRepository.findByIdAndFrId(item.getId(), Integer.parseInt(frId));
-						getFrItems.setDiscPer(discPer);
+						/*
+						 * discPer = itemDiscConfiguredRepository.findByIdAndFrId(item.getId(),
+						 * Integer.parseInt(frId)); getFrItems.setDiscPer(discPer);
+						 */
+
+						for (int j = 0; j < itemListwithDisc.size(); j++) {
+
+							if (String.valueOf(item.getId())
+									.equalsIgnoreCase(String.valueOf(itemListwithDisc.get(j).getId()))) {
+
+								getFrItems.setDiscPer(itemListwithDisc.get(j).getDiscPer());
+								break;
+							}
+
+						}
+
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
@@ -3882,14 +3904,14 @@ public class RestApiController {
 		}
 		return "" + JsonUtil.javaToJson(info);
 	}
-	
+
 	@RequestMapping(value = "/getSpecialCakeSupById")
 	public @ResponseBody SpCakeSupplement getSpCakeSupById(@RequestParam int spId) {
 		SpCakeSupplement spSup = new SpCakeSupplement();
 		try {
 			spSup = specialcakeService.getSpCakeSupById(spId);
 		} catch (Exception e) {
-			System.out.println("error in deleting special cake" + e.getMessage());	
+			System.out.println("error in deleting special cake" + e.getMessage());
 		}
 		return spSup;
 	}
@@ -5324,24 +5346,22 @@ public class RestApiController {
 		return frConfList;
 
 	}
-	
-	
-	
-	@RequestMapping(value = { "/getOpsFrPrevOrders" }, method = RequestMethod.POST)
-	public @ResponseBody List<Orders> getOpsFrPrevOrders(@RequestParam String frId,
-			@RequestParam String menuId,@RequestParam String date,@RequestParam List<Integer> itemList) {
 
-		List<Orders> orderList =null;
-		
+	@RequestMapping(value = { "/getOpsFrPrevOrders" }, method = RequestMethod.POST)
+	public @ResponseBody List<Orders> getOpsFrPrevOrders(@RequestParam String frId, @RequestParam String menuId,
+			@RequestParam String date, @RequestParam List<Integer> itemList) {
+
+		List<Orders> orderList = null;
+
 		orderList = prevItemOrderService.findFrItemOrders(itemList, frId, date, menuId);
-		
+
 		if (orderList == null) {
 			orderList = new ArrayList<>();
 		}
 		return orderList;
 
 	}
-	
+
 	@RequestMapping(value = { "/findAllOnlyCategory" }, method = RequestMethod.GET)
 	public @ResponseBody CategoryList findAllOnlyCategory() {
 		List<Integer> list = new ArrayList<>();
@@ -5402,16 +5422,16 @@ public class RestApiController {
 		return itemResponse;
 
 	}
-	
+
 	@RequestMapping(value = "/getItemsNameByCatIdForPos", method = RequestMethod.POST)
-	public @ResponseBody ItemResponse getItemsNameByCatIdForPos(
-			@RequestParam List<Integer> itemList, @RequestParam int catId) {
+	public @ResponseBody ItemResponse getItemsNameByCatIdForPos(@RequestParam List<Integer> itemList,
+			@RequestParam int catId) {
 
 		ItemResponse itemResponse = new ItemResponse();
 		ErrorMessage errorMessage = new ErrorMessage();
 		List<Item> items = new ArrayList<>();
 
-			items = itemRepository.getItemsByCatIdForPos(catId);
+		items = itemRepository.getItemsByCatIdForPos(catId);
 
 		System.err.println("ITEMS - " + items);
 
@@ -5426,17 +5446,15 @@ public class RestApiController {
 		return itemResponse;
 
 	}
-	
-	
+
 	@RequestMapping(value = "/getAllItemsForPos", method = RequestMethod.POST)
-	public @ResponseBody ItemResponse getAllItemsForPos(
-			@RequestParam List<Integer> itemList) {
+	public @ResponseBody ItemResponse getAllItemsForPos(@RequestParam List<Integer> itemList) {
 
 		ItemResponse itemResponse = new ItemResponse();
 		ErrorMessage errorMessage = new ErrorMessage();
 		List<Item> items = new ArrayList<>();
 
-			items = itemRepository.getAllItemsForPos();
+		items = itemRepository.getAllItemsForPos();
 
 		System.err.println("ITEMS - " + items);
 
@@ -5451,8 +5469,6 @@ public class RestApiController {
 		return itemResponse;
 
 	}
-	
-	
 
 	@RequestMapping("/getSellBillItemsBySellBillNoForEdit")
 	public @ResponseBody SellBillHeader getBillHeaderById(@RequestParam int sellBillNo) throws ParseException {
@@ -5471,7 +5487,7 @@ public class RestApiController {
 		return res;
 
 	}
-	
+
 	@RequestMapping("/getBillItemsBySellBillNo")
 	public @ResponseBody List<ItemListForCustomerBill> getBillItemsBySellBillNo(@RequestParam int sellBillNo)
 			throws ParseException {
@@ -5501,8 +5517,7 @@ public class RestApiController {
 		return itm;
 
 	}
-	
-	
+
 	@RequestMapping("/getSellBillDetailListByHeaderId")
 	public @ResponseBody List<SellBillDetail> getSellBillDetailListByHeaderId(@RequestParam int sellBillNo)
 			throws ParseException {
@@ -5522,5 +5537,4 @@ public class RestApiController {
 
 	}
 
-	
 }
