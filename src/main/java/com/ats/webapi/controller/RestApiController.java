@@ -2245,7 +2245,7 @@ public class RestApiController {
 			@RequestParam("frPassword") String frPassword, @RequestParam("frMob") String frMob,
 			@RequestParam("frOwner") String frOwner, @RequestParam("frRateCat") int frRateCat,
 			@RequestParam("grnTwo") int grnTwo, @RequestParam("ownerBirthDate") String ownerBirthDate,
-			@RequestParam("fbaLicenseDate") String fbaLicenseDate,
+			@RequestParam("fbaLicenseDate") String fbaLicenseDate,@RequestParam("showItem") String showItem,
 			@RequestParam("frAgreementDate") String frAgreementDate, @RequestParam("frGstType") int frGstType,
 			@RequestParam("frGstNo") String frGstNo, @RequestParam("stockType") int stockType,
 			@RequestParam("frAddress") String frAddress, @RequestParam("frTarget") int frTarget,
@@ -2299,7 +2299,7 @@ public class RestApiController {
 		franchisee.setGrnTwo(grnTwo);
 		franchisee.setFrRmn1("");
 		franchisee.setFrOpening(0);
-		franchisee.setShowItems("");
+		franchisee.setShowItems(showItem);
 		franchisee.setNotShowItems("");
 		franchisee.setFrPasswordKey("");
 
@@ -3820,6 +3820,7 @@ public class RestApiController {
 		SpecialCake specialCake = specialcakeService.findSpecialCake(id);
 		Info info = new Info();
 		SpecialCake jsonResult = null;
+		System.err.println("Erplink Values==="+erplinkcode);
 		try {
 
 			specialCake.setSpName(spname);
@@ -3871,6 +3872,8 @@ public class RestApiController {
 		} catch (Exception e) {
 			info.setError(true);
 			info.setMessage("" + e.getMessage());
+			System.err.println("Exc In Update Sp Cake");e.printStackTrace();
+			
 		}
 
 		return jsonResult;

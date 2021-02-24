@@ -131,14 +131,17 @@ public class PostCreditNoteServiceImpl implements PostCreditNoteService {
 				
 				int isCrnNoPresent=0;
 				try {
+					System.err.println("Grn Header Updated1"+crnSrNo+postCreditNoteDetails.getGrnGvnHeaderId());
 				isCrnNoPresent=updateGrnGvnHeaderForCNRepo.isCrnNoPresent(crnSrNo,postCreditNoteDetails.getGrnGvnHeaderId());
 				}
 				catch (Exception e) {
 					isCrnNoPresent=0;
 				}
-				if(isCrnNoPresent!=0)
+				System.err.println("isCrnNoPresent"+isCrnNoPresent);
+				if(crnId>0)
 				{
-				res=updateGrnGvnHeaderForCNRepo.updateGrnGvnHeaderForCN(crnSrNo, 1, postCreditNoteDetails.getGrnGvnHeaderId());
+					System.err.println("Grn Header Updated2"+crnSrNo+postCreditNoteDetails.getGrnGvnHeaderId());
+				res=updateGrnGvnHeaderForCNRepo.updateGrnGvnHeaderForCN(crnId, 1, postCreditNoteDetails.getGrnGvnHeaderId());
 				}
 			}
 		}

@@ -66,7 +66,23 @@ public class SpCakeOrdersBean implements Serializable {
 	private String spImage;
 	
 	
+	//Akhilesh 2021-02-23
 	
+	private int extraCharges;
+	
+	
+	
+	
+	
+	
+	public int getExtraCharges() {
+		return extraCharges;
+	}
+
+	public void setExtraCharges(int extraCharges) {
+		this.extraCharges = extraCharges;
+	}
+
 	public String getSpImage() {
 		return spImage;
 	}
@@ -203,8 +219,9 @@ public class SpCakeOrdersBean implements Serializable {
 				+ ", spTotalAddRate=" + spTotalAddRate + ", frName=" + frName + ", itemId=" + itemId
 				+ ", spSelectedWeight=" + spSelectedWeight + ", spBookedForName=" + spBookedForName + ", isAllocated="
 				+ isAllocated + ", isBillGenerated=" + isBillGenerated + ", slipNo=" + slipNo + ", spImage=" + spImage
-				+ "]";
+				+ ", extraCharges=" + extraCharges + "]";
 	}
+
 
 	
 }
