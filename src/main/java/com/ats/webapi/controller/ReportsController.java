@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.webapi.commons.Common;
 import com.ats.webapi.model.BillWisePurchaseList;
 import com.ats.webapi.model.BillWiseTaxReportList;
+import com.ats.webapi.model.DispTransferBean;
+import com.ats.webapi.model.FranchiseForDispatch;
 import com.ats.webapi.model.ItemReport;
 import com.ats.webapi.model.ItemReportDetail;
 import com.ats.webapi.model.ItemWiseDetailList;
@@ -26,6 +29,7 @@ import com.ats.webapi.model.ItemWiseReportList;
 import com.ats.webapi.model.MonthWiseReportList;
 import com.ats.webapi.model.Orders;
 import com.ats.webapi.model.POrder;
+import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.report.DispatchReport;
 import com.ats.webapi.model.report.GetCustBillTax;
 import com.ats.webapi.model.report.GetCustomerBill;
@@ -35,14 +39,19 @@ import com.ats.webapi.model.report.GetRepMenuwiseSell;
 import com.ats.webapi.model.report.GetRepMonthwiseSell;
 import com.ats.webapi.model.report.GetRepTaxSell;
 import com.ats.webapi.model.report.PDispatchReport;
+import com.ats.webapi.model.report.SpDispatchReport;
 import com.ats.webapi.model.report.SpFlavourWiseSummaryDao;
 import com.ats.webapi.model.report.SpKgSummaryDao;
 import com.ats.webapi.repository.DispatchOrderRepository;
+import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.ItemReportDetailRepo;
 import com.ats.webapi.repository.ItemReportRepo;
 import com.ats.webapi.repository.PDispatchReportRepository;
+import com.ats.webapi.repository.RouteMasterRepository;
 import com.ats.webapi.repository.SpFlavourWiseSummaryRepo;
 import com.ats.webapi.repository.SpKgSummaryRepository;
+import com.ats.webapi.repository.SpecialCakeRepository;
+import com.ats.webapi.repository.reportv2.SpDispatchReportRepo;
 import com.ats.webapi.service.RepFrSellServise;
 import com.ats.webapi.service.ReportsService;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -68,10 +77,10 @@ public class ReportsController {
 
 	@Autowired
 	ItemReportDetailRepo itemReportDetailRepo;
-	
+
 	@Autowired
 	SpKgSummaryRepository spKgSummaryRepository;
-	
+
 	@Autowired
 	SpFlavourWiseSummaryRepo spFlavourWiseSummaryRepo;
 
@@ -151,38 +160,42 @@ public class ReportsController {
 
 		return ItemWiseDetailList;
 	}
-	
+
 	@RequestMapping(value = { "/showItemWiseDetailsReportByCatId" }, method = RequestMethod.POST)
 	public @ResponseBody ItemWiseDetailList showItemWiseDetailsReportByCatId(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
-			@RequestParam("subCat") int subCat,@RequestParam("catId") int catId,@RequestParam("itemIds") List<Integer> itemIds) {
+			@RequestParam("subCat") int subCat, @RequestParam("catId") int catId,
+			@RequestParam("itemIds") List<Integer> itemIds) {
 
 		ItemWiseDetailList ItemWiseDetailList = new ItemWiseDetailList();
-		
+
 		try {
-			
-			/*if(itemIds.contains(0)) {
-				ItemWiseDetailList = reportsService.getItemWiseDetailReport(frId, catId, fromDate, toDate);
-			}else {
-				
-				ItemWiseDetailList = reportsService.getItemWiseDetailReportByItemIds(frId,catId, itemIds, fromDate, toDate);
-				
-			}*/
-			
-			
-			if(itemIds.contains(0)) {
-				ItemWiseDetailList = reportsService.getItemWiseDetailReportsubCat(frId,catId, subCat, fromDate, toDate);
-			}else {
-				
-				ItemWiseDetailList = reportsService.getItemWiseDetailReportByItemIds(frId,catId,subCat, itemIds, fromDate, toDate);
-				
+
+			/*
+			 * if(itemIds.contains(0)) { ItemWiseDetailList =
+			 * reportsService.getItemWiseDetailReport(frId, catId, fromDate, toDate); }else
+			 * {
+			 * 
+			 * ItemWiseDetailList =
+			 * reportsService.getItemWiseDetailReportByItemIds(frId,catId, itemIds,
+			 * fromDate, toDate);
+			 * 
+			 * }
+			 */
+
+			if (itemIds.contains(0)) {
+				ItemWiseDetailList = reportsService.getItemWiseDetailReportsubCat(frId, catId, subCat, fromDate,
+						toDate);
+			} else {
+
+				ItemWiseDetailList = reportsService.getItemWiseDetailReportByItemIds(frId, catId, subCat, itemIds,
+						fromDate, toDate);
+
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 
 		return ItemWiseDetailList;
 	}
@@ -196,13 +209,14 @@ public class ReportsController {
 
 		return ItemWiseReportList;
 	}
-	
+
 	@RequestMapping(value = { "/showItemWiseReportByTypeId" }, method = RequestMethod.POST)
 	public @ResponseBody ItemWiseReportList showItemWiseReportByTypeId(@RequestParam("frId") int frId,
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
-			@RequestParam("catId") int catId,@RequestParam("typeId") int typeId) {
+			@RequestParam("catId") int catId, @RequestParam("typeId") int typeId) {
 
-		ItemWiseReportList ItemWiseReportList = reportsService.showItemWiseReportByTypeId(frId, catId, fromDate, toDate,typeId);
+		ItemWiseReportList ItemWiseReportList = reportsService.showItemWiseReportByTypeId(frId, catId, fromDate, toDate,
+				typeId);
 
 		return ItemWiseReportList;
 	}
@@ -215,12 +229,14 @@ public class ReportsController {
 
 		return monthWiseReportList;
 	}
-	
+
 	@RequestMapping(value = { "/showMonthWiseReportByTypeId" }, method = RequestMethod.POST)
 	public @ResponseBody MonthWiseReportList showMonthWiseReportByTypeId(@RequestParam("frId") int frId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,@RequestParam("typeId") int typeId) {
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("typeId") int typeId) {
 
-		MonthWiseReportList monthWiseReportList = reportsService.getMonthWiseReportByTypeId(frId, fromDate, toDate,typeId);
+		MonthWiseReportList monthWiseReportList = reportsService.getMonthWiseReportByTypeId(frId, fromDate, toDate,
+				typeId);
 
 		return monthWiseReportList;
 	}
@@ -233,12 +249,14 @@ public class ReportsController {
 
 		return billWiseTaxReportList;
 	}
-	
+
 	@RequestMapping(value = { "/showBillWiseTaxReportByTypeId" }, method = RequestMethod.POST)
 	public @ResponseBody BillWiseTaxReportList showBillWiseTaxReportByTypeId(@RequestParam("frId") int frId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,@RequestParam("typeId") int typeId) {
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("typeId") int typeId) {
 
-		BillWiseTaxReportList billWiseTaxReportList = reportsService.getBillWiseTaxReport(frId, fromDate, toDate,typeId);
+		BillWiseTaxReportList billWiseTaxReportList = reportsService.getBillWiseTaxReport(frId, fromDate, toDate,
+				typeId);
 
 		return billWiseTaxReportList;
 	}
@@ -253,41 +271,41 @@ public class ReportsController {
 
 		fromDate = Common.convertToYMD(fromDate);
 		toDate = Common.convertToYMD(toDate);
-		
+
 		tempList = repFrSellServise.getDatewiseSellReport(fromDate, toDate, frId);
-		
-		/*List<GetRepFrDatewiseSell> repFrDatewiseSellList = repFrSellServise.getDatewiseSellReport(fromDate, toDate,
-				frId);
 
-		LinkedHashMap<Date, GetRepFrDatewiseSell> hashList = new LinkedHashMap<Date, GetRepFrDatewiseSell>();
+		/*
+		 * List<GetRepFrDatewiseSell> repFrDatewiseSellList =
+		 * repFrSellServise.getDatewiseSellReport(fromDate, toDate, frId);
+		 * 
+		 * LinkedHashMap<Date, GetRepFrDatewiseSell> hashList = new LinkedHashMap<Date,
+		 * GetRepFrDatewiseSell>();
+		 * 
+		 * for (int i = 0; i < repFrDatewiseSellList.size(); i++) { float cash = 0, card
+		 * = 0, other = 0;
+		 * 
+		 * if (hashList.containsKey(repFrDatewiseSellList.get(i).getBillDate()) ==
+		 * false) {
+		 * 
+		 * for (int j = 0; j < repFrDatewiseSellList.size(); j++) {
+		 * 
+		 * if
+		 * (repFrDatewiseSellList.get(j).getBillDate().equals(repFrDatewiseSellList.get(
+		 * i).getBillDate())) { cash = cash + repFrDatewiseSellList.get(j).getCash();
+		 * card = card + repFrDatewiseSellList.get(j).getCard(); other = other +
+		 * repFrDatewiseSellList.get(j).getOther(); } }
+		 * 
+		 * // System.err.println(getRepFrDatewiseSellResponse.get(i).getBillDate() + "
+		 * cash // " + cash + "card " // + card + "other " + other);
+		 * repFrDatewiseSellList.get(i).setCash(cash);
+		 * repFrDatewiseSellList.get(i).setCard(card);
+		 * repFrDatewiseSellList.get(i).setOther(other);
+		 * hashList.put(repFrDatewiseSellList.get(i).getBillDate(),
+		 * repFrDatewiseSellList.get(i));
+		 * 
+		 * } } tempList = new ArrayList<GetRepFrDatewiseSell>(hashList.values());
+		 */
 
-		for (int i = 0; i < repFrDatewiseSellList.size(); i++) {
-			float cash = 0, card = 0, other = 0;
-
-			if (hashList.containsKey(repFrDatewiseSellList.get(i).getBillDate()) == false) {
-
-				for (int j = 0; j < repFrDatewiseSellList.size(); j++) {
-
-					if (repFrDatewiseSellList.get(j).getBillDate().equals(repFrDatewiseSellList.get(i).getBillDate())) {
-						cash = cash + repFrDatewiseSellList.get(j).getCash();
-						card = card + repFrDatewiseSellList.get(j).getCard();
-						other = other + repFrDatewiseSellList.get(j).getOther();
-					}
-				}
-
-				// System.err.println(getRepFrDatewiseSellResponse.get(i).getBillDate() + " cash
-				// " + cash + "card "
-				// + card + "other " + other);
-				repFrDatewiseSellList.get(i).setCash(cash);
-				repFrDatewiseSellList.get(i).setCard(card);
-				repFrDatewiseSellList.get(i).setOther(other);
-				hashList.put(repFrDatewiseSellList.get(i).getBillDate(), repFrDatewiseSellList.get(i));
-
-			}
-		}
-		tempList = new ArrayList<GetRepFrDatewiseSell>(hashList.values());
-		*/
- 
 		return tempList;
 
 	}
@@ -616,31 +634,106 @@ public class ReportsController {
 		return dispatchReportList;
 
 	}
+
+	@Autowired
+	FranchiseForDispatchRepository franchiseForDispatchRepository;
+	@Autowired
+	SpecialCakeRepository specialcakeRepository;
+	@Autowired
+	RouteMasterRepository routeMasterRepository;
+
+	// Sachin 24-02-2021 SP Baroda Report
+	@Autowired
+	SpDispatchReportRepo spDispReportRepo;
+
+	@RequestMapping(value = "/getSpDispReportBaroda", method = RequestMethod.POST)
+	public @ResponseBody DispTransferBean getSpDispReportBaroda(@RequestParam("deliveryDate") String deliveryDate,
+			@RequestParam("frId") List<Integer> frId, @RequestParam("menu") List<Integer> menu,
+			@RequestParam("abcType") List<Integer> abcTypeList) {
+		DispTransferBean dispRes = new DispTransferBean();
+		try {
+			String deliveryDateYMD = Common.convertToYMD(deliveryDate);
+
+			List<SpDispatchReport> spDispList = spDispReportRepo.getSpCakeOrderListForDispReportPdf(deliveryDateYMD,
+					frId, menu);
+			dispRes.setSpDispList(spDispList);
+
+			List<SpDispatchReport> newItemList;
+
+			newItemList = spDispReportRepo.getSpCakeOrderListuniqueItem(deliveryDateYMD, frId, menu);
+			dispRes.setNewItemList(newItemList);
+
+			System.out.println(" fr................." + spDispList.toString());
+			/*
+			 * List<String> spIds = new ArrayList<String>(); for (int i = 0; i <
+			 * spDispList.size(); i++) { spIds.add(""+spDispList.get(i).getSpIds()); }
+			 */
+			List<FranchiseForDispatch> frNameList = new ArrayList<>();
+			try {
+
+				frNameList = franchiseForDispatchRepository.getFranchiseForDispatchByFrIdList(frId);
+				dispRes.setFrNameList(frNameList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// List<Integer> spIdsInt =
+			// spIds.stream().map(Integer::parseInt).collect(Collectors.toList());
+			/*
+			 * //List<SpecialCake> spList = specialcakeRepository.findBySpIdIn(spIdsInt);
+			 * List<SpecialCake> spList = new ArrayList<SpecialCake>();;
+			 * 
+			 * 
+			 * 
+			 * for(int k=0;k<spDispList.size();k++) {
+			 * 
+			 * SpecialCake sp=new SpecialCake();
+			 * sp.setSpName(spDispList.get(k).getSpName());
+			 * sp.setErpLinkcode(spDispList.get(k).getUuid()); spList.add(sp); }
+			 */
+
+			// dispRes.setSpList(spList);
+
+			List<RouteMaster> routeList = new ArrayList<>();
+			try {
+
+				routeList = routeMasterRepository.findByDelStatusAndAbcTypeInOrderByRouteNameAsc(0, abcTypeList);
+				dispRes.setRouteList(routeList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dispRes;
+
+	}
+
 	// ------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "/getSpKgSummaryReport", method = RequestMethod.POST)
-	public @ResponseBody List<SpKgSummaryDao> getSpKgSummaryReport(
-			@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate, @RequestParam("frId") List<Integer> frId) {
+	public @ResponseBody List<SpKgSummaryDao> getSpKgSummaryReport(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("frId") List<Integer> frId) {
 
 		List<SpKgSummaryDao> spKgSummaryDaoList = spKgSummaryRepository.getSpKgSummaryReport(fromDate, toDate, frId);
-	
+
 		return spKgSummaryDaoList;
 
 	}
 	// ------------------------------------------------------------------------------------------------
 
-	
 	// ------------------------------------------------------------------------------------------------
-	//Anmol-->26-11-2019--->SP_FLAVOUR_WISE_REPORT
-		@RequestMapping(value = "/getSpFlavourSummaryReport", method = RequestMethod.POST)
-		public @ResponseBody List<SpFlavourWiseSummaryDao> getSpFlavourSummaryReport(
-				@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate, @RequestParam("frId") List<Integer> frId) {
+	// Anmol-->26-11-2019--->SP_FLAVOUR_WISE_REPORT
+	@RequestMapping(value = "/getSpFlavourSummaryReport", method = RequestMethod.POST)
+	public @ResponseBody List<SpFlavourWiseSummaryDao> getSpFlavourSummaryReport(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("frId") List<Integer> frId) {
 
-			List<SpFlavourWiseSummaryDao> spFlavourSummaryDaoList = spFlavourWiseSummaryRepo.getFlavourSummaryReport(fromDate, toDate, frId);
-		
-			return spFlavourSummaryDaoList;
+		List<SpFlavourWiseSummaryDao> spFlavourSummaryDaoList = spFlavourWiseSummaryRepo
+				.getFlavourSummaryReport(fromDate, toDate, frId);
 
-		}
-		// ------------------------------------------------------------------------------------------------
+		return spFlavourSummaryDaoList;
 
-		
+	}
+	// ------------------------------------------------------------------------------------------------
+
 }
