@@ -483,12 +483,11 @@ h1.bms_status=1
 	
 	
 	@RequestMapping(value = { "/getFinGoodStockHeaderByDate" }, method = RequestMethod.POST)
-	public @ResponseBody FinishedGoodStock getFinGoodStockHeaderbyDate(@RequestParam("stockDate") String StockDate) {
+	public @ResponseBody FinishedGoodStock getFinGoodStockHeaderbyDate(@RequestParam("stockDate") String stockDate) {
 
-		FinishedGoodStock finishHeader = new FinishedGoodStock();
-
+		FinishedGoodStock finishHeader = new FinishedGoodStock();		
 		try {
-				Date stkDate=Common.convertToSqlDate(StockDate);
+				Date stkDate=Common.convertToSqlDate(stockDate);
 			finishHeader = finishedGoodStockRepo.findByFinGoodStockDate(stkDate);
 		} catch (Exception e) {
 

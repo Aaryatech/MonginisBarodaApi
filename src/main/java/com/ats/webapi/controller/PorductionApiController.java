@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Common;
+import com.ats.webapi.model.FgsOrderToProduction;
 import com.ats.webapi.model.GetBillHeader;
+import com.ats.webapi.model.GetCurrentStock;
 import com.ats.webapi.model.GetOrderItemQty;
 import com.ats.webapi.model.GetProductionDetail;
 import com.ats.webapi.model.GetProductionItemQty;
@@ -39,6 +42,8 @@ import com.ats.webapi.model.report.GetRepFrDatewiseSell;
 import com.ats.webapi.model.report.GetRepItemwiseSell;
 import com.ats.webapi.model.report.GetRepMonthwiseSell;
 import com.ats.webapi.model.report.GetRepTaxSell;
+import com.ats.webapi.repository.FgsOrderToProductionRepo;
+import com.ats.webapi.repository.GetCurrentStockRepo;
 import com.ats.webapi.repository.PostPoductionHeaderRepository;
 import com.ats.webapi.repository.PostProdPlanDetailRepository;
 import com.ats.webapi.repository.PostProdPlanHeaderRepository;
@@ -537,5 +542,48 @@ public class PorductionApiController {
 		Info info = productionService.updateBillStatus(updateOrderStatus);
 
 		return info;
+	}
+	
+	@Autowired FgsOrderToProductionRepo fgsCurrRepo;
+	@RequestMapping(value = { "/getFgsAllItemCurrentStock" }, method = RequestMethod.POST)
+	@ResponseBody
+	public List<FgsOrderToProduction> getFgsAllItemCurrentStock(@RequestParam String currentStkDate, @RequestParam String selecDate,
+			@RequestParam String prodFromDate, @RequestParam String prodToDate, @RequestParam String fromTimeStamp,
+			@RequestParam String toTimeStamp, @RequestParam int catId, @RequestParam List<String> menuId) {
+		List<FgsOrderToProduction> fgsCurrStock = new ArrayList<FgsOrderToProduction>();
+		try {
+			
+			fgsCurrStock = fgsCurrRepo.getFsgItemsCurrentStock(currentStkDate, selecDate, prodFromDate, prodToDate, fromTimeStamp, toTimeStamp, catId, menuId);
+			System.err.println("FGS Stock-------------"+fgsCurrStock);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("exception in /getFgsAllItemCurrentStock" + e.getMessage());
+		}
+		return fgsCurrStock;
+
+	}
+	
+	@Autowired GetCurrentStockRepo currStkRepo;
+	@RequestMapping(value = { "/getPlanProdItemCurrentStock" }, method = RequestMethod.POST)
+	@ResponseBody
+	public List<GetCurrentStock> getPlanProdItemCurrentStock(@RequestParam String currStockDate,
+			@RequestParam String prodFromDate, @RequestParam String prodToDate, @RequestParam String fromTimeStamp,
+			@RequestParam String toTimeStamp, @RequestParam int catId) {
+
+		List<GetCurrentStock> currStkList = new ArrayList<GetCurrentStock>();
+		try {
+
+			System.out.println("Param :" + currStockDate+" "+catId);			
+
+			currStkList = currStkRepo.getPlanProdCurrStkItemQty(currStockDate, prodFromDate, prodToDate, fromTimeStamp, toTimeStamp, catId);
+			System.out.println("getPlanProdItemCurrentStock order " + currStkList);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Exception in Prod Qty list Rest controller" + e.getMessage());
+		}
+		return currStkList;
+
 	}
 }
