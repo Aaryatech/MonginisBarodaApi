@@ -46,4 +46,18 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		@Query(value="SELECT * FROM `m_franchisee` ORDER BY fr_name ASC",nativeQuery=true)
 		public List<Franchisee> findAllFranchisee();
 		
+		
+		
+		
+		//Akhilesh 2021-02-24  Add Vehicle To  Multiple Franchisee 
+		@Modifying
+		@Transactional
+		@Query(value="Update Franchisee  SET frKg1=:vehicleNo WHERE fr_id IN:frIds")
+		int AddVehiceleNoToMultiFr(@Param("vehicleNo") int vehicleNo,@Param("frIds") List<String>  frIds);
+		
+		
+		
+		
+		
+		
 	}

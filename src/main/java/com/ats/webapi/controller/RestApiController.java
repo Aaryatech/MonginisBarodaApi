@@ -2233,6 +2233,31 @@ public class RestApiController {
 	// neha
 	@Autowired
 	FrSettingRepo frSettingRepo;
+	
+	//Add Vehicle To Multiple Franchisee 2021-02-24
+	@RequestMapping(value="/addVehicleToMultiFrs",method=RequestMethod.POST)
+	public Info addVehicleToMultiFrs(@RequestParam int vehicleNo, @RequestParam List<String> frIds) {
+		Info info=new Info();
+		int flag=0;
+		try {
+			flag=franchiseeRepository.AddVehiceleNoToMultiFr(vehicleNo, frIds);
+			if(flag>0) {
+				info.setError(false);
+				info.setMessage("Vehicle Mapped Succesfully");
+			}else {
+				info.setError(true);
+				info.setMessage("Unable To Map Vehicle ");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception Occuered  In /addVehicleToMultiFrs");
+			e.printStackTrace();
+		}
+		
+		return info;
+	}
+	
+	
 
 	// Save Franchisee
 	@RequestMapping(value = { "/saveFranchisee" }, method = RequestMethod.POST)
@@ -3979,7 +4004,7 @@ public class RestApiController {
 			@RequestParam("frPassword") String frPassword, @RequestParam("frMob") String frMob,
 			@RequestParam("frOwner") String frOwner, @RequestParam("frRateCat") int frRateCat,
 			@RequestParam("grnTwo") int grnTwo, @RequestParam("delStatus") int delStatus,
-			@RequestParam("ownerBirthDate") String ownerBirthDate,
+			@RequestParam("ownerBirthDate") String ownerBirthDate,@RequestParam("showItem") String showItem,
 			@RequestParam("fbaLicenseDate") String fbaLicenseDate,
 			@RequestParam("frAgreementDate") String frAgreementDate, @RequestParam("frGstType") int frGstType,
 			@RequestParam("frGstNo") String frGstNo, @RequestParam("stockType") int stockType,
@@ -4038,7 +4063,7 @@ public class RestApiController {
 			franchisee.setGrnTwo(grnTwo);
 			franchisee.setFrRmn1("");
 			franchisee.setFrOpening(0);
-			franchisee.setShowItems("");
+			franchisee.setShowItems(showItem);
 			franchisee.setNotShowItems("");
 			franchisee.setFrPasswordKey("");
 			franchisee.setDelStatus(delStatus);

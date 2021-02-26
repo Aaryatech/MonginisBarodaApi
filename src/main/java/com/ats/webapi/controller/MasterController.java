@@ -1252,6 +1252,26 @@ public class MasterController {
 					return confList;
 
 				}
+				
+				
+				//Akhilesh 2021-02-25 To Get Fr Configured Menu For Selected Franchisees And Menus
+				@RequestMapping(value = "/getFrMenuConfigureListForFrNMenus", method = RequestMethod.POST)
+				public @ResponseBody List<GetFrMenuConfigure> getFrMenuConfigureListForFrNMenus(@RequestParam List<String> frIds,@RequestParam List<String>  menuIds) {
+
+					List<GetFrMenuConfigure> confList;
+					try {
+						confList = getFrMenuConfigureRepository.getFrMenuConfgedForSelctedFrAndMenu(frIds, menuIds);
+					}
+					catch (Exception e) {
+						confList=new ArrayList<>();
+						e.printStackTrace();
+
+					}
+					return confList;
+
+				}
+				
+				
 				// ------------------------DeleteSpCkOrder------------------------------------
 				@RequestMapping(value = { "/deleteFrConfMenu" }, method = RequestMethod.POST)
 				public @ResponseBody Info deleteFrConfMenu(@RequestParam int settingId) {
