@@ -4499,8 +4499,8 @@ public class RestApiController {
 	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
 
 	// update config franchisee 11 sept
-	@RequestMapping(value = { "/updateConfFr" }, method = RequestMethod.POST)
-	public @ResponseBody String updateFrConfig(@RequestParam int settingId, @RequestParam int settingType,
+	@RequestMapping(value = { "/updateConfFr" }, method = RequestMethod.POST) 
+	public @ResponseBody String updateFrConfig(@RequestParam int settingId, @RequestParam int settingType, @RequestParam int seqNo,
 			@RequestParam String fromTime, @RequestParam String toTime, @RequestParam String day,
 			@RequestParam String date, @RequestParam String itemShow) {
 
@@ -4525,7 +4525,7 @@ public class RestApiController {
 			configureFranchisee.setFromTime(fromTime);
 			configureFranchisee.setItemShow(itemShow);
 			configureFranchisee.setSettingType(settingType);
-
+			configureFranchisee.setFrId(seqNo);
 			configureFranchisee.setToTime(toTime);
 			String jsonResult = connfigureService.configureFranchisee(configureFranchisee);
 
