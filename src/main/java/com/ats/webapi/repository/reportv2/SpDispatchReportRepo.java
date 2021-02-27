@@ -15,7 +15,7 @@ public interface SpDispatchReportRepo extends JpaRepository<SpDispatchReport, In
 			+ " as sp_name,COUNT(t_sp_cake.sp_order_no) AS order_qty, GROUP_CONCAT(t_sp_cake.sp_order_no)AS ord_nos, \n"
 			+ " t_sp_cake.sp_id as sp_ids, "
 			+ " sp_selected_weight,fr_id,sp_flavour_id,"
-			+ " CONCAT(t_sp_cake.sp_id,fr_id\n" + 
+			+ " CONCAT(t_sp_cake.sp_id\n" + 
 			"        ,sp_flavour_id,sp_selected_weight) as new_item "
 			+ " FROM t_sp_cake,m_sp_cake,m_sp_flavour WHERE "
 			+ " m_sp_cake.sp_id=t_sp_cake.sp_id and m_sp_flavour.spf_id=t_sp_cake.sp_flavour_id "
@@ -29,7 +29,7 @@ public interface SpDispatchReportRepo extends JpaRepository<SpDispatchReport, In
 			"		 as sp_name,COUNT(t_sp_cake.sp_order_no) AS order_qty, GROUP_CONCAT(t_sp_cake.sp_order_no)AS ord_nos,  " + 
 			"		 t_sp_cake.sp_id as sp_ids," + 
 			"			 sp_selected_weight,fr_id,sp_flavour_id, " + 
-			"			  CONCAT(t_sp_cake.sp_id,fr_id "
+			"			  CONCAT(t_sp_cake.sp_id "
 			+ "    ,sp_flavour_id,sp_selected_weight) as new_item FROM t_sp_cake,"
 			+ "    m_sp_cake, m_sp_flavour WHERE m_sp_cake.sp_id=t_sp_cake.sp_id "
 			+ "    and m_sp_flavour.spf_id=t_sp_cake.sp_flavour_id "
