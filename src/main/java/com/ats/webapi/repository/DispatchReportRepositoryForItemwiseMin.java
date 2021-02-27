@@ -104,8 +104,8 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"                   group by  t_order.item_id,t_order.fr_id"+
 			"			    order by \n" + 
 			"			    m_franchisee.fr_id, \n" + 
-			"			        item_grp2 asc , \n" + 
-			"			        item_sort_id asc \n" + 
+			"			        item_grp2  \n" + 
+			"			         \n" + 
 			"			",nativeQuery=true)
 	List<DispatchStationItem> getItemByFrIdAndDateMin1New(@Param("date") String date,@Param("frList") List<Integer> frList,
 			@Param("menuIds")List<Integer> menuIds);

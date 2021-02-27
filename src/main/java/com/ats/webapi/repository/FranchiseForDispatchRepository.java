@@ -27,12 +27,12 @@ public interface FranchiseForDispatchRepository extends JpaRepository<FranchiseF
 			+ "", nativeQuery = true)
 	List<FranchiseForDispatch> getFranchiseForDispatchRouteIDByPass5(@Param("routeId") List<Integer> routeId);
 
-	@Query(value = " SELECT fr_name,fr_id,  fr_route_id,fr_rate,fr_rate_cat FROM m_franchisee WHERE "
+	@Query(value = " SELECT  show_items AS fr_name,fr_id,  fr_route_id,fr_rate,fr_rate_cat FROM m_franchisee WHERE "
 			+ "fr_id IN(:frIds)  and del_status=0" + "", nativeQuery = true)
 	List<FranchiseForDispatch> getFranchiseForDispatchByFrIds(@Param("frIds") List<String> frIds);
 
 	//Sachin 23-02-2021
-	@Query(value = " SELECT fr_name,fr_id,  fr_route_id,fr_rate,fr_rate_cat FROM m_franchisee WHERE "
+	@Query(value = " SELECT show_items AS  fr_name,fr_id,  fr_route_id,fr_rate,fr_rate_cat FROM m_franchisee WHERE "
 			+ "fr_id IN(:frIds)  and del_status=0" + "", nativeQuery = true)
 	List<FranchiseForDispatch> getFranchiseForDispatchByFrIdList(@Param("frIds") List<Integer> frIds);
 

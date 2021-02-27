@@ -18,11 +18,13 @@ import com.ats.webapi.model.afe.AfeScoreDetail;
 import com.ats.webapi.model.afe.AfeScoreHeader;
 import com.ats.webapi.model.afe.GetAfeScoreDetail;
 import com.ats.webapi.model.afe.GetAfeScoreHeader;
+import com.ats.webapi.model.logistics.VehicalMaster;
 import com.ats.webapi.repository.afe.AfeQueRepository;
 import com.ats.webapi.repository.afe.AfeScoreDetailRepo;
 import com.ats.webapi.repository.afe.AfeScoreHeaderRepo;
 import com.ats.webapi.repository.afe.GetAfeScoreDetailRepo;
 import com.ats.webapi.repository.afe.GetAfeScoreHeaderRepo;
+import com.ats.webapi.repository.logistics.VehicalMasterRepository;
 
 @RestController
 public class AfeQueScoreController {
@@ -41,6 +43,7 @@ public class AfeQueScoreController {
 	
 	@Autowired
 	GetAfeScoreDetailRepo getAfeScoreDetailRepo;
+	
 	
 	@RequestMapping(value = { "/postAfeScore" }, method = RequestMethod.POST)
 	public @ResponseBody AfeScoreHeader postAfeScore(@RequestBody AfeScoreHeader header) {
@@ -203,6 +206,25 @@ System.out.println("postAfeScore ->response " +response.toString());
 			return detailScoreList;
 		}
 
+	@Autowired VehicalMasterRepository vehMastRepo;
 	
 
+	@RequestMapping(value = {"/getVehicleByFrId"}, method = RequestMethod.POST)
+	public @ResponseBody VehicalMaster getVehicleByFrId(@RequestParam("frId") int frId) {
+		
+		VehicalMaster vehicle=new VehicalMaster();
+		try {
+			
+			vehicle = vehMastRepo.getVehicleByFrId(frId);
+			
+		} catch (Exception e) {
+			vehicle=new VehicalMaster();
+			System.err.println("AfeQueScoreController -- Exce in /getVehicleByFrId" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return vehicle;
+	}
+
+	
 }

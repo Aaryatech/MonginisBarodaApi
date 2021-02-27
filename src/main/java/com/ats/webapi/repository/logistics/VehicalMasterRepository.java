@@ -10,20 +10,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ats.webapi.model.logistics.VehicalMaster;
 
-public interface VehicalMasterRepository  extends JpaRepository<VehicalMaster, Integer>{
+public interface VehicalMasterRepository extends JpaRepository<VehicalMaster, Integer> {
 
-	
 	@Transactional
 	@Modifying
 	@Query(" UPDATE VehicalMaster SET del_status=1 WHERE veh_id=:vehicalId")
-	int deleteVehicalMaster(@Param("vehicalId")int vehicalId);
+	int deleteVehicalMaster(@Param("vehicalId") int vehicalId);
 
 	List<VehicalMaster> findByDelStatus(int delStatus);
 
 	VehicalMaster findByVehId(int vehicalId);
 
-	/*@Query(value="select amc_id,mech_name,mech_id,dealer_name,dealer_id,type_id,amc_from_date,amc_to_date,amc_alert_date,DATEDIFF(amc_to_date,:today) AS remaining_day "
-			+ "from m_logis_amc where (amc_to_date >= :today and amc_alert_date <= :today) or amc_to_date < :today",nativeQuery=true)
-	List<VehicalMaster> getAlertVehicleRecord(); */
+	/*
+	 * @Query(
+	 * value="select amc_id,mech_name,mech_id,dealer_name,dealer_id,type_id,amc_from_date,amc_to_date,amc_alert_date,DATEDIFF(amc_to_date,:today) AS remaining_day "
+	 * +
+	 * "from m_logis_amc where (amc_to_date >= :today and amc_alert_date <= :today) or amc_to_date < :today"
+	 * ,nativeQuery=true) List<VehicalMaster> getAlertVehicleRecord();
+	 */
+	//Sachin 26-02-2021
+	@Query(value = " select m_logis_vehical.*"
+			+ " from m_logis_vehical,m_franchisee where m_franchisee.kg_1=m_logis_vehical.veh_id and "
+			+ " m_franchisee.fr_id=:frId ", nativeQuery = true)
+	VehicalMaster getVehicleByFrId(@Param("frId") int frId);
 
 }

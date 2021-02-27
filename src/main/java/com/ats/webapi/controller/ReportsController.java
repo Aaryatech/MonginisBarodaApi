@@ -649,7 +649,8 @@ public class ReportsController {
 	@RequestMapping(value = "/getSpDispReportBaroda", method = RequestMethod.POST)
 	public @ResponseBody DispTransferBean getSpDispReportBaroda(@RequestParam("deliveryDate") String deliveryDate,
 			@RequestParam("frId") List<Integer> frId, @RequestParam("menu") List<Integer> menu,
-			@RequestParam("abcType") List<Integer> abcTypeList) {
+			@RequestParam("abcType") List<Integer> abcTypeList,
+			@RequestParam("routeIds") List<Integer> routeIds) {
 		DispTransferBean dispRes = new DispTransferBean();
 		try {
 			String deliveryDateYMD = Common.convertToYMD(deliveryDate);
@@ -696,7 +697,7 @@ public class ReportsController {
 			List<RouteMaster> routeList = new ArrayList<>();
 			try {
 
-				routeList = routeMasterRepository.findByDelStatusAndAbcTypeInOrderByRouteNameAsc(0, abcTypeList);
+				routeList = routeMasterRepository.findByRouteIdInAndDelStatusOrderByRouteNameAsc(routeIds,0);
 				dispRes.setRouteList(routeList);
 			} catch (Exception e) {
 				e.printStackTrace();
