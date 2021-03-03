@@ -58,6 +58,27 @@ public class ConfigureFranchisee {
 	@Column(name="is_del")
 	private int delStatus;
 	
+	
+	//New fields 19-01-2021 -sachin -sachin 01 March 2021 for Baroda
+		@Column(name="rate_setting_from")
+		int rateSettingFrom;
+		@Column(name="profit_per")
+		float profitPer;
+		@Column(name="rate_setting_type")
+		int rateSettingType;
+		@Column(name="del_days")
+		int delDays;
+		@Column(name="prod_days")
+		int prodDays;
+		@Column(name="is_disc_app")
+		int isDiscApp;
+		@Column(name="disc_per")
+		float discPer;
+		@Column(name="grn_per")
+		int grnPer;
+		//New fields 19-01-2021 -sachin code end
+		
+	
 	public int getSettingId() {
 		return settingId;
 	}
@@ -142,8 +163,76 @@ public class ConfigureFranchisee {
 		return "ConfigureFranchisee [settingId=" + settingId + ", frId=" + frId + ", menuId=" + menuId + ", catId="
 				+ catId + ", subCatId=" + subCatId + ", settingType=" + settingType + ", fromTime=" + fromTime
 				+ ", toTime=" + toTime + ", day=" + day + ", date=" + date + ", itemShow=" + itemShow + ", delStatus="
-				+ delStatus + "]";
+				+ delStatus + ", rateSettingFrom=" + rateSettingFrom + ", profitPer=" + profitPer + ", rateSettingType="
+				+ rateSettingType + ", delDays=" + delDays + ", prodDays=" + prodDays + ", isDiscApp=" + isDiscApp
+				+ ", discPer=" + discPer + ", grnPer=" + grnPer + "]";
 	}
+
+	public int getRateSettingFrom() {
+		return rateSettingFrom;
+	}
+
+	public void setRateSettingFrom(int rateSettingFrom) {
+		this.rateSettingFrom = rateSettingFrom;
+	}
+
+	public float getProfitPer() {
+		return profitPer;
+	}
+
+	public void setProfitPer(float profitPer) {
+		this.profitPer = profitPer;
+	}
+
+	public int getRateSettingType() {
+		return rateSettingType;
+	}
+
+	public void setRateSettingType(int rateSettingType) {
+		this.rateSettingType = rateSettingType;
+	}
+
+	public int getDelDays() {
+		return delDays;
+	}
+
+	public void setDelDays(int delDays) {
+		this.delDays = delDays;
+	}
+
+	public int getProdDays() {
+		return prodDays;
+	}
+
+	public void setProdDays(int prodDays) {
+		this.prodDays = prodDays;
+	}
+
+	public int getIsDiscApp() {
+		return isDiscApp;
+	}
+
+	public void setIsDiscApp(int isDiscApp) {
+		this.isDiscApp = isDiscApp;
+	}
+
+	public float getDiscPer() {
+		return discPer;
+	}
+
+	public void setDiscPer(float discPer) {
+		this.discPer = discPer;
+	}
+
+	public int getGrnPer() {
+		return grnPer;
+	}
+
+	public void setGrnPer(int grnPer) {
+		this.grnPer = grnPer;
+	}
+	   
+	
 	
 		
 }

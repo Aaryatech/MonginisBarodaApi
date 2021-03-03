@@ -22,7 +22,12 @@ public interface ConfigureFrListRepository extends JpaRepository<ConfigureFrBean
 
 	@Query(value=" select m_fr_configure.*,'NA' as fr_name,m_fr_menu_show.menu_title,m_category.cat_name from m_fr_configure,m_fr_menu_show,m_category	where  m_fr_menu_show.menu_id=m_fr_configure.menu_id AND m_category.cat_id=m_fr_configure.cat_id  ",nativeQuery=true)
 	List<ConfigureFrBean> findConfiFrList();
-	
+
+	/*
+	 * @Query(
+	 * value=" select m_fr_configure.*,'NA' as fr_name,m_fr_menu_show.menu_title,m_category.cat_name from m_fr_configure,m_fr_menu_show,m_category	where  m_fr_menu_show.menu_id=m_fr_configure.menu_id AND m_category.cat_id=m_fr_configure.cat_id  "
+	 * ,nativeQuery=true) List<ConfigureFrBean> findConfiguredMenuFrList();
+	 */
 	@Query(value=" select m_fr_configure.*,'NA' as fr_name,m_fr_menu_show.menu_title,m_category.cat_name from m_fr_configure,m_fr_menu_show,m_category	where  m_fr_menu_show.menu_id=m_fr_configure.menu_id AND m_category.cat_id=m_fr_configure.cat_id  ",nativeQuery=true)
 	List<ConfigureFrBean> findConfiguredMenuFrList();
 }

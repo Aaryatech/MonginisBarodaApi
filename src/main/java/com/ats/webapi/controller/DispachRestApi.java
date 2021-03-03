@@ -535,7 +535,7 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 
 			List<Item> items = new ArrayList<Item>();
 			try {
-				items = itemRepository.findByDelStatusOrderByItemGrp2AscItemSortIdAsc(0);
+				items = itemRepository.findByDelStatusOrderByItemGrp2AscItemSortIdAsc1(0);
 				dispRes.setItems(items);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -548,8 +548,12 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 			
 			List<RouteMaster> routeList = new ArrayList<>();
 			try {
-
+				//routeList = routeMasterRepository.findByRouteIdInAndDelStatusOrderByRouteNameAsc(routId,0);
+				if(routId!=0) {
+					routeList = routeMasterRepository.findByRouteIdAndDelStatusOrderByRouteNameAsc(routId,0);
+				}else {
 				routeList = routeMasterRepository.findByDelStatusAndAbcTypeInOrderByRouteNameAsc(0,abcTypeList);
+				}
 				dispRes.setRouteList(routeList);
 			} catch (Exception e) {
 				e.printStackTrace();

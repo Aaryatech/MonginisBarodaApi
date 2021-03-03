@@ -1059,8 +1059,8 @@ public class MasterController {
 				private ConfigureFranchiseeService configureService;
 		
 		       //--------------------------------------------------------------------
-				@RequestMapping(value = "/saveFrMenuConfigure", method = RequestMethod.POST)
-				public @ResponseBody Info saveFrMenuConfigure(@RequestParam List<String> frIdList,@RequestParam List<String> menuIdList)
+				@RequestMapping(value = "/saveFrMenuConfigure_OLD", method = RequestMethod.POST)
+				public @ResponseBody Info saveFrMenuConfigure_OLD(@RequestParam List<String> frIdList,@RequestParam List<String> menuIdList)
 				{
 					Info info=new Info();
 					int currentYear=Calendar.getInstance().get(Calendar.YEAR);    
@@ -1205,6 +1205,141 @@ public class MasterController {
 					}*/
 
 				}
+				
+				//sachin 02-03-2021
+				@RequestMapping(value = "/saveFrMenuConfigure", method = RequestMethod.POST)
+				public @ResponseBody Info saveFrMenuConfigure(@RequestParam List<String> frIdList,
+						@RequestParam List<String> menuIdList) {
+					Info info = new Info();
+					int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+					System.err.println("1 currentYear=" + currentYear);
+					int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+					System.err.println("2 currentMonth=" + currentMonth);
+					try {
+						System.err.println("3 try main");
+						for (int i = 0; i < frIdList.size(); i++) {
+							System.err.println("###  ###");
+							for (int j = 0; j < menuIdList.size(); j++) {
+								System.err.println("***  ***");
+								FrMenuConfigure prevFrMenuConfigure = frMenuConfigureRepository.findByFrIdAndMenuIdAndIsDel(
+										Integer.parseInt(frIdList.get(i)), Integer.parseInt(menuIdList.get(j)), 0);
+								System.err.println("4 prevFrMenuConfigure" + prevFrMenuConfigure);
+								if (prevFrMenuConfigure == null) {
+
+									FrMenuConfigure frMenu = new FrMenuConfigure();
+									frMenu.setSettingId(0);
+									frMenu.setFrId(Integer.parseInt(frIdList.get(i)));
+									frMenu.setMenuId(Integer.parseInt(menuIdList.get(j)));
+									frMenu.setIsDel(0);
+									System.err.println("5 frMenu" + frMenu.toString());
+									FrMenuConfigure frMenuConfigure = frMenuConfigureRepository.save(frMenu);
+									System.err.println("6 frMenuConfigure afer insert" + frMenuConfigure.toString());
+								}
+
+							}
+						}
+						info.setError(false);
+						info.setMessage("Menu Configured");
+						System.err.println("7 info" + info.toString());
+						for (int i = 0; i < frIdList.size(); i++) {
+							System.err.println("### ###");
+							for (int j = 0; j < menuIdList.size(); j++) {
+								System.err.println("1111111  j" + j + "menuIdList");
+								ConfigureFranchisee configureFranchisee = configureFrRepository
+										.findByMenuIdAndDelStatus(Integer.parseInt(menuIdList.get(j)),0);
+								System.err.println("8 configureFranchisee" + configureFranchisee.toString());
+								NewSetting newSetting = newSettingRepository.findBySettingKeyAndDelStatus("cat_id_open_stock", 0);
+								List<Integer> catIdForStock = Stream.of(newSetting.getSettingValue1().split(","))
+										.map(Integer::parseInt).collect(Collectors.toList());
+								List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+										.findByFrIdAndIsMonthClosedAndCatId(Integer.parseInt(frIdList.get(i)), 0,
+												configureFranchisee.getCatId());
+								System.err.println("9 prevStockHeader" + prevStockHeader);
+								if (catIdForStock.contains(configureFranchisee.getCatId())) {
+
+									if (prevStockHeader.size() == 0) {
+										PostFrItemStockHeader postFrItemStockHeader = new PostFrItemStockHeader();
+										postFrItemStockHeader.setOpeningStockHeaderId(0);
+										postFrItemStockHeader.setFrId(Integer.parseInt(frIdList.get(i)));
+										postFrItemStockHeader.setCatId(configureFranchisee.getCatId());
+										postFrItemStockHeader.setYear(currentYear);
+										postFrItemStockHeader.setMonth(currentMonth);
+										postFrItemStockHeader.setIsMonthClosed(0);
+										System.err.println("10 postFrItemStockHeader" + postFrItemStockHeader.toString());
+										PostFrItemStockHeader postFrItemStockHeaderRes = postFrOpStockHeaderRepository
+												.save(postFrItemStockHeader);
+										System.err.println(
+												"11 after insert postFrItemStockHeader --" + postFrItemStockHeaderRes.toString());
+
+										List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+										List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(","))
+												.map(Integer::parseInt).collect(Collectors.toList());
+										System.err.println("12 ids --" + ids.toString());
+
+										List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+										System.err.println("13 itemsList --" + itemsList.toString());
+										for (int k = 0; k < itemsList.size(); k++) {
+
+											PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+											postFrItemStockDetail
+													.setOpeningStockHeaderId(postFrItemStockHeaderRes.getOpeningStockHeaderId());
+											postFrItemStockDetail.setOpeningStockDetailId(0);
+											postFrItemStockDetail.setRegOpeningStock(0);
+											postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+											postFrItemStockDetail.setRemark("");
+											postFrItemStockDetailList.add(postFrItemStockDetail);
+											System.err.println("14 postFrItemStockDetail --" + postFrItemStockDetail.toString());
+										}
+										System.err
+												.println("15 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+										postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+
+									} else {
+										List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+										List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(","))
+												.map(Integer::parseInt).collect(Collectors.toList());
+										System.err.println("16 ids --" + ids.toString());
+										List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+										System.err.println("17 itemsList --" + itemsList.toString());
+										for (int k = 0; k < itemsList.size(); k++) {
+											PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+													.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+															prevStockHeader.get(0).getOpeningStockHeaderId());
+											System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+											if (prevFrItemStockDetail == null) {
+												PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+												postFrItemStockDetail
+														.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());// first
+																																	// stock
+																																	// header
+																																	// (month
+																																	// closed
+																																	// 0
+																																	// status))
+												postFrItemStockDetail.setOpeningStockDetailId(0);
+												postFrItemStockDetail.setRegOpeningStock(0);
+												postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+												postFrItemStockDetail.setRemark("");
+												postFrItemStockDetailList.add(postFrItemStockDetail);
+												System.err
+														.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
+											}
+										}
+										postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+										System.err
+												.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+									}
+								}
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						info.setError(true);
+						info.setMessage("Menu Configuration Failed");
+					}
+					return info;
+				}
+				
 				@RequestMapping(value = "/updateOrderDetails", method = RequestMethod.POST)
 				public @ResponseBody Info updateOrderDetails(@RequestParam List<Integer> orderIds,@RequestParam String delDate,@RequestParam String prodDate)
 				{
@@ -1382,33 +1517,7 @@ public class MasterController {
 				}
 				
 				
-				@RequestMapping(value = { "/saveFlavourConf" }, method = RequestMethod.POST)
-				public @ResponseBody List<FlavourConf> saveFlavourConf(@RequestBody List<FlavourConf> flavourConfList) {
-
-					List<FlavourConf> flList = new ArrayList<FlavourConf>();
-					try {
-                        for(FlavourConf flavourConf:flavourConfList)
-                        {
-                        	FlavourConf isPresent=flavourConfRepository.findByDelStatusAndSpfIdAndSpId(0,flavourConf.getSpfId(),flavourConf.getSpId());
-                        	if(isPresent!=null)
-                        	{
-                        	    flavourConf.setFlavId(isPresent.getFlavId());
-                        	    FlavourConf flr= flavourConfRepository.save(flavourConf);
-                        	    flList.add(flr);
-                        	}else
-                        	{
-                        		 FlavourConf flr= flavourConfRepository.save(flavourConf);
-                          	     flList.add(flr);
-                        	}
-                        }
-						
-					} catch (Exception e) {
-
-						e.printStackTrace();
-					
-					}
-					return flList;
-				}
+				
 				@RequestMapping(value = "/getAllFlConf", method = RequestMethod.GET)
 				public @ResponseBody List<FlavourConf> getAllFlConf() {
 
@@ -1439,7 +1548,7 @@ public class MasterController {
 					return flavour;
 
 				}
-				@RequestMapping(value ="/updateFlavourConf", method = RequestMethod.POST)
+				@RequestMapping(value ="/updateFlavourConf_OLD", method = RequestMethod.POST)
 				public Info updateFlavourConf(@RequestParam("flavId") int flavId, @RequestParam("rate") float rate,@RequestParam("mrp") float mrp)
 				{
 					Info info=new Info();
@@ -1460,22 +1569,6 @@ public class MasterController {
 					}
 					
 					return info;
-				}
-				@RequestMapping(value="/deleteFlavourConf", method=RequestMethod.POST)
-				public @ResponseBody Info deleteFlavourConf(@RequestParam int flavId) {
-					
-					Info info =new Info();
-					int isDelete = flavourConfRepository.deleteByFlavId(flavId);
-					
-					if(isDelete!=0) {
-						info.setError(false);
-						info.setMessage("Success");
-					}else {
-						info.setError(true);
-						info.setMessage("Fail");
-					}
-					return info;
-					
 				}
 				
 				

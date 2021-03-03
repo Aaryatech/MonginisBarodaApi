@@ -25,7 +25,19 @@ public interface FlavourConfRepository extends JpaRepository<FlavourConf, Intege
 	@Query(" UPDATE FlavourConf  SET rate=:rate ,mrp=:mrp  WHERE  flavId=:flavId ")
 	int updateFlavourConf(@Param("flavId")int flavId,@Param("rate") float rate,@Param("mrp") float mrp);
 
-	@Transactional
-	int deleteByFlavId(@Param("flavId")int flavId);
+	/*
+	 * @Transactional int deleteByFlavId(@Param("flavId")int flavId);
+	 */
 
+	@Transactional
+	@Modifying
+	@Query(" UPDATE FlavourConf  SET rate=:rate ,mrp1=:mrp1,mrp2=:mrp2,mrp3=:mrp3  WHERE  spFlavConfId=:spFlavConfId ")
+	int updateFlavourConf(@Param("spFlavConfId")int spFlavConfId,@Param("rate") float rate,
+			@Param("mrp1") float mrp1,@Param("mrp2") float mrp2,@Param("mrp3") float mrp3);
+
+	@Transactional
+	@Modifying
+	int deleteBySpFlavConfId(@Param("spFlavConfId")int spFlavConfId);
+	
+	
 }

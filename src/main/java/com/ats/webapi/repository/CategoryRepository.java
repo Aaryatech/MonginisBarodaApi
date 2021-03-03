@@ -15,10 +15,10 @@ public interface CategoryRepository extends JpaRepository<MCategory, Integer>{
 
 	public List<MCategory> findByCatId(int catId);
 	
-	@Query(value="SELECT m_category.cat_id, m_category.cat_name,m_category.is_same_day,m_category.del_status FROM m_category,m_fr_menu_show where m_category.cat_id=m_fr_menu_show.cat_id and m_fr_menu_show.menu_id=:menuId",nativeQuery=true)
+	@Query(value="SELECT m_category.cat_id,m_category.item_image,m_category.seq_no, m_category.cat_name,m_category.is_same_day,m_category.del_status FROM m_category,m_fr_menu_show where m_category.cat_id=m_fr_menu_show.cat_id and m_fr_menu_show.menu_id=:menuId",nativeQuery=true)
 	public  List<MCategory> findCatidByMenuIdIn(@Param("menuId") int menuId);
 	
-	@Query(value="SELECT m_category.cat_id, m_category.cat_name,m_category.is_same_day,m_category.del_status FROM m_category,m_fr_menu_show where m_category.cat_id=m_fr_menu_show.cat_id and m_fr_menu_show.menu_id IN(:menuId) order By m_category.seq_no asc",nativeQuery=true)
+	@Query(value="SELECT m_category.cat_id, ,m_category.item_image,m_category.seq_no, m_category.cat_name,m_category.is_same_day,m_category.del_status FROM m_category,m_fr_menu_show where m_category.cat_id=m_fr_menu_show.cat_id and m_fr_menu_show.menu_id IN(:menuId) order By m_category.seq_no asc",nativeQuery=true)
 	public  List<MCategory> findCatIdByMenuIdList(@Param("menuId")List<Integer> menuId);
 
 	

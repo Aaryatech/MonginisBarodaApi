@@ -2125,23 +2125,16 @@ public class RestApiController {
 	@RequestMapping(value = { "/configureFranchisee" }, method = RequestMethod.POST)
 	@ResponseBody
 	public String configureFranchisee(@RequestParam("frId") int frId, @RequestParam("menuId") int menuId,
-			@RequestParam("catId") int catId, @RequestParam("settingType") int settingType,
-			@RequestParam("fromTime") String fromTime, @RequestParam("toTime") String toTime,
-			@RequestParam("day") String day, @RequestParam("date") String date,
-			@RequestParam("itemShow") String itemShow) throws ParseException {
-
-		/*
-		 * DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy"); Date fromDate;
-		 * Date fDate = formatter.parse(date);
-		 * 
-		 * java.sql.Date sqlDate = new java.sql.Date(fDate.getTime());
-		 */
-
-		// DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		/// Date fromDate, toDate;
-		// toDate = formatter.parse(date);
-		// java.sql.Date sqlDate = new java.sql.Date(toDate.getTime());
-
+			@RequestParam("catId") int catId, @RequestParam("subCat") int subCat,
+			@RequestParam("settingType") int settingType, @RequestParam("fromTime") String fromTime,
+			@RequestParam("toTime") String toTime, @RequestParam("day") String day, @RequestParam("date") String date,
+			@RequestParam("itemShow") String itemShow,
+			@RequestParam("rateSettingFrom")int rateSettingFrom,@RequestParam("profitPer")float profitPer, 
+			@RequestParam("rateSettingType")int rateSettingType,
+			@RequestParam("delDays") int delDays, @RequestParam("prodDays") int prodDays,
+			@RequestParam("isDiscApp")int isDiscApp, @RequestParam("discPer")float discPer,
+			@RequestParam("grnPer") int grnPer) throws ParseException {
+		
 		ConfigureFranchisee configureFr = new ConfigureFranchisee();
 		configureFr.setFrId(frId);
 		configureFr.setMenuId(menuId);
@@ -2153,7 +2146,16 @@ public class RestApiController {
 		configureFr.setDate(date);
 		configureFr.setItemShow(itemShow);
 		configureFr.setCatId(catId);
-		configureFr.setSubCatId(11);
+		configureFr.setSubCatId(subCat);
+		
+		configureFr.setDelDays(delDays);
+		configureFr.setDiscPer(discPer);
+		configureFr.setGrnPer(grnPer);
+		configureFr.setIsDiscApp(isDiscApp);
+		configureFr.setProdDays(prodDays);
+		configureFr.setProfitPer(profitPer);
+		configureFr.setRateSettingFrom(rateSettingFrom);
+		configureFr.setRateSettingType(rateSettingType);
 
 		String jsonResult = connfigureService.configureFranchisee(configureFr);
 
@@ -4497,9 +4499,107 @@ public class RestApiController {
 
 	@Autowired
 	PostFrOpStockDetailRepository postFrOpStockDetailRepository;
+	@RequestMapping(value = { "/updateConfFr" }, method = RequestMethod.POST)
+	public @ResponseBody String updateFrConfig(@RequestParam int settingId, @RequestParam int settingType,
+			@RequestParam String fromTime, @RequestParam String toTime, @RequestParam String day,
+			@RequestParam String date, @RequestParam String itemShow,
+			@RequestParam("rateSettingFrom")int rateSettingFrom,@RequestParam("profitPer")float profitPer, 
+			@RequestParam("rateSettingType")int rateSettingType,
+			@RequestParam("delDays") int delDays, @RequestParam("prodDays") int prodDays,
+			@RequestParam("isDiscApp")int isDiscApp, @RequestParam("discPer")float discPer,
+			@RequestParam("grnPer") int grnPer,@RequestParam("seqNo") int seqNo) {
 
+		ConfigureFranchisee configureFranchisee = connfigureService.findFranchiseeById(settingId);
+		System.err.println("configureFranchisee " +configureFranchisee.toString());
+		Info info = new Info();
+		try {
+
+			configureFranchisee.setDate(date);
+			configureFranchisee.setDay(day);
+			configureFranchisee.setFrId(seqNo);
+
+			configureFranchisee.setFromTime(fromTime);
+			configureFranchisee.setItemShow(itemShow);
+			configureFranchisee.setSettingType(settingType);
+
+			configureFranchisee.setToTime(toTime);
+			
+			configureFranchisee.setDelDays(delDays);
+			configureFranchisee.setDiscPer(discPer);
+			configureFranchisee.setGrnPer(grnPer);
+			configureFranchisee.setIsDiscApp(isDiscApp);
+			configureFranchisee.setProdDays(prodDays);
+			configureFranchisee.setProfitPer(profitPer);
+			configureFranchisee.setRateSettingFrom(rateSettingFrom);
+			configureFranchisee.setRateSettingType(rateSettingType);
+
+			String jsonResult = connfigureService.configureFranchisee(configureFranchisee);
+			System.err.println("jsonResult update " +jsonResult);
+			try {
+				// -------------------------------------------------------------------------------------
+				AllFrIdNameList allFrIdNamesList = allFrIdNameService.getFrIdAndName();
+
+				for (int i = 0; i < allFrIdNamesList.getFrIdNamesList().size(); i++) {
+
+					List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
+							.findByFrIdAndIsMonthClosedAndCatId(allFrIdNamesList.getFrIdNamesList().get(i).getFrId(), 0,
+									configureFranchisee.getCatId());
+					// --------------------------------------------------------------------------------------------
+					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+					List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(",")).map(Integer::parseInt)
+							.collect(Collectors.toList());
+					System.err.println("16 ids --" + ids.toString());
+					List<Item> itemsList = itemService.findAllItemsByItemId(ids);
+					System.err.println("17 itemsList --" + itemsList.toString());
+					for (int k = 0; k < itemsList.size(); k++) {
+
+						PostFrItemStockDetail prevFrItemStockDetail = postFrOpStockDetailRepository
+								.findByItemIdAndOpeningStockHeaderId(itemsList.get(k).getId(),
+										prevStockHeader.get(0).getOpeningStockHeaderId());
+						System.err.println("18 prevFrItemStockDetail --" + prevFrItemStockDetail);
+						if (prevFrItemStockDetail == null) {
+							PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+							postFrItemStockDetail
+									.setOpeningStockHeaderId(prevStockHeader.get(0).getOpeningStockHeaderId());// first
+																												// stock
+																												// header
+																												// (month
+																												// closed
+																												// 0
+																												// status))
+							postFrItemStockDetail.setOpeningStockDetailId(0);
+							postFrItemStockDetail.setRegOpeningStock(0);
+							postFrItemStockDetail.setItemId(itemsList.get(k).getId());
+							postFrItemStockDetail.setRemark("");
+							postFrItemStockDetailList.add(postFrItemStockDetail);
+							System.err.println("19 postFrItemStockDetail --" + postFrItemStockDetail.toString());
+						}
+					}
+					postFrOpStockDetailRepository.save(postFrItemStockDetailList);
+					System.err.println("20 postFrItemStockDetailList --" + postFrItemStockDetailList.toString());
+					// ---------------------------------------------------------------------------------------
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			if (jsonResult == null) {
+				info.setError(true);
+				info.setMessage("fr confi update failure");
+
+			} else if (jsonResult != null) {
+				info.setError(false);
+				info.setMessage("fr config Update Successful");
+			}
+
+		} catch (Exception e) {
+			// System.out.println("error in config fr update" + e.getMessage());
+			info.setError(true);
+			info.setMessage("" + e.getMessage());
+		}
+		return JsonUtil.javaToJson(info);
+	}
 	// update config franchisee 11 sept
-	@RequestMapping(value = { "/updateConfFr" }, method = RequestMethod.POST) 
+	@RequestMapping(value = { "/updateConfFr_OLD" }, method = RequestMethod.POST) 
 	public @ResponseBody String updateFrConfig(@RequestParam int settingId, @RequestParam int settingType, @RequestParam int seqNo,
 			@RequestParam String fromTime, @RequestParam String toTime, @RequestParam String day,
 			@RequestParam String date, @RequestParam String itemShow) {
