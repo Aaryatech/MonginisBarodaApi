@@ -15,6 +15,7 @@ public interface FlavourRepository extends JpaRepository<Flavour, Integer>{
 	Flavour save(Flavour flavour);
     Flavour findOne(int spfId);
 	List<Flavour> findByDelStatus(int i);
+	@Query(value="SELECT * FROM `m_sp_flavour`  ORDER BY m_sp_flavour.del_status ,m_sp_flavour.spf_name ASC",nativeQuery=true)
 	List<Flavour> findByOrderBySpfNameAsc();
 	List<Flavour> findBySpfIdIn(List<Integer> spfId);
 	List<Flavour> findBySpType(int type);

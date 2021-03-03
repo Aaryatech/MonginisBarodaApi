@@ -181,6 +181,40 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	
 	
+
+	@Query(value="SELECT\n" + 
+			"    id,\n" + 
+			"    item_id,\n" + 
+			"    item_name,\n" + 
+			"    item_grp1,\n" + 
+			"    item_grp2,\n" + 
+			"    item_grp3,\n" + 
+			"    0 AS item_rate1  ,\n" + 
+			"  0 AS  item_rate2  ,\n" + 
+			" 0 AS   item_rate3  ,\n" + 
+			"   CASE\n" + 
+			"    WHEN :itemMrp=1 THEN item_mrp1   WHEN :itemMrp=2 THEN item_mrp2 "
+			+ " WHEN :itemMrp=3 THEN item_mrp3  ELSE 0  END as  item_mrp1 ,\n" + 
+			"    item_mrp2,\n" + 
+			"    item_mrp3,\n" + 
+			"    item_image,\n" + 
+			"    item_tax1,\n" + 
+			"    item_tax2,\n" + 
+			"    item_tax3,\n" + 
+			"    item_is_used,\n" + 
+			"    item_sort_id,\n" + 
+			"    grn_two,\n" + 
+			"    del_status,\n" + 
+			"    min_qty,\n" + 
+			"    item_shelf_life\n" + 
+			"FROM\n" + 
+			"    m_item\n" + 
+			"WHERE\n" + 
+			"  m_item.item_grp2 IN (:subCatids)",nativeQuery=true)
+	public List<Item> getItemsBySubCatIdWithMrp(@Param("subCatids") List<String> subCatids,@Param("itemMrp") int itemMrp);
+	
+	
+	
 	@Query(value="select\n" + 
 			"        id,\n" + 
 			"        item_id,\n" + 

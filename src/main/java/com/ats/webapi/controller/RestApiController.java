@@ -3300,6 +3300,36 @@ public class RestApiController {
 		return itemResponse;
 
 	}
+	
+	
+	
+	//Akhilesh 2021-03-01
+	@RequestMapping(value = "/getItemsBySubCatIdWithMrp", method = RequestMethod.POST)
+	public @ResponseBody List<Item> getItemsBySubCatIdWithMrp(@RequestParam("subCatId") List<String> subCatId,@RequestParam("Mrp") int Mrp ) {
+
+		List<Item> items = new ArrayList<Item>();
+		try {
+
+			/*
+			 * if (Integer.parseInt(subCatId) < 11) { items = itemRepository.
+			 * findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(subCatId,
+			 * 0);
+			 * 
+			 * } else {
+			 */
+			items = itemRepository.getItemsBySubCatIdWithMrp(subCatId, Mrp);
+
+			// }
+			System.err.println("Items by subcat id  and delStatus  " + items.toString());
+
+		} catch (Exception e) {
+			items = new ArrayList<>();
+			e.printStackTrace();
+
+		}
+		return items;
+
+	}
 
 	@RequestMapping(value = "/getItemsNameByIdWithOtherItem", method = RequestMethod.POST)
 	public @ResponseBody ItemResponse getItemsNameByIdWithOtherItem(@RequestParam List<Integer> itemList,
