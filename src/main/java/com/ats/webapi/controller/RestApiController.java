@@ -4574,6 +4574,9 @@ public class RestApiController {
 					List<PostFrItemStockHeader> prevStockHeader = postFrOpStockHeaderRepository
 							.findByFrIdAndIsMonthClosedAndCatId(allFrIdNamesList.getFrIdNamesList().get(i).getFrId(), 0,
 									configureFranchisee.getCatId());
+					if(prevStockHeader.isEmpty()) {
+						continue;
+					}
 					// --------------------------------------------------------------------------------------------
 					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
 					List<Integer> ids = Stream.of(configureFranchisee.getItemShow().split(",")).map(Integer::parseInt)
