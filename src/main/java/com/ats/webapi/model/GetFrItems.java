@@ -1,7 +1,7 @@
 package com.ats.webapi.model;
 
 
-
+//NEw field added Sachin 04-03-2021
 public class GetFrItems {
 	
 	private int id;
@@ -55,8 +55,29 @@ public class GetFrItems {
 	
 	private float discPer;//new
 	
+	//NEw field added Sachin 04-03-2021
+	private double orderRate;
+	private double orderMrp;
 	
 	
+	
+	
+	public double getOrderRate() {
+		return orderRate;
+	}
+
+	public void setOrderRate(double orderRate) {
+		this.orderRate = orderRate;
+	}
+
+	public double getOrderMrp() {
+		return orderMrp;
+	}
+
+	public void setOrderMrp(double orderMrp) {
+		this.orderMrp = orderMrp;
+	}
+
 	public float getDiscPer() {
 		return discPer;
 	}
@@ -266,7 +287,8 @@ public class GetFrItems {
 				+ ", itemImage=" + itemImage + ", itemTax1=" + itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3="
 				+ itemTax3 + ", itemIsUsed=" + itemIsUsed + ", itemSortId=" + itemSortId + ", grnTwo=" + grnTwo
 				+ ", itemQty=" + itemQty + ", delStatus=" + delStatus + ", subCatName=" + subCatName + ", menuId="
-				+ menuId + ", itemRate3=" + itemRate3 + ", minQty=" + minQty + ", discPer=" + discPer + "]";
+				+ menuId + ", itemRate3=" + itemRate3 + ", minQty=" + minQty + ", discPer=" + discPer + ", orderRate="
+				+ orderRate + ", orderMrp=" + orderMrp + "]";
 	}
 
 	

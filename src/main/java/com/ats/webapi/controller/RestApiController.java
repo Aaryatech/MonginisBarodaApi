@@ -3481,7 +3481,8 @@ public class RestApiController {
 
 							getFrItems.setItemQty(orderList.get(j).getOrderQty());
 							getFrItems.setMenuId(orderList.get(j).getMenuId());
-
+							getFrItems.setOrderMrp(orderList.get(j).getOrderMrp());
+							getFrItems.setOrderRate(orderList.get(j).getOrderRate());
 							break;
 						}
 
