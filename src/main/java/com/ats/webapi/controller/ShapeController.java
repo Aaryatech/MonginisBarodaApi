@@ -50,12 +50,12 @@ public class ShapeController {
 		List<Shape> shapeList=new ArrayList<Shape>();
 	
 	
-		shapeList=shapeRepo.findAll();
-			return (List<Shape>) shapeList;
+		shapeList=shapeRepo.getAllShapes();
+			return  shapeList;
 		
 	}
 	
-	@RequestMapping(value = { "/getAllChefById" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/getAllChefById" }, method = RequestMethod.POST)
 	public @ResponseBody Shape getAllChefById(@RequestParam Integer shapeId) {
 
 		
@@ -63,4 +63,38 @@ public class ShapeController {
 		return sh;
 		 
 	}
+	
+	
+	@RequestMapping(value = { "/deleteShape" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteShape(@RequestParam Integer shapeId) {
+				Info info=new Info();
+					int Flag=0;
+				try {
+					Flag =shapeRepo.deleteShape(shapeId);
+					if(Flag>0) {
+						info.setError(false);
+						info.setMessage("Shape Deleted");
+						
+					}else {
+						info.setError(true);
+						info.setMessage("Unable To  Delete Shape");
+						
+					}
+	}	 catch (Exception e) {
+	// TODO: handle exception
+	e.printStackTrace();
+	info.setError(true);
+	info.setMessage("Unable To  Delete Shape");
+	System.err.println("Exception In /deleteShape");
+	}
+		
+
+		return info;
+		 
+	}
+	
+	
+	
+	
+	
 }

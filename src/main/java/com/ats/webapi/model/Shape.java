@@ -32,6 +32,21 @@ public class Shape {
 	
 	@Column(name="ext_var2")
 	private String extVar2;
+	
+	@Column(name="del_status")
+	private Integer delStatus;
+	
+
+	
+	
+	
+	public Integer getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(Integer delStatus) {
+		this.delStatus = delStatus;
+	}
 
 	public Integer getShapeId() {
 		return shapeId;
@@ -91,9 +106,11 @@ public class Shape {
 
 	@Override
 	public String toString() {
-		return "Chef [shapeId=" + shapeId + ", shapeName=" + shapeName + ", shapeDesc=" + shapeDesc + ", extInt1="
-				+ extInt1 + ", extInt2=" + extInt2 + ", extVar1=" + extVar1 + ", extVar2=" + extVar2 + "]";
+		return "Shape [shapeId=" + shapeId + ", shapeName=" + shapeName + ", shapeDesc=" + shapeDesc + ", extInt1="
+				+ extInt1 + ", extInt2=" + extInt2 + ", extVar1=" + extVar1 + ", extVar2=" + extVar2 + ", delStatus="
+				+ delStatus + "]";
 	}
+
 
 	
 

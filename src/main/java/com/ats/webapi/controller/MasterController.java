@@ -40,6 +40,7 @@ import com.ats.webapi.model.FrTargetList;
 import com.ats.webapi.model.FrTotalSale;
 import com.ats.webapi.model.FranchiseSup;
 import com.ats.webapi.model.FranchiseSupList;
+import com.ats.webapi.model.Franchisee;
 import com.ats.webapi.model.GetFrMenuConfigure;
 import com.ats.webapi.model.GetItemSup;
 import com.ats.webapi.model.GetRegSpCakeOrders;
@@ -58,6 +59,7 @@ import com.ats.webapi.model.RegularSpCkOrders;
 import com.ats.webapi.model.SectionMaster;
 import com.ats.webapi.model.SpCake;
 import com.ats.webapi.model.SpCakeSupplement;
+import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.SubCategory;
 import com.ats.webapi.model.SubCategoryRes;
 import com.ats.webapi.model.frsetting.FrSetting;
@@ -426,6 +428,24 @@ public class MasterController {
 					return getSubCategoryRes;
 
 				}
+				
+				
+		//2021-03-04 Get  list Of Sp Cakes By Shape Id
+		@RequestMapping(value="/getSpCakeByShapeId",method=RequestMethod.POST)		
+		public @ResponseBody List<SpecialCake> getSpCakeByShapeId(@RequestParam String shapeId){
+			List<SpecialCake> spCakeList=new ArrayList<>();
+			try {
+			spCakeList=spCakeService.findCakeByShapeId(shapeId);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				System.err.println("Exception Occuered In /checkShapeIsUsed");
+			}
+			return spCakeList;
+		}
+				
+				
+				
 		// ----------------------------SAVE SpCake Sup---------------------------
 				@RequestMapping(value = { "/saveSpCakeSup" }, method = RequestMethod.POST)
 				public @ResponseBody Info saveSpCakeSup(@RequestBody SpCakeSupplement spCakeSupplement) {
@@ -693,6 +713,37 @@ public class MasterController {
 
 		}
       //---------------------------------------------------------------------------
+		
+		
+		
+		//Akhilesh 2021-03-03
+		// ----------------------------Get Franchiee By Route Id---------------------------
+				@RequestMapping(value = { "/getFrByRouteId" }, method = RequestMethod.POST)
+				public @ResponseBody List<Franchisee> getFrByRouteId(@RequestParam Integer routeId) {
+
+					 List<Franchisee> frList=new ArrayList<>();
+					
+					try {
+
+						frList = franchiseeService.getFranchiseByRouteId(routeId);
+
+						
+
+					} catch (Exception e) {
+
+					
+
+						e.printStackTrace();
+						System.out.println("Exception In MasterController /getFrByRouteId" + e.getMessage());
+
+					}
+					return frList;
+
+				}
+		      //---------------------------------------------------------------------------
+		
+		
+		
 	// ------------------------Delete FranchiseSup------------------------------------
 				@RequestMapping(value = { "/deleteFranchiseSup" }, method = RequestMethod.POST)
 				public @ResponseBody Info deleteFranchiseSup(@RequestParam int frId) {
