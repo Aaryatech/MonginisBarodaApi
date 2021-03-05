@@ -92,8 +92,20 @@ public class GenerateRegSpBill {
 		@Column(name="hsn_code")//new
 		private String  hsnCode;
 		
+		private String menuDiscPer; //NEW SACHIN 5-03-2021
 		
 		
+		
+		
+		
+		public String getMenuDiscPer() {
+			return menuDiscPer;
+		}
+
+		public void setMenuDiscPer(String menuDiscPer) {
+			this.menuDiscPer = menuDiscPer;
+		}
+
 		public String getHsnCode() {
 			return hsnCode;
 		}
@@ -295,7 +307,7 @@ public class GenerateRegSpBill {
 					+ ", itemName=" + itemName + ", menuTitle=" + menuTitle + ", itemGrp1=" + itemGrp1 + ", itemGrp2="
 					+ itemGrp2 + ", itemTax1=" + itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3
 					+ ", item_shelf_life=" + item_shelf_life + ", partyName=" + partyName + ", partyGstin=" + partyGstin
-					+ ", partyAddress=" + partyAddress + ", hsnCode=" + hsnCode + "]";
+					+ ", partyAddress=" + partyAddress + ", hsnCode=" + hsnCode + ", menuDiscPer=" + menuDiscPer + "]";
 		}
 
         

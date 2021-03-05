@@ -206,7 +206,9 @@ public class GenerateBillServiceImpl implements GenerateBillService {
 			generateBill.setFrCode(regSpBill.getFrCode());
 			generateBill.setFrId(regSpBill.getFrId());
 			generateBill.setFrName(regSpBill.getFrName());
-			generateBill.setGrnType(3);
+			//generateBill.setGrnType(3);
+			//Sac
+			generateBill.setGrnType(0);
 			generateBill.setItemId(regSpBill.getItemId());
 			generateBill.setItemName(regSpBill.getItemName());
 			generateBill.setItemShelfLife(regSpBill.getItem_shelf_life());
@@ -226,6 +228,8 @@ public class GenerateBillServiceImpl implements GenerateBillService {
 			generateBill.setPartyAddress(regSpBill.getPartyAddress());
 			generateBill.setPartyGstin(regSpBill.getPartyGstin());
 			generateBill.setHsnCode(regSpBill.getHsnCode());//new
+			
+			generateBill.setIsPositive(Float.parseFloat(regSpBill.getMenuDiscPer()));//Sac 05-03-2021
 			generateBillList.add(generateBill);
 			
 			System.out.println("converted Bill : "+generateBillList.toString());
@@ -251,7 +255,9 @@ public class GenerateBillServiceImpl implements GenerateBillService {
 			generateBill.setFrCode(spBill.getFrCode());
 			generateBill.setFrId(spBill.getFrId());
 			generateBill.setFrName(spBill.getFrName());
-			generateBill.setGrnType(3);
+			//generateBill.setGrnType(3);
+			//Sac
+			generateBill.setGrnType(0);
 			generateBill.setItemId(spBill.getSpId());
 			generateBill.setItemName(spBill.getSpName());
 			generateBill.setItemShelfLife(1);
