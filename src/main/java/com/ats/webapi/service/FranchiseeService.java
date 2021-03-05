@@ -54,5 +54,9 @@ public interface FranchiseeService {
 
 	public String findFrEmployeeByEmpId(int empId, int frId);
 	
+	public List<Franchisee> getFranchiseByRouteId(int routeId);
+	
+	
+	
 	
 }

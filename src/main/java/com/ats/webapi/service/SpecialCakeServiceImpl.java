@@ -240,6 +240,19 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 		SpCakeSupplement spSup = spCakeSupRepository.findBySpId(spId);
 		return spSup;
 	}
+
+	@Override
+	public List<SpecialCake> findCakeByShapeId(String shapeId) {
+		// TODO Auto-generated method stub
+		List<SpecialCake> spCakeList=new ArrayList<>();
+		try {
+			spCakeList=specialcakeRepository.findCakeByShapeId(shapeId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return spCakeList;
+	}
 	
 
 }

@@ -24,4 +24,8 @@ public interface SpecialCakeService {
 	public List<SpecialCake> showAllSpecialCakeOrderBySpCode();
 	
 	public SpCakeSupplement getSpCakeSupById(int spId);
+	
+	
+	public List<SpecialCake>  findCakeByShapeId(String shapeId);
+	
 }

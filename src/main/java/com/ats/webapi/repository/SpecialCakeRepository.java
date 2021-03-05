@@ -27,7 +27,8 @@ public interface SpecialCakeRepository extends JpaRepository<SpecialCake, Intege
 	//@Query(value="select * from m_sp_cake where m_sp_cake.del_status=:delStatus order by sp_code asc",nativeQuery=true)
 	public List<SpecialCake> findByDelStatusOrderBySpCodeAsc(int i);
 	
-	
+	@Query(value="SELECT * FROM m_sp_cake WHERE spe_id_list =:shapeId",nativeQuery=true)
+	public List<SpecialCake>  findCakeByShapeId(@Param("shapeId") String shapeId);
 	
 	
 	

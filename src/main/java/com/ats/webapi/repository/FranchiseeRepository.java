@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.ats.webapi.model.Franchise;
 import com.ats.webapi.model.Franchisee;
 import com.ats.webapi.model.User;
 
@@ -55,6 +56,12 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		@Query(value="Update Franchisee  SET frKg1=:vehicleNo WHERE fr_id IN:frIds")
 		int AddVehiceleNoToMultiFr(@Param("vehicleNo") int vehicleNo,@Param("frIds") List<String>  frIds);
 		
+		
+		
+		
+		//Akhilesh 2021-03-03  Get Franchisee By Route Id
+		@Query(value="SELECT * FROM m_franchisee WHERE fr_route_id=:routeId AND del_status=0",nativeQuery=true)
+				List<Franchisee> getFranchiseeByRouteId(@Param("routeId") int routeId);
 		
 		
 		

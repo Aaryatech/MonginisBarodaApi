@@ -602,6 +602,22 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 		
 		return jsonFr;
 	}
+
+	@Override
+	public List<Franchisee> getFranchiseByRouteId(int routeId) {
+		List<Franchisee> franchiseeList=new ArrayList<>();
+		try {
+			franchiseeList=franchiseeRepository.getFranchiseeByRouteId(routeId);
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		
+			// TODO: handle exception
+		}
+		
+		// TODO Auto-generated method stub
+		return franchiseeList;
+	}
 	
 	
 }
