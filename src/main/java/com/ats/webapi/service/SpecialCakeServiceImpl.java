@@ -253,6 +253,20 @@ public class SpecialCakeServiceImpl implements SpecialCakeService{
 		}
 		return spCakeList;
 	}
+
+	@Override
+	public List<SpecialCake> getSpcakeByFrId(int frId) {
+		// TODO Auto-generated method stub
+		 List<SpecialCake> spList=new ArrayList<>();
+		try {
+			spList=specialcakeRepository.getSpcakeByFrId(frId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception Occuered in getSpcakeByFrId()");
+		}
+		return spList;
+	}
 	
 
 }

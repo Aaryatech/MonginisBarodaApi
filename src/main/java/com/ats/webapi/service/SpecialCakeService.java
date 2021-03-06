@@ -2,6 +2,8 @@ package com.ats.webapi.service;
 
 import java.util.List;
 
+
+
 import com.ats.webapi.model.GetSpCkSupplement;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.SearchSpCakeResponse;
@@ -27,5 +29,8 @@ public interface SpecialCakeService {
 	
 	
 	public List<SpecialCake>  findCakeByShapeId(String shapeId);
+	
+	
+	public List<SpecialCake> getSpcakeByFrId(int frId);
 	
 }

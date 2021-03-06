@@ -3,6 +3,7 @@ package com.ats.webapi.service.spprod;
 import java.util.List;
 
 import com.ats.webapi.model.ErrorMessage;
+import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.spprod.Employee;
 import com.ats.webapi.model.spprod.EmployeeList;
 import com.ats.webapi.model.spprod.GetAllocStationCk;
@@ -104,6 +105,9 @@ public interface SpProdService {
 	List<GetAllocStationCk> getAllocStationCk(List<String> stationId, String fromDate, String toDate);
 
 	List<StationWiseCkCount> getStationwiseCkCount();
+	
+	
+	
 
 
 }

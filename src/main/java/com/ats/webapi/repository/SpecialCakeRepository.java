@@ -30,6 +30,25 @@ public interface SpecialCakeRepository extends JpaRepository<SpecialCake, Intege
 	@Query(value="SELECT * FROM m_sp_cake WHERE spe_id_list =:shapeId",nativeQuery=true)
 	public List<SpecialCake>  findCakeByShapeId(@Param("shapeId") String shapeId);
 	
+	@Query(value="SELECT\n" + 
+			"    *\n" + 
+			"FROM\n" + 
+			"    m_sp_cake\n" + 
+			"WHERE\n" + 
+			"    FIND_IN_SET(\n" + 
+			"        m_sp_cake.sp_id,\n" + 
+			"        (\n" + 
+			"        SELECT\n" + 
+			"            GROUP_CONCAT(m_fr_configure.item_show)\n" + 
+			"        FROM\n" + 
+			"            `m_fr_menu_configure`,\n" + 
+			"            m_fr_configure\n" + 
+			"        WHERE\n" + 
+			"            m_fr_menu_configure.fr_id =:frId AND m_fr_configure.menu_id = m_fr_menu_configure.menu_id\n" + 
+			"    )\n" + 
+			"    )",nativeQuery=true)
+	public List<SpecialCake> getSpcakeByFrId(@Param("frId") int frId);
+	
 	
 	
 
