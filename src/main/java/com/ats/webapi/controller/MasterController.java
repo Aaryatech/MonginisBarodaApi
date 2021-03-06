@@ -1263,11 +1263,11 @@ public class MasterController {
 						@RequestParam List<String> menuIdList) {
 					Info info = new Info();
 					int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-					System.err.println("1 currentYear=" + currentYear);
+					//System.err.println("1 currentYear=" + currentYear);
 					int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-					System.err.println("2 currentMonth=" + currentMonth);
+					//System.err.println("2 currentMonth=" + currentMonth);
 					try {
-						System.err.println("3 try main");
+						//System.err.println("3 try main");
 						for (int i = 0; i < frIdList.size(); i++) {
 							System.err.println("###  ###");
 							for (int j = 0; j < menuIdList.size(); j++) {
