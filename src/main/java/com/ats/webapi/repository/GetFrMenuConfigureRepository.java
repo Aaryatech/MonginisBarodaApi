@@ -39,7 +39,7 @@ public interface GetFrMenuConfigureRepository extends JpaRepository<GetFrMenuCon
 			"    m_fr_configure cf,\n" + 
 			"    m_category cat\n" + 
 			"WHERE\n" + 
-			"    c.fr_id = f.fr_id AND c.menu_id = cf.setting_id AND m.menu_id = cf.menu_id AND cat.cat_id = cf.cat_id AND c.is_del = 0\n" + 
+			"    c.fr_id = f.fr_id AND c.menu_id = cf.menu_id AND m.menu_id = cf.menu_id AND cat.cat_id = cf.cat_id AND c.is_del = 0\n" + 
 			"    AND f.fr_id IN (:frIds)  AND  m.menu_id IN (:menuIds)\n" + 
 			"    ",nativeQuery=true)
 	List<GetFrMenuConfigure> getFrMenuConfgedForSelctedFrAndMenu(@Param("frIds") List<String>  frIds ,@Param("menuIds") List<String>  menuIds);
