@@ -3433,7 +3433,7 @@ public class RestApiController {
 		List<GetFrItems> frItemList = new ArrayList<>();
 
 		List<Orders> orderList = new ArrayList<>();
-
+		System.out.println("date of PROD IN getFrItems = " + date);
 		/*
 		 * System.out.println("input param items= " + items.toString());
 		 * 
@@ -3443,7 +3443,7 @@ public class RestApiController {
 		try {
 			itemList = getFrItemsService.findFrItems(items);
 			try {
-				orderList = prevItemOrderService.findFrItemOrders(items, frId, date, menuId);
+				orderList = prevItemOrderService.findFrItemOrdersFrontEndByDelDate(items, frId, date, menuId);
 				List<ItemListWithDisc> itemListwithDisc = itemListWithDiscRepo.findItemListWithDisc(items, frId);
 
 				for (int i = 0; i < itemList.size(); i++) {

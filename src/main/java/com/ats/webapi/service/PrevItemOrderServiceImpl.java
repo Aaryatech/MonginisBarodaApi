@@ -24,6 +24,13 @@ public class PrevItemOrderServiceImpl  implements PrevItemOrderService {
 		return list;
 	}
 
+	@Override
+	public List<Orders> findFrItemOrdersFrontEndByDelDate(List<Integer> items, String frId, String date,
+			String menuId) {
+		List<Orders>list =prevItemOrderRepository.findAllOrdersFrontEndByDelDate(items, frId, date, menuId);
+		return list;
+	}
+
 	
 
 }
