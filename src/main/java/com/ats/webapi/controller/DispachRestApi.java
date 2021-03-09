@@ -521,7 +521,8 @@ public class DispachRestApi {
 	@ResponseBody
 	public DispTransferBean getAbcDepatchReportMin1New(@RequestParam("date") String date,
 			@RequestParam("abcType") List<Integer> abcTypeList, @RequestParam("stationNos") List<Integer> stationNos,
-			@RequestParam("routId") int routId, @RequestParam("menuIds") List<Integer> menuIds) {
+			@RequestParam("routId") int routId, @RequestParam("menuIds") List<Integer> menuIds,
+			@RequestParam("catId") int catId) {
 System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 		DispTransferBean dispRes=new DispTransferBean();
 		
@@ -542,7 +543,7 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 			}
 
 			List<DispatchStationItem> reportDataList = dispatchReportRepositoryForItemwiseMin
-					.getItemByFrIdAndDateMin1New(date, frList, menuIds);//Done
+					.getItemByFrIdAndDateMin1New(date, frList, menuIds,catId);//Done
 			
 			dispRes.setReportDataList(reportDataList);
 			
