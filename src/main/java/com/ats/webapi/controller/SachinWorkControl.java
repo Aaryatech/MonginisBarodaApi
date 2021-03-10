@@ -13,12 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.FlavourConf;
 import com.ats.webapi.model.Info;
+import com.ats.webapi.model.newsetting.NewSetting;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.NewSettingRepository;
 
 @RestController
 public class SachinWorkControl {
 
+	@Autowired NewSettingRepository newSettRepo;
+	
+	@RequestMapping(value = { "/getNewSettingByKey" }, method = RequestMethod.POST)
+	public @ResponseBody NewSetting getNewSettingByKey(@RequestParam String settingKey,
+			@RequestParam int delStatus) {
+		NewSetting sett=new NewSetting();
+		
+		sett=newSettRepo.findBySettingKeyAndDelStatus(settingKey, delStatus);
+		return sett;
+	}
 
 	@Autowired
 	FlavourRepository flavourRepository;
