@@ -65,6 +65,18 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		
 		
 		
-		
+		@Query(value="SELECT DISTINCT fr_route_id FROM `m_franchisee` WHERE del_status=0",nativeQuery=true)
+		public List<Integer> getfrRouteIds();
+
+		@Query(value="SELECT\n" + 
+				"    fr.*\n" + 
+				"FROM\n" + 
+				"    m_fr_menu_configure m,\n" + 
+				"    m_franchisee fr\n" + 
+				"WHERE\n" + 
+				"    m.is_del=0 AND\n" + 
+				"    m.menu_id=:menuId AND\n" + 
+				"    m.fr_id=fr.fr_id",nativeQuery=true)
+		public List<Franchisee> getFrListyMenuId(@Param("menuId") int menuId);
 		
 	}

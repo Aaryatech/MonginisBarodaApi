@@ -5698,5 +5698,15 @@ public class RestApiController {
 		return itm;
 
 	}
+	
+	
+
+	@RequestMapping(value = { "/getAllFranchiseeList" }, method = RequestMethod.GET)
+	public @ResponseBody List<Franchisee> getAllFranchiseeList() {		
+	
+	List<Franchisee> allFranchisee = franchiseeService.findAllFranchisee();
+	
+	return allFranchisee;
+}
 
 }
