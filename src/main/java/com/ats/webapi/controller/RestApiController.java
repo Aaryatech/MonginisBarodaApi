@@ -1545,6 +1545,29 @@ public class RestApiController {
 		return jsonFr;
 
 	}
+	
+	//2021-03-11 Akhilesh To Store Franchisee Token In fr_password_key
+	@RequestMapping(value="/UpdateFrToken",method=RequestMethod.POST)
+	public @ResponseBody Info UpdateFrToken(@RequestParam String frCode,@RequestParam String token) {
+		Info info=new Info();
+		int flag=0;
+		try {
+			flag=franchiseeService.updateFranchiseeToken(frCode, token);
+			if(flag>0) {
+				info.setError(false);
+				info.setMessage("Franchisee Token Updated ");
+			}
+			info.setError(true);
+			info.setMessage("Unable To Update Franchisee Token ");
+		} catch (Exception e) {
+			// TODO: handle exception
+			info.setError(true);
+			info.setMessage("Unable To Update Franchisee Token Exception Occuered ");
+			System.err.println("Exception in /UpdateFrToken");
+		}
+		return info;
+	}
+	
 
 	// Configure Sp Day Cake
 	@RequestMapping(value = { "/configureSpDayCk" }, method = RequestMethod.POST)

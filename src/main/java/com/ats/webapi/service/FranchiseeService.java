@@ -2,6 +2,8 @@ package com.ats.webapi.service;
 
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
+
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.FrLoginResponse;
 import com.ats.webapi.model.FrTarget;
@@ -55,6 +57,9 @@ public interface FranchiseeService {
 	public String findFrEmployeeByEmpId(int empId, int frId);
 	
 	public List<Franchisee> getFranchiseByRouteId(int routeId);
+	
+	
+	int updateFranchiseeToken(String frCode, String token );
 	
 	
 	

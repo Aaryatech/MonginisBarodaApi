@@ -618,6 +618,20 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 		// TODO Auto-generated method stub
 		return franchiseeList;
 	}
+
+	@Override
+	public int updateFranchiseeToken(String frCode, String token) {
+		// TODO Auto-generated method stub
+		int flag=0;
+		try {
+			flag=franchiseRepository.updateFranchiseeToken(frCode, token);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception Occuered In FranchiseeServiceImpl / updateFranchiseeToken");
+		}
+		return flag;
+	}
 	
 	
 }

@@ -60,7 +60,7 @@ public class ImageUploadController {
 	public static final String GATE_ENTRY_IMAGE_FOLDER = fileUploadPath + "GATEENTRY/";
 	private static final String SP_CAKE_FOLDER = fileUploadPath + "SPCAKE/";
 	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = fileUploadPath + "CUSTCHOICEPHOTOCAKE/";
-
+	public static final String M_UPLOAD_CAKE_FOLDER = fileUploadPath + "MOBILEUPLOADS/";
 	// private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 
 	@RequestMapping(value = { "/photoUpload" }, method = RequestMethod.POST)
@@ -125,6 +125,10 @@ public class ImageUploadController {
 
 				} else if (type.equalsIgnoreCase("msg")) {
 					path = Paths.get(MSG_FOLDER + imageName);
+
+				}
+				else if (type.equalsIgnoreCase("mu")) {
+					path = Paths.get(M_UPLOAD_CAKE_FOLDER + imageName);
 
 				}
 				byte[] bytes = file.getBytes();
