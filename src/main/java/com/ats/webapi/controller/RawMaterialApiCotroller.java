@@ -38,6 +38,7 @@ import com.ats.webapi.repository.GetRawMaterialByGroupRepository;
 import com.ats.webapi.repository.RawMaterialDetailsRepository;
 import com.ats.webapi.repository.RmItemGroupRepostitory;
 import com.ats.webapi.repository.RmRateVerificationListRepository;
+import com.ats.webapi.service.ItemService;
 import com.ats.webapi.service.rawmaterial.RawMaterialService;
  
 @RestController
@@ -56,6 +57,9 @@ public class RawMaterialApiCotroller {
 	GetRawMaterialByGroupRepository getRawMaterialByGroupRepository;
 	@Autowired
 	RmItemGroupRepostitory rmItemGroupRepostitory;
+	
+	@Autowired
+	ItemService itemService;
 	
 	@RequestMapping(value = { "/getRawMaterialDetailByGroupSupp" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetRawMaterialByGroup> getRawMaterialDetailByGroupSupp(@RequestParam ("grpId")int grpId,@RequestParam ("suppId")int suppId)
@@ -329,6 +333,16 @@ public class RawMaterialApiCotroller {
 		
 		return rmList;
 		
+	}
+	
+	//Get All Alloted Uom Ids
+	@RequestMapping(value = { "/getAllotedUomIdsToItems" }, method = RequestMethod.GET)
+	public @ResponseBody List<Integer> getAllotedUomIdsToItems() {
+
+		List<Integer> res = itemService.getAllotedUoms();
+
+		return res;
+
 	}
 	//-----------------------------getRM Gst--------------------------------------
 	
@@ -627,5 +641,24 @@ public class RawMaterialApiCotroller {
 				
 				RawMaterialDetailsList rawMaterialDetailsList=rawMaterialService.getRMByCatId(catId);
 				return rawMaterialDetailsList;
+			}
+			
+			
+			@RequestMapping(value = { "/deleteMultiRmUom" }, method = RequestMethod.POST)
+			public @ResponseBody Info deleteMultiRmUom(@RequestParam("uomIds") List<String> uomIds)
+			{
+				int isDelete=rawMaterialService.deleteSelRmUom(uomIds);
+				Info info=new Info();
+				if(isDelete==1)
+				{
+					info.setError(false);
+					info.setMessage("RM Uom Deleted successFully");
+				}
+				else
+				{
+					info.setError(true);
+					info.setMessage("Failed to Delete RM Uom");
+				}
+				return info;
 			}
 }

@@ -99,5 +99,7 @@ public interface RawMaterialService {
 
 	List<ItemSfHeader> getItemSfHeadersByDept(int deptId);
 
+	int deleteSelRmUom(List<String> uomIds);
+
 	
 }

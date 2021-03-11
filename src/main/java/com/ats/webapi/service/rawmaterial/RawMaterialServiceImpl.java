@@ -729,4 +729,11 @@ List<ItemSfHeader> itemSfHeaders=itemSfHeaderRepository.findItemSfHeaderByDelSta
 	}
 	
 	
+	@Override
+	public int deleteSelRmUom(List<String> uomIds) {
+		
+		int isDelete=rawMaterialUomRepository.deleteSelRmUom(uomIds);
+		return isDelete;
+	}
+	
 }

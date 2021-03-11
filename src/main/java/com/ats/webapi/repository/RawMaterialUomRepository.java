@@ -22,4 +22,9 @@ public interface RawMaterialUomRepository extends JpaRepository<RawMaterialUom, 
 	 @Modifying
 	 @Query("UPDATE RawMaterialUom SET del_status=1 WHERE uom_id=:uomId")
 	 int deleteRmUom(@Param("uomId")int uomId);
+
+	@Transactional
+	 @Modifying
+	 @Query("UPDATE RawMaterialUom SET del_status=1 WHERE uom_id IN (:uomIds)")
+	int deleteSelRmUom(@Param("uomIds") List<String> uomIds);
 }

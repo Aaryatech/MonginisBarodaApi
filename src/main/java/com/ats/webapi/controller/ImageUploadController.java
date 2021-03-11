@@ -46,7 +46,9 @@ public class ImageUploadController {
 	 * String CUST_CHOICE_PHOTO_CAKE_FOLDER =
 	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
 	 */
-	public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+	//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+	public static final String fileUploadPath = "/home/maddy/ats-12/";
+	
 	private static String SUGGESTION_URL = fileUploadPath + "SUGGESTION/";
 	private static String COMPLAINT_URL = fileUploadPath + "COMPLAINT/";
 	private static String NOTIFICATION_URL = fileUploadPath + "NOTIFICATION/";
@@ -54,7 +56,7 @@ public class ImageUploadController {
 
 	public static final String M_SP_CAKE_FOLDER = fileUploadPath + "MSPCAKE/";
 	public static final String MSG_FOLDER = fileUploadPath + "MSG/";
-	public static final String FR_FOLDER = fileUploadPath + "FR/";
+//	public static final String FR_FOLDER = fileUploadPath + "FR/";
 	public static final String ITEM_FOLDER = fileUploadPath + "ITEM/";
 	public static final String RAW_MAT_IMAGE_FOLDER = fileUploadPath + "RAWMAT/";
 	public static final String GATE_ENTRY_IMAGE_FOLDER = fileUploadPath + "GATEENTRY/";
@@ -63,6 +65,8 @@ public class ImageUploadController {
 	public static final String M_UPLOAD_CAKE_FOLDER = fileUploadPath + "MOBILEUPLOADS/";
 	// private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 
+	public static final String FR_FOLDER = fileUploadPath;
+	
 	@RequestMapping(value = { "/photoUpload" }, method = RequestMethod.POST)
 	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile uploadfile,
 			@RequestParam("imageName") String imageName, @RequestParam("type") String type) {

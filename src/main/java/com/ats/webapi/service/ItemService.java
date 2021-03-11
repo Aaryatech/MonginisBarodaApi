@@ -37,4 +37,5 @@ public interface ItemService {
 	public List<Item> findAllItemsByItemId(List<Integer> itemList);
 	public GetItemSup getItemSupByItemId(int itemId);
 	ItemsList getItemsForItemDetail(int rmId, int rmType);
+	public List<Integer> getAllotedUoms();
 }

@@ -325,4 +325,10 @@ public class ItemServiceImpl implements ItemService{
 		return itemsList;
 	}
 
+	@Override
+	public List<Integer> getAllotedUoms() {
+		
+		return getItemSupRepository.getAllotedUomIds();
+	}
+
 }
