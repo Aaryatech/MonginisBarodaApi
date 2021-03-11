@@ -447,6 +447,13 @@ public class MasterController {
 
 				}
 				
+				
+				@RequestMapping(value = { "/getSubCatIdsAllotedItem" }, method = RequestMethod.GET)
+				public @ResponseBody List<Integer> getSubCatIdsAllotedItem() {
+					List<Integer> idList = itemRepository.getItemAllotedSubCategoryId();
+					return idList;
+				}
+				
 		//2021-03-04 Get  list Of Sp Cakes By Shape Id
 		@RequestMapping(value="/getSpCakeByShapeId",method=RequestMethod.POST)		
 		public @ResponseBody List<SpecialCake> getSpCakeByShapeId(@RequestParam String shapeId){

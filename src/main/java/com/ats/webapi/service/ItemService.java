@@ -9,6 +9,7 @@ import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.GetItemSup;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
+import com.ats.webapi.model.ItemAndItemSuplement;
 import com.ats.webapi.model.ItemSup;
 import com.ats.webapi.model.ItemSupList;
 import com.ats.webapi.model.ItemWithSubCat;
@@ -38,4 +39,5 @@ public interface ItemService {
 	public GetItemSup getItemSupByItemId(int itemId);
 	ItemsList getItemsForItemDetail(int rmId, int rmType);
 	public List<Integer> getAllotedUoms();
+	public ErrorMessage saveItemAndSupplement(ItemAndItemSuplement itemItemSup);
 }

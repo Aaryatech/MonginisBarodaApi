@@ -2090,6 +2090,13 @@ public class RestApiController {
 		}
 		return jsonResult;
 	}
+	
+	@RequestMapping("/updateProducts")
+	public ErrorMessage updateProducts(@RequestBody ItemAndItemSuplement itemItemSup) {
+		
+		ErrorMessage jsonResult = itemService.saveItemAndSupplement(itemItemSup);
+		return jsonResult;
+	}
 
 	@RequestMapping(value = { "/insertItemList" }, method = RequestMethod.POST)
 	@ResponseBody

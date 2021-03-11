@@ -11,6 +11,7 @@ import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.GetItemSup;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
+import com.ats.webapi.model.ItemAndItemSuplement;
 import com.ats.webapi.model.ItemSup;
 import com.ats.webapi.model.ItemSupList;
 import com.ats.webapi.model.tray.TrayType;
@@ -323,6 +324,41 @@ public class ItemServiceImpl implements ItemService{
 		}
 		
 		return itemsList;
+	}
+
+	public ErrorMessage saveItemAndSupplement(ItemAndItemSuplement itemItemSup) {		
+
+		ErrorMessage errorMessage = new ErrorMessage();
+		try {
+			ItemSup itemSuplement = itemItemSup.getItemSup();
+			Item saveItem = itemItemSup.getItem();
+
+			Item product = itemRepository.save(saveItem);
+
+			if (product != null) {
+				System.out.println("Item Supplement------------" + itemSuplement);
+				ItemSup itemSupRes = itemSupRepository.saveAndFlush(itemSuplement);
+			}
+			errorMessage.setError(false);
+			errorMessage.setMessage("Item Inserted/Updated Successfully");
+
+			try {
+				List<String> frTokens = franchiseSupRepository.findTokens();
+
+				for (String token : frTokens) {
+					Firebase.sendPushNotifForCommunication(token, "Item Details Updated",
+							"Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.",
+							"inbox");
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+		} catch (Exception e) {
+			errorMessage.setError(true);
+			errorMessage.setMessage("Exc while saving Item");
+		}
+		return errorMessage;
 	}
 
 	@Override

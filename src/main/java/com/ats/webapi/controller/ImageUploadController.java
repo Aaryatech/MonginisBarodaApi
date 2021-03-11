@@ -57,7 +57,7 @@ public class ImageUploadController {
 	public static final String M_SP_CAKE_FOLDER = fileUploadPath + "MSPCAKE/";
 	public static final String MSG_FOLDER = fileUploadPath + "MSG/";
 //	public static final String FR_FOLDER = fileUploadPath + "FR/";
-	public static final String ITEM_FOLDER = fileUploadPath + "ITEM/";
+//	public static final String ITEM_FOLDER = fileUploadPath + "ITEM/";
 	public static final String RAW_MAT_IMAGE_FOLDER = fileUploadPath + "RAWMAT/";
 	public static final String GATE_ENTRY_IMAGE_FOLDER = fileUploadPath + "GATEENTRY/";
 	private static final String SP_CAKE_FOLDER = fileUploadPath + "SPCAKE/";
@@ -66,6 +66,7 @@ public class ImageUploadController {
 	// private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 
 	public static final String FR_FOLDER = fileUploadPath;
+	public static final String ITEM_FOLDER = fileUploadPath;
 	
 	@RequestMapping(value = { "/photoUpload" }, method = RequestMethod.POST)
 	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile uploadfile,
