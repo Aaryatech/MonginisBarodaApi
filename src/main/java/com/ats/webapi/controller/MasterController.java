@@ -430,6 +430,23 @@ public class MasterController {
 				}
 				
 				
+				@RequestMapping(value = { "/getSubCategoryByPrefix" }, method = RequestMethod.POST)
+				public @ResponseBody SubCategory getSubCategoryByPrefix(@RequestParam("prefix") String prefix, @RequestParam("subCatId") int subCatId) {
+
+					SubCategory res = null;
+			    	try {
+			    		if(subCatId>0)
+			    			res = subCategoryRepository.findByPrefixIgnoreCaseAndSubCatIdNot(prefix, subCatId);
+			    		else
+			    			res = subCategoryRepository.findByPrefixIgnoreCase(prefix);
+					} catch (Exception e) {
+						res=new SubCategory();
+				    	e.printStackTrace();
+					}
+					return res;
+
+				}
+				
 		//2021-03-04 Get  list Of Sp Cakes By Shape Id
 		@RequestMapping(value="/getSpCakeByShapeId",method=RequestMethod.POST)		
 		public @ResponseBody List<SpecialCake> getSpCakeByShapeId(@RequestParam String shapeId){

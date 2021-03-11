@@ -29,4 +29,8 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Intege
 
 	public List<SubCategory> findBySubCatIdInAndDelStatus(List<Integer> catId, int i);
 
+	public SubCategory findByPrefixIgnoreCaseAndSubCatIdNot(String prefix, int subCatId);
+
+	public SubCategory findByPrefixIgnoreCase(String prefix);
+
 }

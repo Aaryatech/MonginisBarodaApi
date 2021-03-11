@@ -32,6 +32,9 @@ public class SubCategory implements Serializable{
 	@Column(name="del_status")
 	private int delStatus;	
 	
+	@Column(name="prefix")
+	private String prefix;
+	
 	@Column(name="seq_no")
 	private int seqNo;	
 	//----remove to do onetomany association mapping-------
@@ -81,11 +84,16 @@ public class SubCategory implements Serializable{
 		this.delStatus = delStatus;
 	}
 	
+	public String getPrefix() {
+		return prefix;
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 	@Override
 	public String toString() {
 		return "SubCategory [subCatId=" + subCatId + ", subCatName=" + subCatName + ", catId=" + catId + ", delStatus="
-				+ delStatus + ", seqNo=" + seqNo + "]";
+				+ delStatus + ", prefix=" + prefix + ", seqNo=" + seqNo + "]";
 	}
-	
 	
 }
