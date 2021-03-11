@@ -23,6 +23,9 @@ public interface SectionMasterRepository extends JpaRepository<SectionMaster, In
 	@Transactional
 	@Query("Update SectionMaster  SET del_status=1 WHERE section_id=:sectionId")
 	int deleteSection(@Param("sectionId") int sectionId);
+
+	@Query(value="SELECT * FROM m_section WHERE del_status=0 AND section_id=:sectionId",nativeQuery=true)
+	SectionMaster getSingleSectionById(@Param("sectionId") int sectionId);
  
 
 }

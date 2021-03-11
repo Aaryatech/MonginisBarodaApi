@@ -2,6 +2,8 @@ package com.ats.webapi.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,11 +13,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.AllMenuJsonResponse;
+import com.ats.webapi.model.AllMenus;
+import com.ats.webapi.model.ConfigureFranchisee;
+import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.FlavourConf;
 import com.ats.webapi.model.Info;
+import com.ats.webapi.model.Item;
 import com.ats.webapi.model.newsetting.NewSetting;
+import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.ItemRepository;
+import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.NewSettingRepository;
 
 @RestController
@@ -101,4 +111,45 @@ public class SachinWorkControl {
 
 	}
 	
+	// 11-03-2021
+		// Get MenuBy Section Ids
+		@Autowired
+		MainMenuConfigurationRepository mainMenuConfRepo;
+
+		@RequestMapping(value = { "/getMenuListByMenuIds" }, method = RequestMethod.POST)
+		public @ResponseBody AllMenuJsonResponse getFrMenuConfigureByMenuFrId(
+				@RequestParam("menuIds") List<Integer> menuIds) {
+
+			AllMenuJsonResponse menuJsonResponse = new AllMenuJsonResponse();
+			ErrorMessage errorMessage = new ErrorMessage();
+			try {
+				List<AllMenus> menuList = mainMenuConfRepo.findByMenuIdIn(menuIds);
+				menuJsonResponse.setMenuConfigurationPage(menuList);
+				errorMessage.setError(false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			errorMessage.setMessage("Menus shown successfully");
+			menuJsonResponse.setErrorMessage(errorMessage);
+
+			return menuJsonResponse;
+		}
+		
+		@Autowired ItemRepository itemRepository;
+		@Autowired
+		ConfigureFrRepository configureFrRepository;
+		@RequestMapping("/getItemAvailByMenuId")
+		public @ResponseBody List<Item> getItemAvailByMenuId(
+				@RequestParam int menuId) {
+			
+			ConfigureFranchisee menuConf = configureFrRepository.findByMenuIdAndDelStatus(menuId,0);
+
+			
+			List<Integer> ids = Stream.of(menuConf.getItemShow().split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			List<Item> items=itemRepository.findAllItems(ids);	
+
+			return items;
+
+		}
 }

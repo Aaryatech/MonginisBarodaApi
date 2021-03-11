@@ -50,6 +50,7 @@ import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GenerateBillRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
 import com.ats.webapi.repository.GetBillHeaderRepository;
+import com.ats.webapi.repository.GetDumpOrderRepository;
 import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
 import com.ats.webapi.repository.GetReorderByStockTypeRepository;
 import com.ats.webapi.repository.ItemDiscConfiguredRepository;
@@ -4763,25 +4764,56 @@ public class RestApiController {
 
 	}
 
+	// Ganesh 16/10 updated sachin 10Feb2021
+	@Autowired GetDumpOrderRepository dumpRepo;
+		@RequestMapping(value = { "/getOrderListForDumpOrder" }, method = RequestMethod.POST)
+		public @ResponseBody GetDumpOrderList getOrderListForDumpOrder(@RequestParam List<String> frId,
+				@RequestParam String menuId, @RequestParam String date,
+				@RequestParam int searchBy) {
+			GetDumpOrderList orderDumpList = new GetDumpOrderList();
+			List<GetDumpOrder> getDumpmOrder=new ArrayList<GetDumpOrder>();
+			System.err.println("frId getOrderListForDumpOrder API " +frId);
+			if(searchBy==2) {
+			String date1 = Common.convertToYMD(date);
+			
+			  getDumpmOrder = getDumpOrderService.findFrOrder(frId, menuId, date1);
+			// System.out.println("List " + getDumpmOrder.toString());
+			// //System.out.println("Count "+getDumpmOrder.size());
+			
+			}else {
+				//Sachin new 10feb for Dump Order to get item from  fr stock type
+				 getDumpmOrder = dumpRepo.getItemStockTypeQtyByfrIdsMenuId(frId, menuId);
+			}
+			System.err.println(" getDumpmOrder " + getDumpmOrder.toString());
+			orderDumpList.setGetDumpOrder(getDumpmOrder);
+			Info info = new Info();
+			info.setError(false);
+			info.setMessage("configure Fr List displayed successfully");
+			orderDumpList.setInfo(info);
+			return orderDumpList;
+		}
+
+
+	
 	// Ganesh 16/10
 
-	@RequestMapping(value = { "/getOrderListForDumpOrder" }, method = RequestMethod.POST)
-	public @ResponseBody GetDumpOrderList getOrderListForDumpOrder(@RequestParam List<String> frId,
-			@RequestParam String menuId, @RequestParam String date) {
-		String date1 = Common.convertToYMD(date);
+		@RequestMapping(value = { "/getOrderListForDumpOrder_OLD" }, method = RequestMethod.POST)
+		public @ResponseBody GetDumpOrderList getOrderListForDumpOrder_OLD(@RequestParam List<String> frId,
+				@RequestParam String menuId, @RequestParam String date) {
+			String date1 = Common.convertToYMD(date);
 
-		GetDumpOrderList orderDumpList = new GetDumpOrderList();
-		List<GetDumpOrder> getDumpmOrder = getDumpOrderService.findFrOrder(frId, menuId, date1);
-		System.out.println("List  " + getDumpmOrder.toString());
-		// System.out.println("Count "+getDumpmOrder.size());
-		orderDumpList.setGetDumpOrder(getDumpmOrder);
-		Info info = new Info();
-		info.setError(false);
-		info.setMessage("configure Fr List displayed successfully");
-		orderDumpList.setInfo(info);
+			GetDumpOrderList orderDumpList = new GetDumpOrderList();
+			List<GetDumpOrder> getDumpmOrder = getDumpOrderService.findFrOrder(frId, menuId, date1);
+			System.out.println("List  " + getDumpmOrder.toString());
+			// System.out.println("Count "+getDumpmOrder.size());
+			orderDumpList.setGetDumpOrder(getDumpmOrder);
+			Info info = new Info();
+			info.setError(false);
+			info.setMessage("configure Fr List displayed successfully");
+			orderDumpList.setInfo(info);
 
-		return orderDumpList;
-	}
+			return orderDumpList;
+		}
 
 	// Ganesh 24-10-2017
 

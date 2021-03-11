@@ -58,6 +58,19 @@ public class DispachRestApi {
 	@Autowired
 	DispatchReportRepositoryForItemwiseMin dispatchReportRepositoryForItemwiseMin;
 
+	@RequestMapping(value="/getSingleSection",method=RequestMethod.POST)
+	public @ResponseBody SectionMaster getSingleSection(@RequestParam int sectionId) {
+		SectionMaster secResp=new SectionMaster();
+		try {
+			secResp =sectionMasterRepository.getSingleSectionById(sectionId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception Occuered In /getSingleSection");
+			e.printStackTrace();
+		}
+		return secResp;
+	}
+	
 	@RequestMapping(value = { "/saveSection" }, method = RequestMethod.POST)
 	public @ResponseBody SectionMaster saveSection(@RequestBody SectionMaster sectionMaster) {
 
