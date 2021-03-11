@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.AllFrIdName;
+import com.ats.webapi.model.AllFrIdNameList;
 import com.ats.webapi.model.AllMenuJsonResponse;
 import com.ats.webapi.model.AllMenus;
 import com.ats.webapi.model.ConfigureFranchisee;
@@ -21,6 +23,7 @@ import com.ats.webapi.model.FlavourConf;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.newsetting.NewSetting;
+import com.ats.webapi.repository.AllFrIdNameRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
@@ -152,4 +155,36 @@ public class SachinWorkControl {
 			return items;
 
 		}
+		
+		//Sac 11-03-2021
+		@Autowired
+		AllFrIdNameRepository frNameIdRepo;
+
+		@RequestMapping(value = "/getAllFrIdNameByMenuIdConfigured", method = RequestMethod.POST)
+		public @ResponseBody AllFrIdNameList getAllFrIdName(@RequestParam("menuId") int menuId) {
+
+			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			try {
+				List<AllFrIdName> allFrIdNames = frNameIdRepo.getAllFrIdNameByMenuId(menuId);
+				Info info = new Info();
+
+				if (allFrIdNames != null) {
+					allFrIdNameList.setFrIdNamesList(allFrIdNames);
+					info.setError(false);
+					info.setMessage("Successfully displayed all fr Name and Id");
+					allFrIdNameList.setInfo(info);
+				} else {
+					info.setError(true);
+					info.setMessage("error in getting fr Id and Names");
+					allFrIdNameList.setInfo(info);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return allFrIdNameList;
+
+		}
+
+		
 }
