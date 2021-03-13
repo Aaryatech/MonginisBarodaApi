@@ -29,7 +29,7 @@ public interface GetCurrentStockRepo extends JpaRepository<GetCurrentStock, Inte
 			"            m_cat_sub.sub_cat_name,\n" + 
 			"            m_category.cat_name,\n" + 
 			"            fd.cat_id,\n" + 
-			"            fd.item_name,\n" + 
+			"            m_item.item_name,\n" + 
 			"            fd.op_total AS opening_stock           \n" + 
 			"        FROM\n" + 
 			"            m_item,\n" + 

@@ -28,12 +28,27 @@ public interface GetProductionItemQtyRepository extends JpaRepository<GetProduct
 			"        t_order,\n" + 
 			"        m_item \n" + 
 			"    WHERE\n" + 
-			"        t_order.order_date =:productionDate \n" + 
+			"        t_order.production_date =:productionDate \n" + 
 			"        AND  t_order.order_type=:catId \n" + 
 			"        AND m_item.id=t_order.item_id \n" + 
 			"    GROUP BY\n" + 
 			"        t_order.item_id\n" + 
 			" ", nativeQuery = true)
 	List<GetProductionItemQty> getOrderuItemQty(@Param("productionDate") String productionDate, @Param("catId") int catId);
-
+//	 SELECT\n" + 
+//		"        t_order.order_id as production_detail_id ,\n" + 
+//		"        coalesce(0) as production_header_id,\n" + 
+//		"        t_order.order_date as production_date,\n" + 
+//		"        SUM(t_order.order_qty) as qty,\n" + 
+//		"        t_order.item_id,\n" + 
+//		"        m_item.item_name \n" + 
+//		"    FROM\n" + 
+//		"        t_order,\n" + 
+//		"        m_item \n" + 
+//		"    WHERE\n" + 
+//		"        t_order.order_date =:productionDate \n" + 
+//		"        AND  t_order.order_type=:catId \n" + 
+//		"        AND m_item.id=t_order.item_id \n" + 
+//		"    GROUP BY\n" + 
+//		"        t_order.item_id // ON 2021-03-12
 }
