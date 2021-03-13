@@ -33,5 +33,13 @@ public interface MainMenuConfigurationRepository extends JpaRepository<AllMenus,
 	//Sachin 11-03-2021
 		@Query(value="SELECT m_fr_menu_show.* from m_fr_menu_show WHERE m_fr_menu_show.menu_id IN(:menuIds) AND m_fr_menu_show.del_status=0",nativeQuery=true)
 		public List<AllMenus> findByMenuIdIn(@Param("menuIds") List<Integer> menuIds);
+		
+		//Sachin 12-03-2021 25-01-2021 For Menu Id in Manual Order Page Impl At Sachin Work Controller RestAPI
+		@Query(value=" SELECT m_fr_menu_show.* from m_fr_menu_show,m_fr_menu_configure,m_section WHERE "
+				+ " m_fr_menu_show.menu_id=m_fr_menu_configure.menu_id and m_fr_menu_configure.fr_id=:frId "
+				+ "and m_fr_menu_configure.menu_id=m_fr_menu_show.menu_id and FIND_IN_SET(m_fr_menu_configure.menu_id,m_section.menu_ids) "
+				+ " AND m_fr_menu_show.del_status=0 and m_section.section_id=:sectionId  ",nativeQuery=true)
+		public List<AllMenus> findByFrIdAndSectionId(@Param("sectionId") int sectionId,@Param("frId") int frId);
+
 
 }

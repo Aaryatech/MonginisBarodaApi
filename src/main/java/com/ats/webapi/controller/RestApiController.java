@@ -1702,6 +1702,26 @@ public class RestApiController {
 	@Autowired
 	GenerateBillRepository generateBillRepository;
 
+	/*
+	 * @RequestMapping(value = { "/placeManualOrderNew" }, method =
+	 * RequestMethod.POST) public @ResponseBody List<GenerateBill>
+	 * placeManualOrderNew(@RequestBody List<Orders> orderJson) throws
+	 * ParseException, JsonParseException, JsonMappingException, IOException {
+	 * List<GenerateBill> billList = null; List<Orders> jsonResult; OrderLog log =
+	 * new OrderLog(); log.setFrId(orderJson.get(0).getFrId());
+	 * log.setJson(orderJson.toString()); logRespository.save(log);
+	 * 
+	 * jsonResult = orderService.placeManualOrder(orderJson); ArrayList<Integer>
+	 * list = new ArrayList<Integer>();
+	 * 
+	 * if (!jsonResult.isEmpty()) { for (int i = 0; i < jsonResult.size(); i++) {
+	 * list.add(jsonResult.get(i).getOrderId()); }
+	 * 
+	 * billList = generateBillRepository.getBillOfOrder(list); }
+	 * 
+	 * return billList; }
+	 */
+
 	@RequestMapping(value = { "/placeManualOrderNew" }, method = RequestMethod.POST)
 	public @ResponseBody List<GenerateBill> placeManualOrderNew(@RequestBody List<Orders> orderJson)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {
@@ -1726,6 +1746,7 @@ public class RestApiController {
 		return billList;
 	}
 
+	
 	@RequestMapping(value = { "/placeManualOrder" }, method = RequestMethod.POST)
 	public @ResponseBody List<GenerateBill> placeManualOrder(@RequestBody List<Orders> orderJson)
 			throws ParseException, JsonParseException, JsonMappingException, IOException {

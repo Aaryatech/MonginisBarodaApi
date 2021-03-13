@@ -19,14 +19,19 @@ import com.ats.webapi.model.AllMenuJsonResponse;
 import com.ats.webapi.model.AllMenus;
 import com.ats.webapi.model.ConfigureFranchisee;
 import com.ats.webapi.model.ErrorMessage;
+import com.ats.webapi.model.Flavour;
 import com.ats.webapi.model.FlavourConf;
+import com.ats.webapi.model.FlavourList;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
+import com.ats.webapi.model.ItemForMOrder;
 import com.ats.webapi.model.newsetting.NewSetting;
 import com.ats.webapi.repository.AllFrIdNameRepository;
+import com.ats.webapi.repository.ConfiSpCodeRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.ItemForMOrderRepository;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.NewSettingRepository;
@@ -187,4 +192,95 @@ public class SachinWorkControl {
 		}
 
 		
+		// Sachin 12-03-2021 25-01-2021 For ManualOrder page Menus
+		@RequestMapping(value = { "/getMenuListByFrAndSectionId" }, method = RequestMethod.POST)
+		public @ResponseBody AllMenuJsonResponse getMenuListByFrAndSectionId(@RequestParam("frId") int frId,
+				@RequestParam("sectionId") int sectionId) {
+
+			AllMenuJsonResponse menuJsonResponse = new AllMenuJsonResponse();
+			ErrorMessage errorMessage = new ErrorMessage();
+			try {
+				List<AllMenus> menuList = mainMenuConfRepo.findByFrIdAndSectionId(sectionId, frId);
+				menuJsonResponse.setMenuConfigurationPage(menuList);
+				errorMessage.setError(false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			errorMessage.setMessage("Menus shown successfully");
+			menuJsonResponse.setErrorMessage(errorMessage);
+
+			return menuJsonResponse;
+		}
+		
+		@Autowired
+		ItemForMOrderRepository itemRepositoryForMOrderRepository;
+
+		@RequestMapping(value = "/getItemListForMOrder", method = RequestMethod.POST)
+		public @ResponseBody List<ItemForMOrder> getItemListForMOrder(@RequestParam("itemGrp1") int itemGrp1,
+				@RequestParam("frId") int frId, @RequestParam("menuId") int menuId,
+				@RequestParam("ordertype") int ordertype, @RequestParam("prodDate") String prodDate) {
+
+			List<ItemForMOrder> itemList;
+			try {
+
+				itemList = itemRepositoryForMOrderRepository.getItemListForMOrder(menuId);
+
+				/*
+				 * if(ordertype==0) {
+				 * System.err.println("itemGrp1"+itemGrp1+"frId"+menuId+"ordertype"+ordertype+
+				 * "prodDate"+prodDate); itemList =
+				 * itemRepositoryForMOrderRepository.getItemListForMOrder(itemGrp1,frId,menuId,
+				 * prodDate); } else if(ordertype==2) { itemList =
+				 * itemRepositoryForMOrderRepository.getItemListForMOrderMul(itemGrp1);
+				 * 
+				 * }else { itemList =
+				 * itemRepositoryForMOrderRepository.getItemListForMOrderPrev(itemGrp1,frId);
+				 * 
+				 * }
+				 */
+			} catch (Exception e) {
+				itemList = new ArrayList<>();
+				e.printStackTrace();
+
+			}
+			return itemList;
+
+		}
+		
+
+		@RequestMapping(value = { "/getFrMenuConfigureByMenuFrId" }, method = RequestMethod.POST)
+		public @ResponseBody ConfigureFranchisee getFrMenuConfigureByMenuFrId1(@RequestParam("menuId") int menuId,
+				@RequestParam("frId") int frId) {
+			ConfigureFranchisee menuConf = configureFrRepository.findByMenuIdFrIdCustomeQuery(menuId, frId);
+			return menuConf;
+		}
+		
+		//Sac 12-03-2021
+		@Autowired ConfiSpCodeRepository confSpCodeRepo;
+		@RequestMapping("/getSPCodesByMenuId")
+		public @ResponseBody List<String> getSPCodesByMenuId(
+				@RequestParam int menuId) {
+
+			List<String> spCakeCodesResponse = confSpCodeRepo.findSpCodeAdminSpOrder(menuId);
+
+			return spCakeCodesResponse;
+
+		}
+		
+		
+		// new Method to display at frontEnd ordersp cake flavor list 12-03-2021
+		@RequestMapping(value = { "/getFlavorsAndSpConfBySpId" }, method = RequestMethod.POST)
+		@ResponseBody
+		public FlavourList showFlavorsAndSpConfBySpId(@RequestParam("spId") int spId) {
+
+			List<Flavour> jsonFlavourtList = flavourRepository.findBySpId(spId);
+			FlavourList flavourList = new FlavourList();
+			flavourList.setFlavour(jsonFlavourtList);
+			Info info = new Info();
+			info.setError(false);
+			info.setMessage("Flavour list displayed Successfully");
+			flavourList.setInfo(info);
+
+			return flavourList;
+		}
 }

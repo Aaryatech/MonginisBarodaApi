@@ -168,7 +168,19 @@ public class DispachRestApi {
 
 		return getSectionById;
 	}
-
+	@RequestMapping(value="/getAllSection",method=RequestMethod.GET)
+	public @ResponseBody List<SectionMaster> getAllSection(){
+		List<SectionMaster> sectionResp=new ArrayList<>();
+		try {
+			sectionResp=sectionMasterRepository.findByDelStatus(0);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception Occuered In /getAllSection");
+			e.printStackTrace();
+		}
+		
+		return sectionResp;
+	}
 	@RequestMapping(value = { "/itemListGroupByStationNo" }, method = RequestMethod.GET)
 	public @ResponseBody List<Double> itemListGroupByStationNo() {
 

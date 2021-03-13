@@ -23,7 +23,7 @@ public interface AllFrIdNameRepository extends JpaRepository<AllFrIdName, Intege
 	 */
 	//SAc 11-03-2021 //Changed for getting menu configured fr only by sachin m_fr_menu_configure table added to compare
 	@Query(value="select m_franchisee.fr_id,CONCAT(m_franchisee.fr_name, ' ', m_franchisee.fr_code) AS  fr_name from m_fr_menu_configure, m_franchisee where m_franchisee.del_status=0 And  m_franchisee.fr_id NOT"
-			+" IN(select t_order.fr_id from t_order where order_date=:orderDate AND menu_id=:menuId) and m_fr_menu_configure.fr_id=m_franchisee.fr_id and "
+			+" IN(select t_order.fr_id from t_order where production_date=:orderDate AND menu_id=:menuId) and m_fr_menu_configure.fr_id=m_franchisee.fr_id and "
 			+ "m_fr_menu_configure.menu_id=:menuId  order by m_franchisee.fr_name Asc"
 			,nativeQuery=true)
 public List<AllFrIdName> findNonOrders(@Param("orderDate") String orderDate, @Param("menuId") int menuId);

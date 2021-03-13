@@ -1512,8 +1512,8 @@ public class MasterController {
 					return details;
 
 				}
-				@RequestMapping(value = "/getItemListForMOrder", method = RequestMethod.POST)
-				public @ResponseBody List<ItemForMOrder> getItemListForMOrder(@RequestParam("itemGrp1")int itemGrp1,@RequestParam("frId")int frId,@RequestParam("menuId")int menuId,@RequestParam("ordertype")int ordertype,@RequestParam("prodDate")String prodDate) {
+				@RequestMapping(value = "/getItemListForMOrder_OLD", method = RequestMethod.POST)
+				public @ResponseBody List<ItemForMOrder> getItemListForMOrder_OLD(@RequestParam("itemGrp1")int itemGrp1,@RequestParam("frId")int frId,@RequestParam("menuId")int menuId,@RequestParam("ordertype")int ordertype,@RequestParam("prodDate")String prodDate) {
 
 					List<ItemForMOrder> itemList;
 					try {
