@@ -16,11 +16,13 @@ import com.ats.webapi.model.Info;
 import com.ats.webapi.model.RouteAbcVal;
 import com.ats.webapi.model.RouteSection;
 import com.ats.webapi.model.State;
+import com.ats.webapi.model.prod.GetProductListExlPdf;
 import com.ats.webapi.repo.RouteAbcValRepo;
 import com.ats.webapi.repo.StateRepository;
 import com.ats.webapi.repositories.RoiteSectionRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.RouteMasterRepository;
+import com.ats.webapi.repository.getproddetailbysubcat.GetProductListExlPdfRepo;
 
 @RestController
 public class FranchiseApiContoller {
@@ -258,4 +260,24 @@ public class FranchiseApiContoller {
 		}		
 		return secRouteList;		
 	}
+	
+	//----------------------------------------------------------------
+			@Autowired GetProductListExlPdfRepo prodExpRepo;
+			@RequestMapping(value = { "/getAllProdctExlPdf" }, method = RequestMethod.GET)
+			public @ResponseBody List<GetProductListExlPdf> getAllProdctExlPdf() {
+
+				List<GetProductListExlPdf> prod = new ArrayList<GetProductListExlPdf>();
+
+				try {
+
+					prod = prodExpRepo.getProductExlPdfList();
+
+				} catch (Exception e) {
+
+					e.printStackTrace();
+
+				}
+				return prod;
+
+			}
 }
