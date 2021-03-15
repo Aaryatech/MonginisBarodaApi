@@ -60,6 +60,8 @@ public interface FranchiseeService {
 	
 	
 	int updateFranchiseeToken(String frCode, String token );
+
+	public List<Franchisee> findAllFranchiseeByMenuId(int menuId);
 	
 	
 	

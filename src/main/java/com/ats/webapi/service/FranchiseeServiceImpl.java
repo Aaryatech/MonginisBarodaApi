@@ -633,5 +633,9 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 		return flag;
 	}
 	
-	
+	@Override
+	public List<Franchisee> findAllFranchiseeByMenuId(int menuId) {
+		List<Franchisee> frList = franchiseeRepository.getFrListyMenuId(menuId);
+		return frList;
+	}
 }
