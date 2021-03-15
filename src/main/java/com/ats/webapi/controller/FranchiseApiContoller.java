@@ -1,5 +1,6 @@
 package com.ats.webapi.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +12,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.CakeType;
 import com.ats.webapi.model.ErrorMessage;
+import com.ats.webapi.model.GetFrMenuExlPdf;
+import com.ats.webapi.model.GetMenuIdAndType;
 import com.ats.webapi.model.Info;
+import com.ats.webapi.model.MenuShow;
 import com.ats.webapi.model.RouteAbcVal;
 import com.ats.webapi.model.RouteSection;
+import com.ats.webapi.model.ShowFrMenuConfExlPdf;
 import com.ats.webapi.model.State;
+import com.ats.webapi.model.bill.Company;
 import com.ats.webapi.model.prod.GetProductListExlPdf;
+import com.ats.webapi.model.spprod.GetSpCakeExlPdf;
+import com.ats.webapi.repo.FrMenusRepo;
 import com.ats.webapi.repo.RouteAbcValRepo;
+import com.ats.webapi.repo.ShapeRepo;
 import com.ats.webapi.repo.StateRepository;
+import com.ats.webapi.repositories.CakeTypeRepo;
+import com.ats.webapi.repositories.FrMenuExlPdfRepo;
+import com.ats.webapi.repositories.GetMenuIdAndTypeRepo;
+import com.ats.webapi.repositories.GetSpCakeExlPdfRepo;
 import com.ats.webapi.repositories.RoiteSectionRepository;
+import com.ats.webapi.repositories.ShowFrMenuConfRepo;
+import com.ats.webapi.repository.CompanyRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.RouteMasterRepository;
 import com.ats.webapi.repository.getproddetailbysubcat.GetProductListExlPdfRepo;
@@ -38,6 +54,9 @@ public class FranchiseApiContoller {
 	
 	@Autowired
 	RoiteSectionRepository routeSecRepo;
+	
+	@Autowired 
+	CakeTypeRepo cakeTypeRepo;
 	
 	@RequestMapping(value = { "/showRouteAbcValList" }, method = RequestMethod.GET)
 	@ResponseBody
@@ -280,4 +299,213 @@ public class FranchiseApiContoller {
 				return prod;
 
 			}
+			
+			
+			// Show Cake Type List
+			@RequestMapping(value = { "/showCakeTypeList" }, method = RequestMethod.GET)
+			@ResponseBody
+			public List<CakeType> showCakeTypeList() {
+
+				List<CakeType> cakeType = cakeTypeRepo.findByDelStatusOrderByCakeTypeIdDesc(0);
+
+				return cakeType;
+			}
+			
+			@RequestMapping(value = { "/getCakeTypeById" }, method = RequestMethod.POST)
+			public @ResponseBody CakeType getCakeTypeById(@RequestParam("cakeTypeId") int cakeTypeId) {
+
+				CakeType cakeType = new CakeType();
+				try {
+					cakeType = cakeTypeRepo.findBycakeTypeId(cakeTypeId);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return cakeType;
+
+			}
+			
+			@RequestMapping(value = { "/deleteCakeType" }, method = RequestMethod.POST)
+			public @ResponseBody ErrorMessage deleteCakeType(@RequestParam("cakeTypeId") int cakeTypeId) {
+
+				ErrorMessage errorMessage = new ErrorMessage();
+
+				try {
+					int res = cakeTypeRepo.delCakeType(cakeTypeId);
+
+					if (res > 0) {
+						errorMessage.setError(false);
+						errorMessage.setMessage(" Deleted Successfully");
+					} else {
+						errorMessage.setError(true);
+						errorMessage.setMessage("Deletion Failed");
+					}
+
+				} catch (Exception e) {
+
+					e.printStackTrace();
+					errorMessage.setError(true);
+					errorMessage.setMessage("Deletion Failed :EXC");
+
+				}
+				return errorMessage;
+			}
+			
+			@RequestMapping(value = { "/insertCakeType" }, method = RequestMethod.POST)
+			public @ResponseBody CakeType insertCakeType(@RequestBody CakeType cakeType) {
+
+				CakeType res = new CakeType();
+
+				try {
+
+					res = cakeTypeRepo.saveAndFlush(cakeType);
+
+				} catch (Exception e) {
+
+					e.printStackTrace();
+
+				}
+				return res;
+
+			}
+			
+		@Autowired
+		GetSpCakeExlPdfRepo spCakeExlRepo;
+		@RequestMapping(value = { "/getSpCakeListPdfExl" }, method = RequestMethod.GET)
+			public @ResponseBody List<GetSpCakeExlPdf> getSpCakeListPdfExl() {
+
+				Info info = new Info();
+				
+				List<GetSpCakeExlPdf> res=new ArrayList<GetSpCakeExlPdf>();
+			
+			
+				res=spCakeExlRepo.getSpCakeListExlPdf();
+					return  res;
+				
+			}
+	//--------------------------------------------------------------------
+		
+		
+		@Autowired
+		FrMenuExlPdfRepo frMenuExlRepo;
+		
+		@RequestMapping(value = { "/getAllFrMenusList" }, method = RequestMethod.GET)
+		public @ResponseBody List<GetFrMenuExlPdf> getAllFrMenusList() {
+
+			List<GetFrMenuExlPdf> menuList = new ArrayList<GetFrMenuExlPdf>();
+
+			menuList = frMenuExlRepo.getAllFrMenus();
+			
+			return menuList;
+
+		}
+		
+		@Autowired
+		GetMenuIdAndTypeRepo sMenuRepo;	
+		@RequestMapping(value = { "/getAllSavedMenuIds" }, method = RequestMethod.GET)
+		public @ResponseBody List<GetMenuIdAndType> getAllSavedMenuIds() {
+
+			List<GetMenuIdAndType> menuIds = new ArrayList<GetMenuIdAndType>();
+
+			menuIds = sMenuRepo.getSavedMenuIds();
+			return menuIds;
+
+		}
+		
+		@Autowired
+		ShowFrMenuConfRepo frMenuConfRepo;
+		@RequestMapping(value = { "/getFrMenuCogigDetails" }, method = RequestMethod.GET)
+		public @ResponseBody List<ShowFrMenuConfExlPdf> getFrMenuCogigDetails() {
+
+			List<ShowFrMenuConfExlPdf> menuList = new ArrayList<ShowFrMenuConfExlPdf>();
+
+			menuList = frMenuConfRepo.getfrMenuConfigList();
+			
+			return menuList;
+
+		}
+		
+		
+		
+		@RequestMapping(value = { "/getFrMenuCogigDetailsByIds" }, method = RequestMethod.POST)
+		public @ResponseBody List<ShowFrMenuConfExlPdf> getFrMenuCogigDetailsyIds(@RequestParam List<String> menuIds, @RequestParam List<String> frIds) {
+
+			List<ShowFrMenuConfExlPdf> menuList = new ArrayList<ShowFrMenuConfExlPdf>();
+
+			menuList = frMenuConfRepo.getAllFrMenusExlPdfList(menuIds, frIds);
+			
+			System.err.println("List--------------------"+menuList);
+			
+			return menuList;
+
+		}
+		
+		
+		//--------------------------------------------------------------------
+		@Autowired
+		FrMenusRepo frMenuRepo;
+		
+		@RequestMapping(value = { "/saveNewMenu" }, method = RequestMethod.POST)
+		public @ResponseBody MenuShow saveNewMenu(@RequestBody MenuShow menu) {
+			
+			Info info=new Info();
+			MenuShow saveMenu = frMenuRepo.save(menu);	    
+			
+			if(saveMenu.getMenuId()>0)
+			{
+				info.setError(false);
+				info.setMessage("Data Insert Successfully");
+			}
+			else
+			{
+				info.setError(true);
+				info.setMessage("Data Insert Failed");
+			}		
+			return saveMenu;
+		}
+		
+		@RequestMapping(value = { "/getAllFrMenus" }, method = RequestMethod.GET)
+		public @ResponseBody List<MenuShow> getAllFrMenus() {
+
+			List<MenuShow> menuList = new ArrayList<MenuShow>();
+
+			menuList = frMenuRepo.findByDelStatusOrderByCatId(0);
+			return menuList;
+
+		} 
+		@RequestMapping(value = { "/getFrMenuById" }, method = RequestMethod.POST)
+		public @ResponseBody MenuShow getFrMenuById(@RequestParam int menuId) {
+
+			
+			MenuShow menu = frMenuRepo.findByMenuId(menuId);
+			return menu;
+			 
+		}
+		
+		@RequestMapping(value = { "/deleteFrMenu" }, method = RequestMethod.POST)
+		public @ResponseBody Info deleteFrMenu(@RequestParam int menuId) {
+			Info info = new Info();
+			int res = 0;
+			try {
+				res = frMenuRepo.deleteMenuById(menuId);
+				if (res > 0) {
+					info.setError(false);
+					info.setMessage("Fr Menu Deleted");
+
+				} else {
+					info.setError(true);
+					info.setMessage("Unable To  Delete Fr Menu");
+
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				info.setError(true);
+				info.setMessage("Unable To  Delete Fr Menu");
+				System.err.println("Exception In /deleteFrMenu : " + e.getMessage());
+			}
+
+			return info;
+
+		}
 }

@@ -2420,84 +2420,72 @@ public class RestApiController {
 	// Special Cake Insert
 	@RequestMapping(value = { "/insertSpecialCake" }, method = RequestMethod.POST)
 	@ResponseBody
-	public SpecialCake saveSpecialCake(@RequestParam("spCode") String spcode, @RequestParam("spName") String spname,
-			@RequestParam("spType") int sptype, @RequestParam("spMinwt") String spminwt,
-			@RequestParam("spMaxwt") String spmaxwt, @RequestParam("spBookb4") String spbookb4,
-			@RequestParam("spImage") String spimage, @RequestParam("spTax1") double sptax1,
-			@RequestParam("spTax2") double sptax2, @RequestParam("spTax3") double sptax3,
-			@RequestParam("speIdlist") String speidlist, @RequestParam("erpLinkcode") String erplinkcode,
-			@RequestParam("spPhoupload") int spphoupload, @RequestParam("timeTwoappli") int timetwoappli,
-			@RequestParam("isUsed") int isused, @RequestParam("spDesc") String spDesc,
-			@RequestParam("orderQty") int orderQty, @RequestParam("orderDiscount") float orderDiscount,
-			@RequestParam("isCustChoiceCk") int isCustChoiceCk, @RequestParam("isAddonRateAppli") int isAddonRateAppli,
-			@RequestParam("mrpRate1") float mrpRate1, @RequestParam("mrpRate2") float mrpRate2,
-			@RequestParam("mrpRate3") float mrpRate3, @RequestParam("spRate1") float spRate1,
-			@RequestParam("spRate2") float spRate2, @RequestParam("spRate3") float spRate3,
-			@RequestParam("isSlotUsed") int isSlotUsed, @RequestParam("noOfChars") int noOfChars) {
+	public SpecialCake saveSpecialCake(@RequestBody SpecialCake specialcake) {
 
 		SpecialCake specialCakeRes = null;
 		try {
-			System.out.println("isSlotUsed");
+			// System.out.println("isSlotUsed");
 
-			SpecialCake specialcake = new SpecialCake();
+//			SpecialCake specialcake = new SpecialCake();
+//
+//			specialcake.setSpCode(spcode);
+//			specialcake.setSpName(spname);
+//			specialcake.setSpType(sptype);
+//			specialcake.setSpMinwt(spminwt);
+//			specialcake.setSpMaxwt(spmaxwt);
+//			specialcake.setSpBookb4(spbookb4);
+//			specialcake.setSprId(1);
+//			specialcake.setSpImage(spimage);
+//			specialcake.setSpTax1(sptax1);
+//			specialcake.setSpTax2(sptax2);
+//			specialcake.setSpTax3(sptax3);
+//			specialcake.setSpeIdlist(speidlist);
+//			specialcake.setErpLinkcode(erplinkcode);
+//			specialcake.setIsUsed(isused);
+//			specialcake.setSpPhoupload(spphoupload);
+//			specialcake.setTimeTwoappli(timetwoappli);
+//			specialcake.setBaseCode("0");
+//			specialcake.setDelStatus(0);
+//
+//			specialcake.setSpDesc(spDesc);
+//			specialcake.setOrderQty(orderQty);
+//			specialcake.setOrderDiscount(orderDiscount);
+//			specialcake.setIsCustChoiceCk(isCustChoiceCk);
+//			specialcake.setIsAddonRateAppli(isAddonRateAppli);
+//			specialcake.setMrpRate1(mrpRate1);
+//			specialcake.setMrpRate2(mrpRate2);
+//			specialcake.setMrpRate3(mrpRate3);
+//			specialcake.setSpRate1(spRate1);
+//			specialcake.setSpRate2(spRate2);
+//			specialcake.setSpRate3(spRate3);
+//			specialcake.setIsSlotUsed(isSlotUsed);
 
-			specialcake.setSpCode(spcode);
-			specialcake.setSpName(spname);
-			specialcake.setSpType(sptype);
-			specialcake.setSpMinwt(spminwt);
-			specialcake.setSpMaxwt(spmaxwt);
-			specialcake.setSpBookb4(spbookb4);
-			specialcake.setSprId(1);
-			specialcake.setSpImage(spimage);
-			specialcake.setSpTax1(sptax1);
-			specialcake.setSpTax2(sptax2);
-			specialcake.setSpTax3(sptax3);
-			specialcake.setSpeIdlist(speidlist);
-			specialcake.setErpLinkcode(erplinkcode);
-			specialcake.setIsUsed(isused);
-			specialcake.setSpPhoupload(spphoupload);
-			specialcake.setTimeTwoappli(timetwoappli);
-			specialcake.setBaseCode("0");
-			specialcake.setDelStatus(0);
-
-			specialcake.setSpDesc(spDesc);
-			specialcake.setOrderQty(orderQty);
-			specialcake.setOrderDiscount(orderDiscount);
-			specialcake.setIsCustChoiceCk(isCustChoiceCk);
-			specialcake.setIsAddonRateAppli(isAddonRateAppli);
-			specialcake.setMrpRate1(mrpRate1);
-			specialcake.setMrpRate2(mrpRate2);
-			specialcake.setMrpRate3(mrpRate3);
-			specialcake.setSpRate1(spRate1);
-			specialcake.setSpRate2(spRate2);
-			specialcake.setSpRate3(spRate3);
-			specialcake.setIsSlotUsed(isSlotUsed);
-			specialcake.setNoOfChars(noOfChars);
-
-			System.out.println("*********Special Cake:***************" + specialcake.toString());
+			// System.out.println("*********Special Cake:***************" +
+			// specialcake.toString());
 
 			specialCakeRes = specialcakeRepository.save(specialcake);
 
-			try {
-				List<String> frTokens = franchiseSupRepository.findTokens();
-
-				for (String token : frTokens) {
-					Firebase.sendPushNotifForCommunication(token, "Special Cake Details Updated",
-							"Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.",
-							"inbox");
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+//			try {
+//				List<String> frTokens = franchiseSupRepository.findTokens();
+//
+//				for (String token : frTokens) {
+//					Firebase.sendPushNotifForCommunication(token, "Special Cake Details Updated",
+//							"Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.",
+//							"inbox");
+//				}
+//			} catch (Exception e2) {
+//				e2.printStackTrace();
+//			}
 
 		} catch (Exception e) {
-			System.out.println("inser cake error " + e.getMessage());
+			// System.out.println("inser cake error " + e.getMessage());
 
 			e.printStackTrace();
 		}
 		return specialCakeRes;
 
 	}
+
 
 	// Save Message
 	@RequestMapping(value = { "/insertMessage" }, method = RequestMethod.POST)
@@ -2741,7 +2729,7 @@ public class RestApiController {
 	@ResponseBody
 	public FlavourList showFlavourList() {
 
-		List<Flavour> jsonFlavourtList = flavourService.findAllFlavour();
+		List<Flavour> jsonFlavourtList = flavourService.findAllFlavourList();
 		FlavourList flavourList = new FlavourList();
 		flavourList.setFlavour(jsonFlavourtList);
 		Info info = new Info();
@@ -2765,6 +2753,22 @@ public class RestApiController {
 		flavourList.setInfo(info);
 
 		return flavourList;
+	}
+	
+	@RequestMapping(value = "/updateMultiFlavourStatus", method = RequestMethod.POST)
+	public @ResponseBody String updateMultiFlavourStatus(@RequestParam List<String> spfId, @RequestParam int status) {
+		
+		ErrorMessage errorMessage = new ErrorMessage();
+		int res = flavourRepository.updateFlavourIds(spfId, status);
+		if(res>0) {
+			errorMessage.setError(false);
+			errorMessage.setMessage("Operation Sucessfull");
+		}else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("Operation Fail");
+		}
+			
+		return JsonUtil.javaToJson(errorMessage);
 	}
 
 	// Show Scheduler List
@@ -3924,13 +3928,11 @@ public class RestApiController {
 			@RequestParam("mrpRate1") float mrpRate1, @RequestParam("mrpRate2") float mrpRate2,
 			@RequestParam("mrpRate3") float mrpRate3, @RequestParam("spRate1") float spRate1,
 			@RequestParam("spRate2") float spRate2, @RequestParam("spRate3") float spRate3,
-			@RequestParam("isUsed") int isUsed, @RequestParam("isSlotUsed") int isSlotUsed,
-			@RequestParam("noOfChars") int noOfChars) {
+			@RequestParam("isUsed") int isUsed, @RequestParam("isSlotUsed") int isSlotUsed) {
 
 		SpecialCake specialCake = specialcakeService.findSpecialCake(id);
 		Info info = new Info();
 		SpecialCake jsonResult = null;
-		System.err.println("Erplink Values==="+erplinkcode);
 		try {
 
 			specialCake.setSpName(spname);
@@ -3963,9 +3965,9 @@ public class RestApiController {
 			specialCake.setSpRate2(spRate2);
 			specialCake.setSpRate3(spRate3);
 			specialCake.setIsSlotUsed(isSlotUsed);
-			specialCake.setNoOfChars(noOfChars);// new
 
-			System.out.println("*********Special Cake:***************" + specialCake.getIsSlotUsed());
+			// System.out.println("*********Special Cake:***************" +
+			// specialCake.getIsSlotUsed());
 
 			jsonResult = specialcakeRepository.save(specialCake);
 
@@ -3982,8 +3984,6 @@ public class RestApiController {
 		} catch (Exception e) {
 			info.setError(true);
 			info.setMessage("" + e.getMessage());
-			System.err.println("Exc In Update Sp Cake");e.printStackTrace();
-			
 		}
 
 		return jsonResult;

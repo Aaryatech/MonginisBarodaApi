@@ -471,47 +471,47 @@ public class MasterController {
 				
 				
 		// ----------------------------SAVE SpCake Sup---------------------------
-				@RequestMapping(value = { "/saveSpCakeSup" }, method = RequestMethod.POST)
-				public @ResponseBody Info saveSpCakeSup(@RequestBody SpCakeSupplement spCakeSupplement) {
+		@RequestMapping(value = { "/saveSpCakeSup" }, method = RequestMethod.POST)
+		public @ResponseBody Info saveSpCakeSup(@RequestBody SpCakeSupplement spCakeSupplement) {
 
-					SpCakeSupplement spCakeSupplementRes = null;
-					Info info = new Info();
+			SpCakeSupplement spCakeSupplementRes = null;
+			Info info = new Info();
+			try {
+
+				spCakeSupplementRes = spCakeService.saveSpCakeSup(spCakeSupplement);
+
+				if (spCakeSupplementRes != null) {
+					info.setError(false);
+					info.setMessage("SpCakeSupplement Saved Successfully.");
+					
 					try {
+					    List<String> frTokens=franchiseSupRepository.findTokens();
 
-						spCakeSupplementRes = spCakeService.saveSpCakeSup(spCakeSupplement);
-
-						if (spCakeSupplementRes != null) {
-							info.setError(false);
-							info.setMessage("SpCakeSupplement Saved Successfully.");
-							
-							try {
-							    List<String> frTokens=franchiseSupRepository.findTokens();
-
-							 for(String token:frTokens) {
-					          Firebase.sendPushNotifForCommunication(token,"Special Cake Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","updateList");
-							 }
-					         }
-					         catch(Exception e2)
-					         {
-						       e2.printStackTrace();
-					         }
-						} else {
-							info.setError(true);
-							info.setMessage("SpCakeSupplement Not Saved .");
-						}
-
-					} catch (Exception e) {
-
-						info.setError(true);
-						info.setMessage("SpCakeSupplement Not Saved");
-
-						e.printStackTrace();
-						System.out.println("Exception In MasterController /saveSpCakeSup" + e.getMessage());
-
-					}
-					return info;
-
+					 for(String token:frTokens) {
+			          Firebase.sendPushNotifForCommunication(token,"Special Cake Details Updated","Changes have been made in OPS at item level, SP level, in the rates. Kindly refer the OPS for exact changes made.","updateList");
+					 }
+			         }
+			         catch(Exception e2)
+			         {
+				       e2.printStackTrace();
+			         }
+				} else {
+					info.setError(true);
+					info.setMessage("SpCakeSupplement Not Saved .");
 				}
+
+			} catch (Exception e) {
+
+				info.setError(true);
+				info.setMessage("SpCakeSupplement Not Saved .");
+
+				e.printStackTrace();
+				//System.out.println("Exception In MasterController /saveSpCakeSup" + e.getMessage());
+
+			}
+			return info;
+
+		}
 		 //---------------------------------------------------------------------------
 		// ------------------------Delete SpCake Sup------------------------------------
 		@RequestMapping(value = { "/deleteSpCakeSup" }, method = RequestMethod.POST)

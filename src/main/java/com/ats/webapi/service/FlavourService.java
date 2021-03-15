@@ -11,4 +11,6 @@ public interface FlavourService {
 	public Flavour findFlavour(int spfId);
 	public Flavour updateFlavour(int id);
 
+	public List<Flavour> findAllFlavourList();
+
 }
