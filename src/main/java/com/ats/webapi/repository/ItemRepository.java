@@ -536,5 +536,10 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	
 	@Query(value="SELECT DISTINCT item_grp2 FROM `m_item` WHERE del_status=0",nativeQuery=true)
 	public List<Integer> getItemAllotedSubCategoryId();
+
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE m_item SET item_mrp1=:mrp1, item_mrp2=:mrp2, item_mrp3=:mrp3 WHERE id=:itemId",nativeQuery=true)
+	public int editItemMrps(@Param("itemId") int itemId, @Param("mrp1") float mrp1, @Param("mrp2") float mrp2, @Param("mrp3") float mrp3);
 	
 }

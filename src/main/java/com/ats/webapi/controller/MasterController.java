@@ -1647,5 +1647,30 @@ public class MasterController {
 				}
 				
 				
+				@RequestMapping(value ="/itemMrpUpdt", method = RequestMethod.POST)
+				public Info itemMrpUpdt(@RequestParam("itemId") int itemId, @RequestParam("mrp1") float mrp1 ,@RequestParam("mrp2") float mrp2
+						,@RequestParam("mrp3") float mrp3)
+				{
+					Info info=new Info();
+					try {
+						int isUpdated=itemRepository.editItemMrps(itemId, mrp1, mrp2, mrp3);
+						
+						if(isUpdated>0)
+						{
+							info.setError(false);
+							info.setMessage("Item MRP Updated Successfully.");
+						}else
+						{
+							info.setError(true);
+							info.setMessage("Item MRP Updation Failed.");
+						}
+						
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					return info;
+				}
+				
 				
 }
