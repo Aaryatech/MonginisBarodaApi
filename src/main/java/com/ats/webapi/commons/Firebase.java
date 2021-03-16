@@ -19,9 +19,19 @@ import com.google.android.gcm.server.Sender;
 public class Firebase {
  
 	
-	// Method to send Notifications from server to client end.
+	// Method to send Notifications from server to client end. 
+	//Old Key
 	public final static String AUTH_KEY_FCM = "AAAAvgBdT8Y:APA91bEQg2VdTdB7GfMksze2J5sWVNsOHa6cGBjRJkMqBK05Zx1N0hW9tRhrE1dJ13CuUaKvtefSusRX1sOhDiiLpyrQuqpXobMx80U-FdqM4UWd_sCmhGLIdGAvpBS3v1IX5676xmUz";
 
+	//Akhilesh 2021-03-13 
+	public final static String ADMIN_AUTH_KEY_FCM = "AAAAjfdqpS4:APA91bHW0vK7WF2zIU9zg_SVKfCCGaTMcxeLQtvc3FrvhAVgGKYmtB-mQGl-TVSlVSAno84YXx16s3zvR-NShlTOyX3qQzU5BonyXFxsRgSJlTyoXL-Rb204qQNRg7N6IYAB9nM2KWPk";
+	
+	
+	//Akhilesh 2021-03-13 
+	public final static String FR_AUTH_KEY_FCM = "AAAADy_uRQk:APA91bGRbRJfJdZmLxbfRSFo0CyVQzlzlPaeVympZvDVsHN_azZ37f2ZjDa3ZQ3YpRlDkj126c_-1an8XII64OiZbGU70XwppzM_w4ebMK_YdliE2jYK13o6Sgl57Xy2s-f1J2sEcP4z";
+
+	
+	
 	public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
 	public static String sendPushNotification(String deviceToken, String title, String body,int tag) throws IOException {
@@ -132,6 +142,82 @@ System.out.println("deviceToken"+deviceToken.toString());
 
 		return result;
 	}
+	
+	
+	//New Akhilesh 2021-03-13
+	/*********************************************************For Both ************************************************************************/
+	public static String sendPushNotifForCommunicationBoth(String deviceToken, String title, String body,String tag,int SendTo) throws IOException {
+
+		// System.out.println("Parameters : " + deviceToken + "\nTitle : " +
+		// title + "\nDesc : " + body);
+		String result = "";
+		URL url = new URL(API_URL_FCM);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		conn.setUseCaches(false);
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+
+		conn.setRequestMethod("POST");
+		if(SendTo==1) {
+			conn.setRequestProperty("Authorization", "key=" + ADMIN_AUTH_KEY_FCM);
+		}else {
+			conn.setRequestProperty("Authorization", "key=" + FR_AUTH_KEY_FCM);
+		}
+		
+		
+		
+		conn.setRequestProperty("Content-Type", "application/json");
+System.out.println("deviceToken"+deviceToken.toString());
+		JSONObject json = new JSONObject();
+		JSONObject info = new JSONObject();
+		try {
+
+			json.put("to", deviceToken.trim());
+			info.put("title", title.trim());
+			info.put("tag",tag);
+			info.put("body", body.trim()); // Notification
+			info.put("sound", "default");
+			info.put("vibrate", "true");
+			json.put("data", info);
+
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+			wr.write(json.toString());
+			wr.flush();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+			String output;
+			// System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				// System.out.println(output);
+			}
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "failure";
+		}
+		System.out.println("------------------------------------------------------------------------");
+		System.out.println("FCM Notification is sent successfully");
+
+		return result;
+	}
+/****************************************************************************************************************************************/	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static String sendPushNotifForCommunicationWithFr(String deviceToken, String title, String body,String tag,String frName) throws IOException {
 
 		// System.out.println("Parameters : " + deviceToken + "\nTitle : " +

@@ -2,7 +2,10 @@ package com.ats.webapi.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,6 +15,12 @@ public interface AlbumEnquiryRepository extends JpaRepository<AlbumEnquiry, Inte
 	
 	@Query(value="SELECT * FROM t_album_enquiry WHERE del_status=0 AND enquiry_no=:enqId",nativeQuery=true)
 	AlbumEnquiry getEnquiryByDelStatusAndId(@Param("enqId") int enqId );
+	
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE t_album_enquiry SET ex_var3=:orderNo WHERE enquiry_no=:enqId AND del_status=0  ",nativeQuery=true)
+	int updateAddToProdFlag(@Param("enqId") int enqId,@Param("orderNo") String orderNo);
+	
 	
 	@Query(value="SELECT\n" + 
 			"    `enquiry_no`,\n" + 

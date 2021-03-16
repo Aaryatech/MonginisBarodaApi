@@ -46,8 +46,10 @@ public class ImageUploadController {
 	 * String CUST_CHOICE_PHOTO_CAKE_FOLDER =
 	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
 	 */
-	//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
-	public static final String fileUploadPath = "/home/maddy/ats-12/";
+//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+	//public static final String fileUploadPath = "/home/lenovo/AkhileshWorkspace/";
+	public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/kolhapur/";
+	
 	
 	private static String SUGGESTION_URL = fileUploadPath + "SUGGESTION/";
 	private static String COMPLAINT_URL = fileUploadPath + "COMPLAINT/";
@@ -73,12 +75,17 @@ public class ImageUploadController {
 			@RequestParam("imageName") String imageName, @RequestParam("type") String type) {
 
 		Info info = new Info();
-
 		System.out.println("File Name " + uploadfile.getOriginalFilename());
-
+		String a=	imageName.replaceAll("^\"|\"$", "");//Akhilesh ," " In Image Name Problm 2021-03-11
+		System.out.println("imageName Name1 " +a);
+		
+		
+		
 		try {
+			//saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);//Akhilesh ," " In Image Name Problm 2021-03-11
+			saveUploadedFiles(Arrays.asList(uploadfile), a, type);
 
-			saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);
+			//saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);
 
 			info.setError(false);
 			info.setMessage("File uploaded successfully");

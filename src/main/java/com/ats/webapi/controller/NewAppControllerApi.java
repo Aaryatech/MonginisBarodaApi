@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.AlbumEnquiry;
+import com.ats.webapi.model.Info;
 import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.rejectRemark;
 import com.ats.webapi.model.newsetting.NewSetting;
 import com.ats.webapi.repository.AlbumEnquiryRepository;
+import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.NewSettingRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
+import com.ats.webapi.repository.UserRepository;
 import com.ats.webapi.repository.rejectRemarkRepository;
 import com.ats.webapi.service.SpecialCakeService;
 
@@ -40,6 +44,14 @@ public class NewAppControllerApi {
 	
 	@Autowired
 	rejectRemarkRepository rejectRemarkRepo; 
+	
+	@Autowired
+	UserRepository userRepo;
+	
+	@Autowired
+	FranchiseSupRepository franSuprepo;
+	
+	
 	
 	
 	
@@ -102,6 +114,40 @@ public class NewAppControllerApi {
 		AlbumEnquiry enq = new AlbumEnquiry();
 		try {
 			enq = enquiryRepo.save(enquiry);
+			//System.err.println("Req="+enquiry.getEnquiryNo());
+			//System.err.println("Res="+enq.getEnquiryNo());
+			//NEW Enquiry Nofification
+			if(enq.getStatus()==0 && enq.getEnquiryNo()>0) {
+				List<String> userTokens=userRepo.findTokens();
+				for(String token : userTokens) {
+					if(token!=null) {
+						Firebase.sendPushNotifForCommunicationBoth(token, "New Enquiry", "New Enquiry Added By"+enq.getExVar1(), "inbox", 1);
+						System.err.println("New Nottification");
+					}
+					
+				}
+			}
+			//Approve Enquiry Notification
+			if(enquiry.getEnquiryNo()>0 && enq.getStatus()==1) {
+			String frToken =franSuprepo.findTokenByFrId(enq.getFrId());
+			if(frToken!=null) {
+				Firebase.sendPushNotifForCommunicationBoth(frToken, "Enquiry Approved", "Enquiry Approved  For \t "+enq.getCustName(), "inbox", 0);
+				System.err.println("Approve Nottification");
+			}
+			}
+			
+			
+			//Reject Enquiry Notification
+			if(enquiry.getEnquiryNo()>0 && enq.getStatus()==2) {
+			String frToken =franSuprepo.findTokenByFrId(enq.getFrId());
+			if(frToken!=null) {
+				Firebase.sendPushNotifForCommunicationBoth(frToken, "Enquiry Rejected", "Enquiry Rejected  Because \t "+enq.getRejectRemark()+"For"+enq.getCustName(), "inbox", 0);
+				System.err.println("Approve Nottification");
+			}
+			}
+			
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -158,6 +204,59 @@ public class NewAppControllerApi {
 		
 		return remarks;
 	}
+	
+	
+	
+	//To Place New Order From Enq App
+	@RequestMapping(value="/placeSpcakeOrderFromApp",method=RequestMethod.POST)
+	public @ResponseBody Info placeSpcakeOrderFromApp(@RequestParam int frid,@RequestParam int menuId,@RequestParam int spId,
+													@RequestParam int flavourId,@RequestParam int shapeId, @RequestParam String message,
+													@RequestParam String  spInstruction,@RequestParam int extraCharg,@RequestParam int selWeight,
+													@RequestParam int enqId )  {
+		Info info=new Info();
+		int flag=0;
+		try {
+			//Check Condition  Sp Cake Opreder Placed 
+			int orederNo=111111;
+			if(true) {
+				flag=enquiryRepo.updateAddToProdFlag(enqId, String.valueOf(orederNo));
+				if(flag>0) {
+					info.setError(false);
+					info.setMessage("Special Cake Order Placed Successfully");
+				}else {
+					info.setError(true);
+					info.setMessage("Ubable To Place Special Cake Order");
+				}
+				
+				
+				if(!info.isError()) {
+					String frToken =franSuprepo.findTokenByFrId(frid);
+					if(frToken!=null) {
+						Firebase.sendPushNotifForCommunicationBoth(frToken, "Oder Placed Successfully", "Order Place Oder Placed Successfully For Enquiry No:"+enqId, "inbox", 0);
+						System.err.println("Approve Nottification");
+					}
+				}
+				
+				
+			}
+			
+			
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception Occuered In /placeSpcakeOrderFromApp");
+			info.setError(true);
+			info.setMessage("Ubable To Place Special Cake Order Exception Occuered");
+		}
+		
+		return info;
+	}
+	
+	
+	
 	
 	
 	
