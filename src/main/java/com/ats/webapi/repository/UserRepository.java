@@ -76,5 +76,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	int changePassword(@Param("userId") int userId, @Param("newPass") String newPass);
 	
 	User findBycontact(String mob);
+
+	User findByContactAndDelStatus(String mobEmail, int i);
 	
 }

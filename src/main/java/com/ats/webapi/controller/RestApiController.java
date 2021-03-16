@@ -5392,35 +5392,35 @@ public class RestApiController {
 
 	}
 
-	@RequestMapping(value = { "/updateToNewPassword" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateToNewPassword(@RequestParam int userId, @RequestParam String newPass) {
-
-		Info res = new Info();
-
-		int a = updateUserRepo.changePassword(userId, newPass);
-		if (a > 0) {
-
-			mailsubject = " New Credentials ";
-			String text = "\n Your new username and password are : \n";
-
-			User usr = new User();
-			usr = userService.findByUserId(userId);
-			if (usr != null) {
-				String emailId = usr.getEmail();
-				String password = "\n Username : " + usr.getUsername() + " \n Password : " + usr.getPassword();
-
-				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
-						password);
-			}
-			res.setError(false);
-			res.setMessage("success");
-		} else {
-			res.setError(true);
-			res.setMessage("fail");
-		}
-
-		return res;
-	}
+//	@RequestMapping(value = { "/updateToNewPassword" }, method = RequestMethod.POST)
+//	public @ResponseBody Info updateToNewPassword(@RequestParam int userId, @RequestParam String newPass) {
+//
+//		Info res = new Info();
+//
+//		int a = updateUserRepo.changePassword(userId, newPass);
+//		if (a > 0) {
+//
+//			mailsubject = " New Credentials ";
+//			String text = "\n Your new username and password are : \n";
+//
+//			User usr = new User();
+//			usr = userService.findByUserId(userId);
+//			if (usr != null) {
+//				String emailId = usr.getEmail();
+//				String password = "\n Username : " + usr.getUsername() + " \n Password : " + usr.getPassword();
+//
+//				Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text,
+//						password);
+//			}
+//			res.setError(false);
+//			res.setMessage("success");
+//		} else {
+//			res.setError(true);
+//			res.setMessage("fail");
+//		}
+//
+//		return res;
+//	}
 
 	/******************************************************************************/
 	// OPS
