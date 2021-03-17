@@ -3495,9 +3495,9 @@ public class RestApiController {
 		 * 
 		 * System.out.println("date param = " + date.toString());
 		 */
-
+int FridInt=Integer.parseInt(frId);
 		try {
-			itemList = getFrItemsService.findFrItems(items);
+			itemList = getFrItemsService.findFrItems(items,FridInt);
 			try {
 				orderList = prevItemOrderService.findFrItemOrdersFrontEndByDelDate(items, frId, date, menuId);
 				List<ItemListWithDisc> itemListwithDisc = itemListWithDiscRepo.findItemListWithDisc(items, frId);
@@ -3530,6 +3530,9 @@ public class RestApiController {
 					getFrItems.setSubCatName(item.getSubCatName());
 					getFrItems.setMinQty(item.getMinQty());
 					getFrItems.setItemRate3(item.getItemRate3());
+					getFrItems.setMinQuantity(item.getMinQtyByItemConfig());
+					getFrItems.setMaxQuantity(item.getMaxQtyByItemConfig());
+					getFrItems.setReoderQuantity(item.getReorderQtyByItemConfig());
 
 					for (int j = 0; j < orderList.size(); j++) {
 

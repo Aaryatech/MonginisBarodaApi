@@ -46,9 +46,10 @@ public class ImageUploadController {
 	 * String CUST_CHOICE_PHOTO_CAKE_FOLDER =
 	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
 	 */
-//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
-	//public static final String fileUploadPath = "/home/lenovo/AkhileshWorkspace/";
-	public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/kolhapur/";
+public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+	//public static final String fileUploadPath = "/home/lenovo/AkhileshWorkspace/MOBILEUPLOADS/"; 
+		
+	//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/kolhapur/";
 	
 	
 	private static String SUGGESTION_URL = fileUploadPath + "SUGGESTION/";

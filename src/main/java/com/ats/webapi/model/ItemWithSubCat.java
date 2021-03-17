@@ -65,6 +65,18 @@ public class ItemWithSubCat implements Serializable {
 	private String subCatName;
 	
 	
+	//Akhilesh 2021-03-17 To Get Min Qty From  m_fr_item_stock Table
+	//@Column(name="min_qty")
+	private int MinQtyByItemConfig;
+	
+	//Akhilesh 2021-03-17 To Get Max Qty From  m_fr_item_stock Table
+	//@Column(name="max_qty")
+	private int MaxQtyByItemConfig;
+	
+	//Akhilesh 2021-03-17 To Get Reorder Qty From  m_fr_item_stock Table
+	//@Column(name="reorder_qty")
+	private int ReorderQtyByItemConfig;
+	
 	
 
 	public double getItemMrp3() {
@@ -253,14 +265,45 @@ public class ItemWithSubCat implements Serializable {
 		this.id = id;
 	}
 
+	public int getMinQtyByItemConfig() {
+		return MinQtyByItemConfig;
+	}
+
+	public void setMinQtyByItemConfig(int minQtyByItemConfig) {
+		MinQtyByItemConfig = minQtyByItemConfig;
+	}
+
+	public int getMaxQtyByItemConfig() {
+		return MaxQtyByItemConfig;
+	}
+
+	public void setMaxQtyByItemConfig(int maxQtyByItemConfig) {
+		MaxQtyByItemConfig = maxQtyByItemConfig;
+	}
+
+	public int getReorderQtyByItemConfig() {
+		return ReorderQtyByItemConfig;
+	}
+
+	public void setReorderQtyByItemConfig(int reorderQtyByItemConfig) {
+		ReorderQtyByItemConfig = reorderQtyByItemConfig;
+	}
+
 	@Override
 	public String toString() {
-		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", itemGrp1=" + itemGrp1 + ", itemGrp2=" + itemGrp2
-				+ ", itemGrp3=" + itemGrp3 + ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2 + ", itemMrp1="
-				+ itemMrp1 + ", itemMrp2=" + itemMrp2 + ", itemImage=" + itemImage + ", itemTax1=" + itemTax1
-				+ ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3 + ", itemIsUsed=" + itemIsUsed + ", itemSortId="
-				+ itemSortId + ", grnTwo=" + grnTwo + ", delStatus=" + delStatus + ", id=" + id + "]";
+		return "ItemWithSubCat [itemId=" + itemId + ", itemName=" + itemName + ", itemGrp1=" + itemGrp1 + ", itemGrp2="
+				+ itemGrp2 + ", itemGrp3=" + itemGrp3 + ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2
+				+ ", itemMrp1=" + itemMrp1 + ", itemMrp2=" + itemMrp2 + ", itemMrp3=" + itemMrp3 + ", itemImage="
+				+ itemImage + ", itemTax1=" + itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3
+				+ ", itemIsUsed=" + itemIsUsed + ", itemSortId=" + itemSortId + ", grnTwo=" + grnTwo + ", delStatus="
+				+ delStatus + ", itemRate3=" + itemRate3 + ", minQty=" + minQty + ", subCatName=" + subCatName
+				+ ", MinQtyByItemConfig=" + MinQtyByItemConfig + ", MaxQtyByItemConfig=" + MaxQtyByItemConfig
+				+ ", ReorderQtyByItemConfig=" + ReorderQtyByItemConfig + ", id=" + id + "]";
 	}
+
+
+
+	
 
 
 }

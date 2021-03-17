@@ -6,6 +6,6 @@ import com.ats.webapi.model.ItemWithSubCat;
 
 public interface GetFrItemsService {
 
-	   public List<ItemWithSubCat> findFrItems( List<Integer>items);
+	   public List<ItemWithSubCat> findFrItems( List<Integer>items , int frId);
 
 }

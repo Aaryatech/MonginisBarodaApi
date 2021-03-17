@@ -20,7 +20,7 @@ public class GetFrItemsServiceImpl implements GetFrItemsService {
 
 	
 	@Override
-	public List<ItemWithSubCat> findFrItems(List<Integer> items) {
+	public List<ItemWithSubCat> findFrItems(List<Integer> items, int frId) {
 		List<ItemWithSubCat> list=null;
 		
 		Calendar calendar = Calendar.getInstance();
@@ -31,43 +31,43 @@ public class GetFrItemsServiceImpl implements GetFrItemsService {
 			 List<Integer> arrList=new ArrayList<>();
 			 arrList.add(1);
 			 arrList.add(11);
-				 list=getFrItemRepository.findFrItems(arrList,items);
+				 list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==2)
 		{
 			 List<Integer> arrList=new ArrayList<>();
 			 arrList.add(1);
 			 arrList.add(12);
-				 list=getFrItemRepository.findFrItems(arrList,items);
+			 list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==3)
 		{
 			 List<Integer> arrList=new ArrayList<>();
 			 arrList.add(1);
 			 arrList.add(13);
-				 list=getFrItemRepository.findFrItems(arrList,items);
+			 list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==4)
 		{
 			List<Integer> arrList=new ArrayList<>();
 			 arrList.add(1);
 			 arrList.add(14);
-				 list=getFrItemRepository.findFrItems(arrList,items);
+			 list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==5)
 		{
 			List<Integer> arrList=new ArrayList<>();
 			 arrList.add(1);
 			 arrList.add(15);
-				 list=getFrItemRepository.findFrItems(arrList,items);
+			 list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==6)
 		{
 			List<Integer> arrList=new ArrayList<>();
 			arrList.add(1);
 			arrList.add(16);
-			list=getFrItemRepository.findFrItems(arrList,items);
+			list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}else if(dayOfWeek==7)
 		{
 			List<Integer> arrList=new ArrayList<>();
 			arrList.add(1);
 			arrList.add(17);
-			list=getFrItemRepository.findFrItems(arrList,items);
+			list=getFrItemRepository.findFrItems(arrList,items,frId);
 		}
 		
 		return list;
