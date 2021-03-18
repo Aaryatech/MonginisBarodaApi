@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.AlbumEnquiry;
+import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Info;
+import com.ats.webapi.model.Setting;
 import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.rejectRemark;
 import com.ats.webapi.model.newsetting.NewSetting;
@@ -23,6 +25,7 @@ import com.ats.webapi.repository.NewSettingRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
 import com.ats.webapi.repository.UserRepository;
 import com.ats.webapi.repository.rejectRemarkRepository;
+import com.ats.webapi.repository.settingSpCakeRepository;
 import com.ats.webapi.service.SpecialCakeService;
 
 //Akhilesh 2021-03-06  
@@ -51,8 +54,8 @@ public class NewAppControllerApi {
 	@Autowired
 	FranchiseSupRepository franSuprepo;
 	
-	
-	
+	@Autowired
+	settingSpCakeRepository setting;
 	
 	
 
@@ -203,6 +206,73 @@ public class NewAppControllerApi {
 		}
 		
 		return remarks;
+	}
+	
+
+	@RequestMapping(value="/getAllRejectRemarkById",method=RequestMethod.POST)
+	public @ResponseBody rejectRemark getAllRejectRemark(@RequestParam int rejectId){
+		rejectRemark  remarks=new rejectRemark();
+		try {
+			remarks=rejectRemarkRepo.getAllRejectRemarkById(rejectId);
+			System.out.println("remarks"+remarks);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception In /getAllRejectRemark");
+		}
+		
+		return remarks;
+	}
+	
+	@RequestMapping(value="/postAllRejectRemark",method=RequestMethod.POST)
+	public @ResponseBody rejectRemark postAllRejectRemark(@RequestBody rejectRemark map ){
+		rejectRemark  remarks=new rejectRemark();
+		try {
+			remarks=rejectRemarkRepo.save(map);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception In /postAllRejectRemark");
+		}
+		
+		return remarks;
+	}
+	
+	
+		// Delete Item
+	@RequestMapping(value ="/deleteRemark", method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage deleteItem(@RequestParam Integer rejectId) {
+System.err.println("error");
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		int isUpdated = rejectRemarkRepo.deleteItems(rejectId);
+		if (isUpdated == 1) {
+
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Deleted Successfully");
+		} else {
+			errorMessage.setError(false);
+			errorMessage.setMessage("Items Deletion Failed");
+
+		}
+		return errorMessage;
+	}
+	
+	
+	@RequestMapping(value="/postUpdateSpCake",method=RequestMethod.POST)
+	public @ResponseBody int UpdateSettingCake(@RequestParam String itemId ){
+		int  settings=0;
+		try {
+			System.err.println(itemId);
+			System.out.println("set"+itemId);
+			settings=setting.updateItems(itemId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception In /postAllRejectRemark");
+		}
+		
+		return settings;
 	}
 	
 	
