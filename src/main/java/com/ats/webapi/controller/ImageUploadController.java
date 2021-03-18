@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ats.webapi.commons.ApiConstants;
 import com.ats.webapi.model.Info;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
@@ -46,30 +47,30 @@ public class ImageUploadController {
 	 * String CUST_CHOICE_PHOTO_CAKE_FOLDER =
 	 * "/opt/apache-tomcat-8.5.37/webapps/uploadspune/CUSTCHOICEPHOTOCAKE/";
 	 */
-public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
+//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/baroda/";
 	//public static final String fileUploadPath = "/home/lenovo/AkhileshWorkspace/MOBILEUPLOADS/"; 
 		
 	//public static final String fileUploadPath = "/opt/cpanel/ea-tomcat85/webapps/uploads/kolhapur/";
 	
 	
-	private static String SUGGESTION_URL = fileUploadPath + "SUGGESTION/";
-	private static String COMPLAINT_URL = fileUploadPath + "COMPLAINT/";
-	private static String NOTIFICATION_URL = fileUploadPath + "NOTIFICATION/";
-	private static String FEEDBACK_URL = fileUploadPath + "FEEDBACK/";
+	private static String SUGGESTION_URL = ApiConstants.fileUploadPath + "SUGGESTION/";
+	private static String COMPLAINT_URL = ApiConstants.fileUploadPath + "COMPLAINT/";
+	private static String NOTIFICATION_URL = ApiConstants.fileUploadPath + "NOTIFICATION/";
+	private static String FEEDBACK_URL = ApiConstants.fileUploadPath + "FEEDBACK/";
 
-	public static final String M_SP_CAKE_FOLDER = fileUploadPath + "MSPCAKE/";
-	public static final String MSG_FOLDER = fileUploadPath + "MSG/";
+	public static final String M_SP_CAKE_FOLDER = ApiConstants.fileUploadPath + "MSPCAKE/";
+	public static final String MSG_FOLDER = ApiConstants.fileUploadPath + "MSG/";
 //	public static final String FR_FOLDER = fileUploadPath + "FR/";
 //	public static final String ITEM_FOLDER = fileUploadPath + "ITEM/";
-	public static final String RAW_MAT_IMAGE_FOLDER = fileUploadPath + "RAWMAT/";
-	public static final String GATE_ENTRY_IMAGE_FOLDER = fileUploadPath + "GATEENTRY/";
-	private static final String SP_CAKE_FOLDER = fileUploadPath + "SPCAKE/";
-	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = fileUploadPath + "CUSTCHOICEPHOTOCAKE/";
-	public static final String M_UPLOAD_CAKE_FOLDER = fileUploadPath + "MOBILEUPLOADS/";
+	public static final String RAW_MAT_IMAGE_FOLDER = ApiConstants.fileUploadPath + "RAWMAT/";
+	public static final String GATE_ENTRY_IMAGE_FOLDER = ApiConstants.fileUploadPath + "GATEENTRY/";
+	private static final String SP_CAKE_FOLDER = ApiConstants.fileUploadPath + "SPCAKE/";
+	private static final String CUST_CHOICE_PHOTO_CAKE_FOLDER = ApiConstants.fileUploadPath + "CUSTCHOICEPHOTOCAKE/";
+	public static final String M_UPLOAD_CAKE_FOLDER = ApiConstants.fileUploadPath + "MOBILEUPLOADS/";
 	// private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 
-	public static final String FR_FOLDER = fileUploadPath;
-	public static final String ITEM_FOLDER = fileUploadPath;
+	public static final String FR_FOLDER = ApiConstants.fileUploadPath;
+	public static final String ITEM_FOLDER = ApiConstants.fileUploadPath;
 	
 	@RequestMapping(value = { "/photoUpload" }, method = RequestMethod.POST)
 	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile uploadfile,

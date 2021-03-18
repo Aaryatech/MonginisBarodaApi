@@ -21,6 +21,11 @@ public interface FranchiseeService {
 	public ErrorMessage saveFranchisee(Franchisee franchisee);
 
 	public List<Franchisee> findAllFranchisee();
+	
+	//Akhilesh 2021-03-18
+	public List<Franchisee> findAll();
+	
+	
 
 	public Franchisee findFranchisee(int frId);
 
@@ -62,6 +67,9 @@ public interface FranchiseeService {
 	int updateFranchiseeToken(String frCode, String token );
 
 	public List<Franchisee> findAllFranchiseeByMenuId(int menuId);
+	
+	
+	
 	
 	
 	

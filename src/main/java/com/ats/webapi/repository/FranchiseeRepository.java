@@ -25,6 +25,10 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 
 		public List<Franchisee> findAllByDelStatus(int i);
 		
+		//Akhilesh 2021-03-18 
+		public List<Franchisee> findAll();
+		
+		
 
 		@Modifying
 		@Transactional

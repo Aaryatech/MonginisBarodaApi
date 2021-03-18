@@ -3752,6 +3752,35 @@ int FridInt=Integer.parseInt(frId);
 
 		return franchiseeList;
 	}
+	
+	
+	
+	
+	// Get All Franchisees Without Del Status 
+	//Akhilesh 2021-03-18
+	@RequestMapping(value = { "/getAllFranchinseesWidoutdelStatus" }, method = RequestMethod.GET)
+	public @ResponseBody FranchiseeList getAllFranchinseesWodelStatus() {
+		List<Franchisee> franchisee = franchiseeService.findAll();
+		FranchiseeList franchiseeList = new FranchiseeList();
+		franchiseeList.setFranchiseeList(franchisee);
+		ErrorMessage errorMessage = new ErrorMessage();
+		if (franchisee != null) {
+			errorMessage.setError(false);
+			errorMessage.setMessage("Franchisee displayed Successfully");
+			franchiseeList.setErrorMessage(errorMessage);
+
+		} else {
+			errorMessage.setError(true);
+			errorMessage.setMessage("Franchisee Not displayed");
+			franchiseeList.setErrorMessage(errorMessage);
+		}
+
+		return franchiseeList;
+	}
+	
+	
+	
+	
 
 	// Get All Rates
 	@RequestMapping(value = { "/getAllRates" }, method = RequestMethod.GET)

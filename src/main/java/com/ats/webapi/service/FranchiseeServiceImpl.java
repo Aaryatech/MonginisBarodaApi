@@ -638,4 +638,10 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 		List<Franchisee> frList = franchiseeRepository.getFrListyMenuId(menuId);
 		return frList;
 	}
+
+	@Override
+	public List<Franchisee> findAll() {
+		// TODO Auto-generated method stub
+		return  franchiseeRepository.findAll();
+	}
 }
