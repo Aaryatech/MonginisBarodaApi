@@ -40,6 +40,8 @@ import com.ats.webapi.model.phpwebservice.GetLogin;
 import com.ats.webapi.model.phpwebservice.SpecialCakeBean;
 import com.ats.webapi.model.phpwebservice.SpecialCakeBeanList;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
+import com.ats.webapi.model.stock.FinishedGoodStock;
+import com.ats.webapi.model.stock.FinishedGoodStockDetail;
 import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
@@ -80,6 +82,8 @@ import com.ats.webapi.repository.UpdateBillStatusRepository;
 import com.ats.webapi.repository.UpdatePBTimeRepo;
 import com.ats.webapi.repository.UpdateSeetingForPBRepo;
 import com.ats.webapi.repository.UserRepository;
+import com.ats.webapi.repository.bmsstock.FinishedGoodStockDetailRepo;
+import com.ats.webapi.repository.bmsstock.FinishedGoodStockRepo;
 import com.ats.webapi.repository.frsetting.FrSettingRepo;
 import com.ats.webapi.service.AllFrIdNameService;
 import com.ats.webapi.service.CategoryService;
@@ -435,6 +439,12 @@ public class RestApiController {
 
 	@Autowired
 	ItemListWithDiscRepo itemListWithDiscRepo;
+	
+	@Autowired
+	FinishedGoodStockDetailRepo finishedGoodStockDetailRepo;
+	
+	@Autowired
+	FinishedGoodStockRepo finishedGoodStockRepo;
 
 	@RequestMapping(value = { "/changeAdminUserPass" }, method = RequestMethod.POST)
 	public @ResponseBody Info changeAdminUserPass(@RequestParam int userId, @RequestParam String curPass,
@@ -2098,6 +2108,26 @@ public class RestApiController {
 		item.setShelfLife(itemShelfLife);
 
 		Item jsonResult = item = itemRepository.save(item);
+		
+		FinishedGoodStockDetail dtlRes = finishedGoodStockDetailRepo.findStkHeadDtlByItemId(item.getItemIsUsed());
+				if(dtlRes==null) {
+					FinishedGoodStockDetail finGoodStockDetail = new FinishedGoodStockDetail();
+					
+					FinishedGoodStock finStkHead = finishedGoodStockRepo.findByFinGoodStockStatus(0);
+					
+					finGoodStockDetail.setItemId(item.getItemIsUsed());
+					finGoodStockDetail.setItemName(item.getItemName());
+					finGoodStockDetail.setFinStockId(finStkHead.getFinStockId());
+					finGoodStockDetail.setOpT1(0);
+					finGoodStockDetail.setOpT2(0);
+					finGoodStockDetail.setOpT3(0);
+					finGoodStockDetail.setOpTotal(0);
+					finGoodStockDetail.setStockDate(new Date());
+					finGoodStockDetail.setDelStatus(0);
+					finGoodStockDetail.setCatId(Integer.parseInt(item.getItemGrp1()) );
+					
+					FinishedGoodStockDetail insertStkDtl=finishedGoodStockDetailRepo.save(finGoodStockDetail);
+				}
 		try {
 			List<String> frTokens = franchiseSupRepository.findTokens();
 

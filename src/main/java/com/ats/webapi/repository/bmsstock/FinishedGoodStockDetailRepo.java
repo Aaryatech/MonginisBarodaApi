@@ -120,5 +120,15 @@ public interface FinishedGoodStockDetailRepo  extends JpaRepository<FinishedGood
 		List<FinishedGoodStockDetail> findByStockDateBetweenTwoDateByCat(@Param("fromDate")java.sql.Date fromDate, 
 			@Param("toDate")java.sql.Date toDate,@Param("catId") int catId);
 	
-	
+	@Query(value="SELECT\n" + 
+			"    d.*\n" + 
+			"FROM\n" + 
+			"    finished_good_stock_detail d,\n" + 
+			"    finished_good_stock h\n" + 
+			"WHERE\n" + 
+			"    h.fin_stock_id=d.fin_stock_id AND\n" + 
+			"    h.fin_good_stock_status=0 AND\n" + 
+			"    h.del_status=0 AND\n" + 
+			"    d.item_id=:itemId",nativeQuery=true)
+	FinishedGoodStockDetail findStkHeadDtlByItemId(@Param("itemId") int itemId);
 }
