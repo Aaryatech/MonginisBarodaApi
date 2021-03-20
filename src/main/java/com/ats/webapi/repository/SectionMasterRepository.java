@@ -26,6 +26,16 @@ public interface SectionMasterRepository extends JpaRepository<SectionMaster, In
 
 	@Query(value="SELECT * FROM m_section WHERE del_status=0 AND section_id=:sectionId",nativeQuery=true)
 	SectionMaster getSingleSectionById(@Param("sectionId") int sectionId);
+	
+	
+	@Query(value="SELECT\n" + 
+			"        * \n" + 
+			"    FROM\n" + 
+			"        m_section \n" + 
+			"    WHERE\n" + 
+			"        del_status=0 \n" + 
+			"        AND section_type=:sectionId",nativeQuery=true)
+	List<SectionMaster> getSectionById(@Param("sectionId") int sectionId);
  
 
 }

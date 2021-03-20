@@ -71,6 +71,19 @@ public class DispachRestApi {
 		return secResp;
 	}
 	
+	@RequestMapping(value="/getSections",method=RequestMethod.POST)
+	public @ResponseBody List<SectionMaster> getSections(@RequestParam int sectionId) {
+		List<SectionMaster> secResp=new ArrayList<SectionMaster>();
+		try {
+			secResp = sectionMasterRepository.getSectionById(sectionId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception Occuered In /getSingleSection");
+			e.printStackTrace();
+		}
+		return secResp;
+	}
+	
 	@RequestMapping(value = { "/saveSection" }, method = RequestMethod.POST)
 	public @ResponseBody SectionMaster saveSection(@RequestBody SectionMaster sectionMaster) {
 
