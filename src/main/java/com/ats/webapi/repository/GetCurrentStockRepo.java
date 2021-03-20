@@ -38,7 +38,7 @@ public interface GetCurrentStockRepo extends JpaRepository<GetCurrentStock, Inte
 			"            m_item.item_grp1=m_category.cat_id                           \n" + 
 			"            AND   m_item.item_grp2=m_cat_sub.sub_cat_id                           \n" + 
 			"            AND   m_item.del_status=0                           \n" + 
-			"            AND   m_category.cat_id=:catId)t1               \n" + 
+			"            AND   m_category.cat_id=:catId ORDER BY  m_category.cat_id, m_cat_sub.seq_no, m_item.item_name)t1               \n" + 
 			"    LEFT JOIN\n" + 
 			"        (\n" + 
 			"            SELECT\n" + 

@@ -544,7 +544,21 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	
 	
 	
-	@Query(value = "select * from m_item where item_grp2 IN (:subCatId) AND del_status = 0 Order By item_grp1, item_grp2, item_sort_id, item_name", nativeQuery = true)
+	@Query(value="select\n" + 
+			"        m_item.* \n" + 
+			"    from\n" + 
+			"        m_item,\n" + 
+			"        m_cat_sub\n" + 
+			"    where\n" + 
+			"        item_grp2 IN (:subCatId) \n" + 
+			"        AND m_item.del_status = 0  AND\n" + 
+			"        m_cat_sub.sub_cat_id=m_item.item_grp2\n" + 
+			"    Order By\n" + 
+			"        item_grp1,\n" + 
+			"        m_cat_sub.sub_cat_id,\n" + 
+			"        m_cat_sub.seq_no,\n" + 
+			"        item_name",nativeQuery=true)
 	public List<Item> getAllItemsFinishGoodsStock(@Param("subCatId") List<String> subCatId);
-
+	//@Query(value = "select * from m_item where item_grp2 IN (:subCatId) AND del_status = 0 Order By item_grp1, item_grp2, item_sort_id, item_name", nativeQuery = true)
+	
 }

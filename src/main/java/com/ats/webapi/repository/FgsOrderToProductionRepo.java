@@ -44,7 +44,7 @@ public interface FgsOrderToProductionRepo extends JpaRepository<FgsOrderToProduc
 			"    GROUP BY\n" + 
 			"        t_order.item_id\n" + 
 			"    ORDER BY\n" + 
-			"        t_order.item_id ASC\n" + 
+			"        m_category.cat_id, m_cat_sub.seq_no, m_item.item_name\n" + 
 			") t1\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT pd.item_id AS production_item_id,\n" + 

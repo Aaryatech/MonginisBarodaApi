@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface OpStockUpdateRepo extends JpaRepository<OpStockUpdate, Integer> {
 
-	@Query(value = "   SELECT u.* FROM t_opening_stock_update u WHERE u.del_status=0 AND u.date between :fromDate AND :toDate AND u.cat_id=:catId", nativeQuery = true)
+	@Query(value = "   SELECT u.* FROM t_opening_stock_update u WHERE u.del_status=0 AND u.date between :fromDate AND :toDate AND u.cat_id=:catId ORDER BY u.item_name", nativeQuery = true)
 	List<OpStockUpdate> getOpStockAdjReport(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("catId") int catId);
 
