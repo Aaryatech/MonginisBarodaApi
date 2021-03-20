@@ -13,6 +13,9 @@ public interface FinishedGoodStockDetailRepo  extends JpaRepository<FinishedGood
 
 	FinishedGoodStockDetail save(FinishedGoodStockDetail finishedGoodStockDetail);
 	
+	@Query(value="SELECT * FROM `finished_good_stock_detail` WHERE  stock_date=:stockDate AND cat_id IN (:catIds) AND del_status=0",nativeQuery=true)
+	List<FinishedGoodStockDetail> getAllStockDateAndCatId(@Param("stockDate") Date stockDate, @Param("catIds")List<String> catIds);
+	
 	List<FinishedGoodStockDetail> findByStockDateAndCatId(Date stockDate,int catId);
 	
 	@Query(value=" SELECT d.cat_id, d.op_t1,d.op_t2,d.op_t3,d.stock_date,d.item_id,d.item_name,SUM(d.op_total) AS op_total,SUM(d.prod_qty)AS prod_qty ,SUM(d.rej_qty) AS rej_qty," + 

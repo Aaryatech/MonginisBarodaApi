@@ -530,6 +530,30 @@ h1.bms_status=1
 
 	}
 	
+	@RequestMapping(value = { "/getFinGoodStockDetailByCatIds" }, method = RequestMethod.POST)
+	public @ResponseBody List<FinishedGoodStockDetail> getFinGoodStockDetailByCatIds(@RequestParam("stockDate") String stockDate,
+			@RequestParam("catId") List<String> catIds) {
+
+		List<FinishedGoodStockDetail> finishedGoodStockDetail=new ArrayList<FinishedGoodStockDetail>();
+		try {					
+			
+			Date stkDate= Common.convertToSqlDate(stockDate);
+			
+			System.out.println("date After convert for Stock Detail "+stkDate);
+
+			finishedGoodStockDetail=finishedGoodStockDetailRepo.getAllStockDateAndCatId(stkDate,catIds);
+		} catch (Exception e) {
+			
+			System.out.println("Exce in getFinGoodStockDetailByCatIds " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		
+	System.out.println("output finished Good Detail  = "+finishedGoodStockDetail.toString());
+		return finishedGoodStockDetail;
+
+	}
+	
 	//getFinGoodStockDetail all Category
 	@RequestMapping(value = { "/getFinGoodStockDetailAllCat" }, method = RequestMethod.POST)
 	public @ResponseBody List<FinishedGoodStockDetail> getFinGoodStockDetailAllCat(@RequestParam("stockDate") String stockDate) {

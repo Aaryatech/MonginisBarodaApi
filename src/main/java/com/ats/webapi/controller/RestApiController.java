@@ -3219,6 +3219,15 @@ public class RestApiController {
 		return subCategoryList;
 
 	}
+	
+	@RequestMapping(value = "/getSubCategoryByMultiCatId", method = RequestMethod.POST)
+	public @ResponseBody List<SubCategory> getSubCategoryByMultiCatId(@RequestParam("catId") List<String> catId) {		
+	System.err.println(catId);
+		 List<SubCategory> subCategoryList = subCategoryService.getSubCatListByCatIdInForDisp(catId);			 
+		
+		return subCategoryList;
+
+	}
 
 	// Get Flavour
 	@RequestMapping(value = "/getFlavour", method = RequestMethod.GET)
@@ -3293,6 +3302,34 @@ public class RestApiController {
 			 * } else {
 			 */
 			items = itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(subCatId, 0);
+
+			// }
+			System.err.println("Items by subcat id  and delStatus  " + items.toString());
+
+		} catch (Exception e) {
+			items = new ArrayList<>();
+			e.printStackTrace();
+
+		}
+		return items;
+
+	}
+	
+	
+	@RequestMapping(value = "/getFgsItemsBySubCatId", method = RequestMethod.POST)
+	public @ResponseBody List<Item> getFgsItemsBySubCatId(@RequestParam("subCatId") List<String> subCatId) {
+
+		List<Item> items = new ArrayList<Item>();
+		try {
+
+			/*
+			 * if (Integer.parseInt(subCatId) < 11) { items = itemRepository.
+			 * findByItemGrp1AndDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(subCatId,
+			 * 0);
+			 * 
+			 * } else {
+			 */
+			items = itemRepository.getAllItemsFinishGoodsStock(subCatId);
 
 			// }
 			System.err.println("Items by subcat id  and delStatus  " + items.toString());

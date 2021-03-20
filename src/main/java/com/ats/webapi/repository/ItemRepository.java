@@ -542,4 +542,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query(value="UPDATE m_item SET item_mrp1=:mrp1, item_mrp2=:mrp2, item_mrp3=:mrp3 WHERE id=:itemId",nativeQuery=true)
 	public int editItemMrps(@Param("itemId") int itemId, @Param("mrp1") float mrp1, @Param("mrp2") float mrp2, @Param("mrp3") float mrp3);
 	
+	
+	
+	@Query(value = "select * from m_item where item_grp2 IN (:subCatId) AND del_status = 0 Order By item_grp1, item_grp2, item_sort_id, item_name", nativeQuery = true)
+	public List<Item> getAllItemsFinishGoodsStock(@Param("subCatId") List<String> subCatId);
+
 }
