@@ -199,24 +199,11 @@ private int addToProd;
 	}
 
 
-	public int getWeight() {
-		return weight;
-	}
 
 
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
 
 
-	public int getMinWeight() {
-		return minWeight;
-	}
 
-
-	public void setMinWeight(int minWeight) {
-		this.minWeight = minWeight;
-	}
 
 
 	public int getFlavourId() {
@@ -373,11 +360,35 @@ private int addToProd;
 
 
 
+
 	
 	
 	
 	
 	
+	
+
+
+	public int getWeight() {
+		return weight;
+	}
+
+
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+
+
+	public int getMinWeight() {
+		return minWeight;
+	}
+
+
+	public void setMinWeight(int minWeight) {
+		this.minWeight = minWeight;
+	}
+
+
 	@Override
 	public String toString() {
 		return "AlbumEnquiry [enquiryNo=" + enquiryNo + ", frId=" + frId + ", custName=" + custName + ", mobNo=" + mobNo

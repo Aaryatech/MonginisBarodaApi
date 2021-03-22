@@ -366,5 +366,45 @@ public class ItemServiceImpl implements ItemService{
 		
 		return getItemSupRepository.getAllotedUomIds();
 	}
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Item> getItemsBySubCatIdForConfiguration(String itemGrp2) {
+
+		List<Item> itemList=null;
+		try
+		{
+
+			itemList=itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(itemGrp2, 0);
+		}catch(Exception e)
+		{
+			itemList=new ArrayList<>();
+			e.printStackTrace();
+		}
+		return itemList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

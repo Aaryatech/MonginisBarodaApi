@@ -40,4 +40,7 @@ public interface ItemService {
 	ItemsList getItemsForItemDetail(int rmId, int rmType);
 	public List<Integer> getAllotedUoms();
 	public ErrorMessage saveItemAndSupplement(ItemAndItemSuplement itemItemSup);
+	
+	
+	public List<Item> getItemsBySubCatIdForConfiguration(String itemGrp2);
 }
