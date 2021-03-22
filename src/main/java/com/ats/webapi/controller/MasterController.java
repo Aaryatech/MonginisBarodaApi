@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.commons.Common;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.AllMenus;
 import com.ats.webapi.model.CategoryList;
@@ -1420,16 +1421,14 @@ public class MasterController {
 				{
 					Info info=new Info();
 					 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-						 System.err.println(orderIds.toString());
+						 
 						 Date dateDel = new Date();
 						 Date dateProd = new Date();
-						 try {
-							 dateDel = df.parse(delDate);
-							 dateProd=df.parse(prodDate);
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+					
+							 dateDel = Common.convertToSqlDate(delDate);
+							 dateProd=  Common.convertToSqlDate(prodDate);
+						
+						// System.err.println(orderIds.toString()+"-----"+dateDel+"-----"+dateProd);
 						int isUpdated=orderRepository.updateOrderDelivery(orderIds,dateDel,dateProd);
 						if(isUpdated>0)
 						{
