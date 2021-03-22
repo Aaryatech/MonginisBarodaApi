@@ -5032,6 +5032,12 @@ int FridInt=Integer.parseInt(frId);
 		AllMenuJsonResponse menus = menuService.findMenuByCat(catId);
 		return menus;
 	}
+	
+	@RequestMapping(value = { "/getMenuByCatSectn" }, method = RequestMethod.POST)
+	public @ResponseBody AllMenuJsonResponse findMenuByCat(@RequestParam("catId") int catId, @RequestParam("sectionId") int sectionId) {
+		AllMenuJsonResponse menus = menuService.findMenuByCatAndSectn(catId, sectionId);
+		return menus;
+	}
 
 	@RequestMapping(value = { "/updateBillStatus" }, method = RequestMethod.POST)
 

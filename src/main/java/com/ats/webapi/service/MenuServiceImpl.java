@@ -121,4 +121,18 @@ public class MenuServiceImpl implements MenuService{
 		}
 		return resp;
 	}
+	
+	@Override
+	public AllMenuJsonResponse findMenuByCatAndSectn(int catId, int sectionId) {
+		 List<AllMenus> menus=new ArrayList<AllMenus>();
+		 menus=mainMenuConfigurationRepository.findMenuByCatIdAndSectnId(catId, sectionId);
+		 AllMenuJsonResponse menuJsonResponse=new AllMenuJsonResponse();
+
+		menuJsonResponse.setMenuConfigurationPage(menus);
+		ErrorMessage errorMessage=new ErrorMessage();
+		errorMessage.setError(false);
+		errorMessage.setMessage("Menus displayed successfully");
+		menuJsonResponse.setErrorMessage(errorMessage);
+		return menuJsonResponse;
+	}
 }
