@@ -169,7 +169,6 @@ public class RestApiController {
 		}
 		c.add(Calendar.DATE, day); // number of days to add
 		date = sdf.format(c.getTime());
-
 		return date;
 
 	}
