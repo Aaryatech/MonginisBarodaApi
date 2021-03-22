@@ -102,4 +102,23 @@ public class MenuServiceImpl implements MenuService{
 		menuJsonResponse.setErrorMessage(errorMessage);
 		return menuJsonResponse;
 	}
+
+
+
+	@Override
+	public List<AllMenus> getMenusByIsSameDayAppl(int isSameDayAppl) {
+		// TODO Auto-generated method stub
+		List<AllMenus> resp=new ArrayList<>();
+		
+		try {
+			
+			resp=mainMenuConfigurationRepository.getMenusByIsSameDayAppl(isSameDayAppl);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Exception In getMenusByIsSameDayAppl Of  MenuServiceImpl");
+		}
+		return resp;
+	}
 }
