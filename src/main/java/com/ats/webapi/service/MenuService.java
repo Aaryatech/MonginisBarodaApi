@@ -2,6 +2,8 @@ package com.ats.webapi.service;
 
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
+
 import com.ats.webapi.model.AllMenuJsonResponse;
 import com.ats.webapi.model.AllMenus;
 
@@ -11,5 +13,6 @@ public interface MenuService {
 	public AllMenuJsonResponse findAllMenu();
 	public AllMenuJsonResponse findMenuByCat(int catId);
 	public AllMenus findMenu(int menuId);
+	public List<AllMenus>  getMenusByIsSameDayAppl(int isSameDayAppl );
 
 }

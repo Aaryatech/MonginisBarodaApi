@@ -5898,6 +5898,31 @@ int FridInt=Integer.parseInt(frId);
 		
 		return allFranchisee;
 	}
+	
+	
+	
+	//Akhilesh 2021-03-18
+		@RequestMapping(value="/getMenusForSection",method=RequestMethod.POST)
+		public @ResponseBody  List<AllMenus> getMenusForSection(@RequestParam int isSameDayAppl){
+			List<AllMenus> resp=new ArrayList<>();
+			try {
+				if(isSameDayAppl==-1) {
+					resp=menuService.findAllMenus();
+				}
+				else{
+					resp=menuService.getMenusByIsSameDayAppl(isSameDayAppl);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				System.err.println("Exeption Occuered in /getMenusForSection");
+			}
+			return resp;
+		}
+	
+	
+	
+	
 
 
 }
