@@ -83,7 +83,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"			        CONCAT(i.id, m_franchisee.fr_id, i.item_mrp2) AS id, \n" + 
 			"			        i.id as item_id, \n" + 
 			"			        i.item_name, \n" + 
-			"			        i.item_mrp2, \n" + 
+			"			        i.item_mrp2,i.item_grp1, \n" + 
 			"			        m_franchisee.fr_id, \n" + 
 			"			        m_franchisee.fr_name,  \n" + 
 			"			        SUM(t_order.order_qty) AS   order_qty, m_franchisee.fr_route_id,i.item_grp2 \n" + 
@@ -96,7 +96,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"			                and  t_order.fr_id=m_franchisee.fr_id \n" + 
 			"			                and t_order.menu_id in (:menuIds)             \n" + 
 			"			                 \n" + 
-			"			            and i.id=t_order.item_id AND i.item_grp1=:catId AND " + 
+			"			            and i.id=t_order.item_id AND i.item_grp1 IN (:catId) AND " + 
 			"			         \n" + 
 			"			          \n" + 
 			"			       i.del_status=0    \n" + 
@@ -108,6 +108,6 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			"			         \n" + 
 			"			",nativeQuery=true)
 	List<DispatchStationItem> getItemByFrIdAndDateMin1New(@Param("date") String date,@Param("frList") List<Integer> frList,
-			@Param("menuIds")List<Integer> menuIds, 	@Param("catId") int catId);
+			@Param("menuIds")List<Integer> menuIds, 	@Param("catId") List<Integer> catId);
 
 }

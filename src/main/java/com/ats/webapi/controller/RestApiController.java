@@ -2,6 +2,7 @@ package com.ats.webapi.controller;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import com.ats.webapi.commons.Common;
 import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
+import com.ats.webapi.model.bill.GetBillAmtGroupByFr;
 import com.ats.webapi.model.bill.ItemListForCustomerBill;
 import com.ats.webapi.model.frsetting.FrSetting;
 import com.ats.webapi.model.grngvn.GetGrnGvnForCreditNoteList;
@@ -34,6 +36,7 @@ import com.ats.webapi.model.grngvn.GrnGvnHeader;
 import com.ats.webapi.model.grngvn.PostCreditNoteHeader;
 import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
+import com.ats.webapi.model.newsetting.NewSetting;
 import com.ats.webapi.model.phpwebservice.Admin;
 import com.ats.webapi.model.phpwebservice.Flavor;
 import com.ats.webapi.model.phpwebservice.GetLogin;
@@ -42,6 +45,7 @@ import com.ats.webapi.model.phpwebservice.SpecialCakeBeanList;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.model.stock.FinishedGoodStock;
 import com.ats.webapi.model.stock.FinishedGoodStockDetail;
+import com.ats.webapi.repo.GetBillAmtGroupByFrRepo;
 import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
@@ -63,6 +67,7 @@ import com.ats.webapi.repository.ItemStockRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.MessageRepository;
 import com.ats.webapi.repository.MiniSubCategoryRepository;
+import com.ats.webapi.repository.NewSettingRepository;
 import com.ats.webapi.repository.OrderLogRespository;
 import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.PostBillHeaderRepository;
@@ -791,17 +796,45 @@ public class RestApiController {
 
 	}
 
+	/*
+	 * @RequestMapping(value = "/getBillsForFr", method = RequestMethod.POST)
+	 * public @ResponseBody GetBillsForFrList
+	 * getBillsForFrService(@RequestParam("frId") int frId,
+	 * 
+	 * @RequestParam("curDate") String curDate) {
+	 * 
+	 * String back15Days = incrementDate(curDate, -5); java.sql.Date cDate =
+	 * Common.convertToSqlDate(curDate); java.sql.Date back15Date =
+	 * Common.convertToSqlDate(back15Days);
+	 * 
+	 * System.out.println("curDate for Sql  ::: " + cDate);
+	 * 
+	 * System.out.println("15 Days Back Date  For SQl ::: " + back15Date);
+	 * 
+	 * System.out.println("Fr Id ::: " + frId);
+	 * 
+	 * GetBillsForFrList billsForFrLisr = getBillsForFrService.getBillForFr(frId,
+	 * back15Date, cDate); System.out.println("GEt BillS for Fr " +
+	 * billsForFrLisr.toString()); return billsForFrLisr;
+	 * 
+	 * }
+	 */
+	
+	@Autowired NewSettingRepository newSettRepo;
 	@RequestMapping(value = "/getBillsForFr", method = RequestMethod.POST)
 	public @ResponseBody GetBillsForFrList getBillsForFrService(@RequestParam("frId") int frId,
 			@RequestParam("curDate") String curDate) {
-
-		String back15Days = incrementDate(curDate, -5);
+			
+		NewSetting sett=new NewSetting();
+		
+		sett=newSettRepo.findBySettingKeyAndDelStatus("GVN_DATE_DIFF_DAYS", 0);
+		String backDays = incrementDate(curDate, -Integer.parseInt(sett.getSettingValue1()));
 		java.sql.Date cDate = Common.convertToSqlDate(curDate);
-		java.sql.Date back15Date = Common.convertToSqlDate(back15Days);
+		java.sql.Date back15Date = Common.convertToSqlDate(backDays);
 
 		System.out.println("curDate for Sql  ::: " + cDate);
 
-		System.out.println("15 Days Back Date  For SQl ::: " + back15Date);
+		System.out.println(" Days Back Date  For SQl ::: " + backDays);
 
 		System.out.println("Fr Id ::: " + frId);
 
@@ -1240,7 +1273,120 @@ public class RestApiController {
 		return jsonBillHeader;
 
 	}
+	
+	//Sac 23March2021
+		@Autowired
+		NewSettingRepository newSettingRepository;
+		@Autowired
+		GetBillAmtGroupByFrRepo getBillAmtGroupByFrRepo;
+		
+	public List<PostBillHeader> setTCS(PostBillDataCommon postBillDataCommon)
+	{
+		List<PostBillHeader> headerList = new ArrayList<>();
+	try {
 
+		String fromDate = "", toDate = "";
+
+		Calendar cal = Calendar.getInstance();
+		System.err.println("MONTH - " + cal.get(Calendar.MONTH));
+
+		int startYear = 0, endYear = 0;
+		int month = cal.get(Calendar.MONTH) + 1;
+
+		if (month < 4) {
+			startYear = cal.get(Calendar.YEAR) - 1;
+			endYear = cal.get(Calendar.YEAR);
+		} else {
+			startYear = cal.get(Calendar.YEAR);
+			endYear = cal.get(Calendar.YEAR) + 1;
+		}
+
+		Calendar start = Calendar.getInstance();
+		start.set(Calendar.DAY_OF_MONTH, 1);
+		start.set(Calendar.MONTH, 3);
+		start.set(Calendar.YEAR, startYear);
+
+		Calendar end = Calendar.getInstance();
+		end.set(Calendar.DAY_OF_MONTH, 31);
+		end.set(Calendar.MONTH, 2);
+		end.set(Calendar.YEAR, endYear);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		fromDate = sdf.format(start.getTime());
+		toDate = sdf.format(end.getTime());
+
+		System.err.println("FROM - " + fromDate + "         TO  - " + toDate);
+		
+		DecimalFormat df = new DecimalFormat("#.00");
+
+	
+
+		List<GetBillAmtGroupByFr> frWiseTotal = new ArrayList<>();
+		frWiseTotal = getBillAmtGroupByFrRepo.getBillTotalByFr(fromDate, toDate);
+		
+		System.err.println("FR_LIST ========== "+frWiseTotal);
+
+		if (frWiseTotal == null) {
+			frWiseTotal = new ArrayList<>();
+		}
+
+		NewSetting settings = newSettingRepository.findBySettingKeyAndDelStatus("TCS_PERCENT", 0);
+
+		float tcs = 0;
+		if (settings != null) {
+			tcs = Float.parseFloat(settings.getSettingValue1());
+		}
+
+		if (postBillDataCommon.getPostBillHeadersList().size() > 0) {
+			
+			
+			
+
+			for (PostBillHeader bill : postBillDataCommon.getPostBillHeadersList()) {
+
+				if (frWiseTotal.size() > 0) {
+					
+					int found=0;
+
+					for (GetBillAmtGroupByFr fr : frWiseTotal) {
+						
+						if (bill.getFrId() == fr.getFrId()) {
+
+							found=1;
+							break;
+						} 
+
+					}
+					
+					if(found==1) {
+						float grandTot = bill.getGrandTotal();
+						float val = grandTot * tcs;
+						float newGrandTot = Float.parseFloat(df.format(val)) + grandTot;
+
+						bill.setGrandTotal(newGrandTot);
+						bill.setVehNo("" + Float.parseFloat(df.format(val)));
+					}
+					
+					headerList.add(bill);
+
+				} else {
+					headerList.add(bill);
+				}
+
+			}
+
+		}
+		
+		System.err.println("HEADER LIST COUNT ------------> "+headerList.size());
+		System.err.println("HEADER LIST ------------> "+headerList);
+
+	} catch (Exception e) {
+
+		System.out.println("Exc in insertBillData rest Api " + e.getMessage());
+		e.printStackTrace();
+	}
+	return headerList;
+	}//ENd of function setTCS
 	@RequestMapping(value = { "/updateBillData" }, method = RequestMethod.POST)
 
 	public @ResponseBody Info updateBillData(@RequestBody PostBillDataCommon postBillDataCommon)

@@ -37,8 +37,17 @@ public class DispatchStationItem implements Serializable{
 	private int frRouteId;//23-02-21-Sac
 	private int itemGrp2;//23-02-21-Sac
 	
-
+	private int itemGrp1;//23-03-21-Sac
 	
+	
+	public int getItemGrp1() {
+		return itemGrp1;
+	}
+
+	public void setItemGrp1(int itemGrp1) {
+		this.itemGrp1 = itemGrp1;
+	}
+
 	public int getId() {
 		return id;
 	}

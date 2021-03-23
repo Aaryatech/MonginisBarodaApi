@@ -569,7 +569,7 @@ public class DispachRestApi {
 	public DispTransferBean getAbcDepatchReportMin1New(@RequestParam("date") String date,
 			@RequestParam("abcType") List<Integer> abcTypeList, @RequestParam("stationNos") List<Integer> stationNos,
 			@RequestParam("routId") int routId, @RequestParam("menuIds") List<Integer> menuIds,
-			@RequestParam("catId") int catId) {
+			@RequestParam("catId") List<Integer> catId) {
 System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 		DispTransferBean dispRes=new DispTransferBean();
 		

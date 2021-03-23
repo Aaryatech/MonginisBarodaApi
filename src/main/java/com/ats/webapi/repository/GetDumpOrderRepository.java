@@ -23,7 +23,7 @@ public interface GetDumpOrderRepository extends JpaRepository<GetDumpOrder, Inte
 @Query(value=" select concat(m_fr_item_stock.item_id,m_franchisee.fr_id) as order_id, " + 
 		" m_franchisee.fr_id, " + 
 		" :menuId as menu_id, " + 
-		" m_fr_item_stock.min_qty as order_qty, " + 
+		" m_fr_item_stock.reorder_qty as order_qty, " + 
 		" m_fr_item_stock.item_id " + 
 		" FROM m_fr_item_stock,m_franchisee,m_fr_configure " + 
 		" WHERE m_franchisee.fr_id in (:frId) and m_franchisee.stock_type=m_fr_item_stock.type " + 

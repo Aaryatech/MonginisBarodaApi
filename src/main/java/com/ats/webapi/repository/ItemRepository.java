@@ -55,8 +55,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query(value = "select i.id,i.item_id,i.item_grp1,i.item_grp2,i.item_grp3,i.item_rate1,i.item_rate2,"
 			+ "i.item_rate3,i.item_mrp1,i.item_mrp2,i.item_mrp3,i.item_image,i.item_tax1,i.item_tax2,"
 			+ "i.item_tax3,i.item_is_used,i.item_sort_id,i.grn_two,i.del_status,i.min_qty,i.item_shelf_life "
-			+ " ,coalesce((select m_item_sup.short_name from m_item_sup where m_item_sup.item_id=i.id),0) "
-			+ "as item_name from m_item i  where i.del_status=:delStatus order by i.item_grp1, i.item_grp2 asc ", nativeQuery = true)
+			+ " ,i.item_name from m_item i  where i.del_status=:delStatus order by i.item_grp1, i.item_grp2 asc ", nativeQuery = true)
 	public List<Item> findByDelStatusOrderByItemGrp2AscItemSortIdAsc1(@Param("delStatus") int i);
 
 	

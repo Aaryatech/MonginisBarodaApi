@@ -58,6 +58,9 @@ public interface MainMenuConfigurationRepository extends JpaRepository<AllMenus,
 				"        ",nativeQuery=true)
 		public List<AllMenus> findMenuByCatIdAndSectnId(@Param("catId") int catId, @Param("sectionId") int sectionId);
 		
+		//Sachin 23-03-2021
+		public List<AllMenus> findByDelStatus(int delStatus);
+		
 
 
 }
