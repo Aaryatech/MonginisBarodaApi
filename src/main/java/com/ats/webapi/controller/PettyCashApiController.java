@@ -355,7 +355,7 @@ public class PettyCashApiController {
 			frEmp = frEmpRepo.save(emp);
 			if (id == 0) {
 				if (frEmp != null) {
-					Setting setting = settingRepository.findBySettingId(52);
+					Setting setting = settingRepository.findBySettingId(54);
 					int val = setting.getSettingValue() + 1;
 
 					int value = settingRepository.udatekeyvalueForFrEmpCode(val);
@@ -741,7 +741,7 @@ public class PettyCashApiController {
 	
 	@RequestMapping(value = "/getSettingDataById", method = RequestMethod.GET)
 	public @ResponseBody Setting getSettingDataById(@RequestParam("settingId") int settingId) {
-
+System.err.println("settingId----------"+settingId);
 		Setting Updatevalue = settingRepository.findBySettingId(settingId);
 
 		return Updatevalue;

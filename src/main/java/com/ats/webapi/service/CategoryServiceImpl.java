@@ -37,5 +37,11 @@ public class CategoryServiceImpl implements CategoryService {
 		 
 		return mCategoryList;
 	}
+
+	@Override
+	public List<MCategory> getCategory() {
+		// TODO Auto-generated method stub
+		return categoryRepository.getCatBySettingVals();
+	}
 		
 }

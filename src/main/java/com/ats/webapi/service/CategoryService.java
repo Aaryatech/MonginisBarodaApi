@@ -11,4 +11,6 @@ public interface CategoryService {
 	
 	List<MCategory> findAllOnlyCategory(List<Integer> list);
 	
+	List<MCategory> getCategory();
+	
 }

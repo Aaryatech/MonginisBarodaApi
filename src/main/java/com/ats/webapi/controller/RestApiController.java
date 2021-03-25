@@ -3350,6 +3350,14 @@ public class RestApiController {
 		return subCategoryList;
 
 	}
+	
+	@RequestMapping(value = { "/getCategories" }, method = RequestMethod.GET)
+	public @ResponseBody List<MCategory> getCategories() {
+
+		List<MCategory> catList = categoryService.getCategory();		
+
+		return catList;
+	}
 
 	@RequestMapping(value = "/getSubCatListByCatIdInForDisp", method = RequestMethod.POST)
 	public @ResponseBody List<SubCategory> getSubCatListByCatIdInForDisp(@RequestParam("catId") List<String> catId,

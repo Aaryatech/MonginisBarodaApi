@@ -23,5 +23,18 @@ public interface CategoryRepository extends JpaRepository<MCategory, Integer>{
 
 	
 	public List<MCategory> findByDelStatusAndIsSameDayInOrderBySeqNoAsc(int i, List<Integer> list);
+
+	@Query(value="SELECT\n" + 
+			"    c.*\n" + 
+			"FROM\n" + 
+			"   m_category c,\n" + 
+			"   t_setting_new s\n" + 
+			"    \n" + 
+			"WHERE\n" + 
+			"    FIND_IN_SET(c.cat_id, s.setting_value1) AND\n" + 
+			"    c.del_status=0 AND\n" + 
+			"    s.setting_key LIKE 'set_cat_ids'\n" + 
+			"    ",nativeQuery=true)
+	public List<MCategory> getCatBySettingVals();
 	
 }
