@@ -1254,8 +1254,12 @@ public class RestApiController {
 
 		Info info = new Info();
 		try {
-			jsonBillHeader = postBillDataService.saveBillHeader(postBillDataCommon.getPostBillHeadersList());
+			//jsonBillHeader = postBillDataService.saveBillHeader(postBillDataCommon.getPostBillHeadersList());
 
+			List<PostBillHeader> headerList=setTCS(postBillDataCommon);//SAC 24-03-2021
+			//jsonBillHeader = postBillDataService.saveBillHeader(postBillDataCommon.getPostBillHeadersList());
+			jsonBillHeader = postBillDataService.saveBillHeader(headerList);
+			
 			if (jsonBillHeader != null && !jsonBillHeader.isEmpty()) {
 
 				info.setError(false);
@@ -1364,7 +1368,8 @@ public class RestApiController {
 						float newGrandTot = Float.parseFloat(df.format(val)) + grandTot;
 
 						bill.setGrandTotal(newGrandTot);
-						bill.setVehNo("" + Float.parseFloat(df.format(val)));
+						//bill.setVehNo("" + Float.parseFloat(df.format(val)));
+						bill.setExVarchar1("" + Float.parseFloat(df.format(val)));
 					}
 					
 					headerList.add(bill);

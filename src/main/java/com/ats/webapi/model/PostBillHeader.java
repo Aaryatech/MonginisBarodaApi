@@ -93,7 +93,7 @@ public class PostBillHeader implements Serializable {
 	
 	private String billTime;
 	
-	private String exVarchar1;
+	private String exVarchar1; //For TCS AMT if applicable and calc Sac 24-03-2021
 	
 	private String exVarchar2;//for cessAmt
 	
