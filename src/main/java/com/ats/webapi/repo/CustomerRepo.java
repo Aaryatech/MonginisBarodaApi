@@ -13,9 +13,11 @@ import com.ats.webapi.model.Customer;
 
 public interface CustomerRepo extends JpaRepository<Customer,Integer> {
 
-	List<Customer> findByDelStatusOrderByCustIdDesc(int i);
+	@Query(value="SELECT * FROM  m_customer WHERE del_status=:i ORDER BY cust_id DESC ",nativeQuery=true)
+	List<Customer> findByDelStatusOrderByCustIdDesc(@Param("i")  int i);
 
-	Customer findByCustIdAndDelStatus(int custId, int i);
+	@Query(value="SELECT * FROM  m_customer WHERE cust_id=:custId AND del_status=:i ",nativeQuery=true)
+	Customer findByCustIdAndDelStatus(@Param("custId")int custId,@Param("i") int i);
 
  	
 	

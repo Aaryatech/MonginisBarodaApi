@@ -36,9 +36,9 @@ public class AlbumEnquiry {
 	
 	private int status;
 	
-	private int weight;
+	private float weight;
 	
-	private int minWeight;
+	private float minWeight;
 	
 	private int flavourId;
 	
@@ -359,32 +359,22 @@ private int addToProd;
 	}
 
 
-
-
-	
-	
-	
-	
-	
-	
-
-
-	public int getWeight() {
+	public float getWeight() {
 		return weight;
 	}
 
 
-	public void setWeight(int weight) {
+	public void setWeight(float weight) {
 		this.weight = weight;
 	}
 
 
-	public int getMinWeight() {
+	public float getMinWeight() {
 		return minWeight;
 	}
 
 
-	public void setMinWeight(int minWeight) {
+	public void setMinWeight(float minWeight) {
 		this.minWeight = minWeight;
 	}
 
@@ -401,6 +391,20 @@ private int addToProd;
 				+ exInt2 + ", exInt3=" + exInt3 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", exVar3=" + exVar3
 				+ ", delStatus=" + delStatus + "]";
 	}
+
+
+
+
+	
+	
+	
+	
+	
+	
+
+
+
+
 	
 	
 	

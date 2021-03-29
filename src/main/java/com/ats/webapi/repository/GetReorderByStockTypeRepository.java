@@ -13,5 +13,11 @@ public interface GetReorderByStockTypeRepository extends JpaRepository<GetReorde
 	
 	@Query(value=" select * from m_fr_item_stock where item_id in (:itemId) and type=:stockType",nativeQuery=true)
 	List<GetReorderByStockType> GetRegSpCakeOrderQty(@Param("itemId")List<String> itemId, @Param("stockType")int stockType);
+	
+	
+	
+	//Akhilesh 2021-03-23 
+	@Query(value=" select * from m_fr_item_stock where  type IN (:stockType)",nativeQuery=true)
+	List<GetReorderByStockType> GetRegSpCakeOrderQtyByStocktype(@Param("stockType")List<String>  stockType);
 
 }

@@ -18,7 +18,7 @@ List<rejectRemark> getAllRejectRemarksByDelStatus();
 @Query(value="SELECT * FROM reject_remark WHERE reject_id =:rejectId",nativeQuery=true)	
   rejectRemark getAllRejectRemarkById(@Param("rejectId") Integer rejectId);
 
-rejectRemark save(rejectRemark map);
+
 
 @Transactional
 	@Modifying

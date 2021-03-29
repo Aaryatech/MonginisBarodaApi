@@ -12,14 +12,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.ErrorMessage;
+import com.ats.webapi.model.GetitemStockConfig;
+import com.ats.webapi.model.Item;
 import com.ats.webapi.model.StockType;
+import com.ats.webapi.model.StockTypeConfigResponse;
 import com.ats.webapi.repo.StockTypeRepository;
+import com.ats.webapi.repository.GetitemStockConfigRepository;
+import com.ats.webapi.repository.ItemStockRepository;
+import com.ats.webapi.service.ItemService;
 
 @RestController
 public class StockTypeControllerApi {
 
 	@Autowired
 	StockTypeRepository StockTypeRepo;
+	
+	
+	
+	@Autowired
+	ItemService itemService;
+	
+	@Autowired
+	GetitemStockConfigRepository itemStockrepo;
+	
+	
+	
 	
 	
 	@RequestMapping(value="/getAllStockType",method=RequestMethod.GET)
@@ -89,6 +106,57 @@ System.err.println("error");
 	}
 	return errorMessage;
 }
+
+
+
+
+@RequestMapping(value = "/getStocktypeWithItems",method=RequestMethod.POST)
+public @ResponseBody StockTypeConfigResponse getStocktypeWithItems(@RequestParam List<String> subcatIds,@RequestParam List<String> sTypeIds) {
+	System.err.println("In /getStocktyWithItems");
+	StockTypeConfigResponse resp=new StockTypeConfigResponse();
+	List<Item> items=new ArrayList<>();
+	List<StockType> stockTypes=new ArrayList<>();
+	List<GetitemStockConfig> itemStresp=new ArrayList<>();
+	try {
+		
+		items=itemService.getItemsBySubCatIdForConfiguration(subcatIds);
+		stockTypes=StockTypeRepo.findAllStockTypesByIndelStatus(sTypeIds);
+		resp.setItemlist(items);
+		resp.setStockTypelist(stockTypes);
+		itemStresp=itemStockrepo.GetItemStockByType(sTypeIds);
+		resp.setItemStockList(itemStresp);
+	
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+		System.err.println("Exception Occuered In /getStocktypeWithItems");
+	}
+	
+	
+	return resp;
+	
+}
+
+@RequestMapping(value="/submitConfigApi",method=RequestMethod.POST)
+public @ResponseBody List<GetitemStockConfig> submitConfigApi(@RequestBody List<GetitemStockConfig> configlist) {
+	List<GetitemStockConfig> respList=new ArrayList<>();
+	try {
+		respList= itemStockrepo.save(configlist);
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+		System.err.println("Exception In /submitConfigApi");
+	}
+	
+	
+	return respList;
+	
+}
+
+
+
+
+
 
 }
 	

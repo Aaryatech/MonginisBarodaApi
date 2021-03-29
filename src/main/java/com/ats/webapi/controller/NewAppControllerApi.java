@@ -166,6 +166,7 @@ public class NewAppControllerApi {
 		List<AlbumEnquiry> enquiries = new ArrayList<>();
 		try {
 			enquiries = enquiryRepo.get100Enquiry();
+			System.err.println("Size Of Responce--->"+enquiries.size());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -181,6 +182,7 @@ public class NewAppControllerApi {
 		List<AlbumEnquiry> enquiries = new ArrayList<>();
 		try {
 			enquiries = enquiryRepo.get50Enquiry(frId);
+			System.err.println("Size Of Responce--->"+enquiries.size());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

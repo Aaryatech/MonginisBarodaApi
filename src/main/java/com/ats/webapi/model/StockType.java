@@ -23,6 +23,9 @@ public class StockType {
 	private int exInt1,exInt2;
 	
 	private String exVar1,exVar2;
+	
+	private int delStatus;
+	
 
 	public int getId() {
 		return id;
@@ -88,12 +91,21 @@ public class StockType {
 		this.exVar2 = exVar2;
 	}
 
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "StockType [id=" + id + ", stockTypeName=" + stockTypeName + ", stockTypeDesc=" + stockTypeDesc
 				+ ", type=" + type + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2="
-				+ exVar2 + "]";
+				+ exVar2 + ", delStatus=" + delStatus + "]";
 	}
+
 	
 	
 	

@@ -42,5 +42,5 @@ public interface ItemService {
 	public ErrorMessage saveItemAndSupplement(ItemAndItemSuplement itemItemSup);
 	
 	
-	public List<Item> getItemsBySubCatIdForConfiguration(String itemGrp2);
+	public List<Item> getItemsBySubCatIdForConfiguration(List<String>  itemGrp2);
 }

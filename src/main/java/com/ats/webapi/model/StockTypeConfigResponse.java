@@ -8,6 +8,9 @@ public class StockTypeConfigResponse {
 	List<Item> itemlist;
 	
 	List<StockType> stockTypelist;
+	
+	
+	List<GetitemStockConfig> itemStockList;
 
 	public List<Item> getItemlist() {
 		return itemlist;
@@ -25,10 +28,22 @@ public class StockTypeConfigResponse {
 		this.stockTypelist = stockTypelist;
 	}
 
+	public List<GetitemStockConfig> getItemStockList() {
+		return itemStockList;
+	}
+
+	public void setItemStockList(List<GetitemStockConfig> itemStockList) {
+		this.itemStockList = itemStockList;
+	}
+
 	@Override
 	public String toString() {
-		return "StockTypeConfigResponse [itemlist=" + itemlist + ", stockTypelist=" + stockTypelist + "]";
+		return "StockTypeConfigResponse [itemlist=" + itemlist + ", stockTypelist=" + stockTypelist + ", itemStockList="
+				+ itemStockList + "]";
 	}
+
+	
+
 	
 	
 	

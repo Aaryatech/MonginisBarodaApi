@@ -16,7 +16,7 @@ public interface GetFranchiseSupRepository extends JpaRepository<GetFranchiseSup
 			"        s.fr_id,\n" + 
 			"        CONCAT(f.fr_name,'-', f.fr_code) AS fr_name,\n" + 
 			"        s.fr_pan_no,\n" + 
-			"        CONCAT(state.state_name,'-',state.state_code) AS fr_state,\n" + 
+			"        s.fr_state,\n" + 
 			"        s.fr_country,\n" + 
 			"        s.no_in_route,\n" + 
 			"        s.pest_control_date,\n" + 
@@ -31,12 +31,12 @@ public interface GetFranchiseSupRepository extends JpaRepository<GetFranchiseSup
 			"        s.is_tally_sync \n" + 
 			"    from\n" + 
 			"        m_franchise_sup s,\n" + 
-			"        m_franchisee f,\n" + 
-			"        m_state state\n" + 
+			"        m_franchisee f\n" + 
+			"       \n" + 
 			"    where\n" + 
 			"        f.fr_id=s.fr_id \n" + 
-			"        and s.del_status=0 AND\n" + 
-			"        s.fr_state=state.state_id\n" + 
+			"        and s.del_status=0 \n" + 
+			"        " + 
 			"    order by\n" + 
 			"        f.fr_name Asc",nativeQuery=true)
 	 List<GetFranchiseSup> findByDelStatus();

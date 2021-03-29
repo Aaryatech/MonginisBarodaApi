@@ -15,6 +15,12 @@ public interface StockTypeRepository extends JpaRepository<StockType, Integer> {
 	@Query(value="SELECT * FROM m_stock_type WHERE del_status=0",nativeQuery=true)
 	List<StockType> findAllStockTypesBydelStatus();
 	
+	
+	@Query(value="SELECT * FROM m_stock_type WHERE del_status=0 AND id IN (:sTypeIds)",nativeQuery=true)
+	List<StockType> findAllStockTypesByIndelStatus(@Param("sTypeIds") List<String>  sTypeIds);
+	
+	
+	
 	StockType save(StockType stock);
 
 	@Query(value="SELECT * FROM m_stock_type WHERE id =:id",nativeQuery=true)	

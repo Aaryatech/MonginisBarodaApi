@@ -366,6 +366,7 @@ public class ItemServiceImpl implements ItemService{
 		
 		return getItemSupRepository.getAllotedUomIds();
 	}
+
 	
 	
 	
@@ -373,13 +374,13 @@ public class ItemServiceImpl implements ItemService{
 	
 	
 	@Override
-	public List<Item> getItemsBySubCatIdForConfiguration(String itemGrp2) {
+	public List<Item> getItemsBySubCatIdForConfiguration(List<String> itemGrp2) {
 
 		List<Item> itemList=null;
 		try
 		{
 
-			itemList=itemRepository.findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(itemGrp2, 0);
+			itemList=itemRepository.findInSubcat(itemGrp2, 0);
 		}catch(Exception e)
 		{
 			itemList=new ArrayList<>();

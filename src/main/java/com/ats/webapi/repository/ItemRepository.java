@@ -79,6 +79,13 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	//Akhilesh 2021-03-22 For Stock Type Configuration 
 	public List<Item> findByItemGrp2AndDelStatusOrderByItemGrp2AscItemNameAsc(String subCatId, int delStatus);
 
+	
+	//Akhilesh 2021-03-22 For Stock Type Configuration 
+		@Query(value="SELECT * FROM  m_item WHERE item_grp2 IN(:subCatId) AND del_status=:delStatus ",nativeQuery=true)
+		public List<Item> findInSubcat(@Param("subCatId") List<String> subCatId,@Param("delStatus") int delStatus);
+	
+	
+	
 	public List<Item> findByIdIn(List<String> id);
 
 	@Transactional
