@@ -18,5 +18,9 @@ public interface TallySVoucherUpdateRepository extends JpaRepository<SalesVouche
 	@Modifying
 	@Query("UPDATE SalesVouchers s SET s.isTallySync =:isTallySync  WHERE s.billNo=:billNo")
 	int updateSalesVouchers(@Param("billNo")int billNo,@Param("isTallySync") int isTallySync);
+	@Transactional
+	@Modifying
+	@Query("UPDATE SalesVouchers s SET s.isTallySync =:isTallySync  WHERE s.billNo=:billNo")
+	int updateSalesVouchers(@Param("billNo")int billNo,@Param("isTallySync") long isTallySync);
 
 }

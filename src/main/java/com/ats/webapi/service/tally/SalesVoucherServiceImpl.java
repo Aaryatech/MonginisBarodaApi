@@ -69,6 +69,27 @@ public class SalesVoucherServiceImpl implements SalesVoucherService{
 		
 	}
 	
+	@Override
+	public ErrorMessage updateSalesVouchers(int billNo, long isTallySync) {
+
+		ErrorMessage errorMessage=new ErrorMessage();
+		
+		int i=tallySVoucherUpdateRepository.updateSalesVouchers(billNo,isTallySync);
+		if(i==1) {
+		
+		errorMessage.setError(false);
+		errorMessage.setMessage("Sales Voucher Updated Successfully");
+		}
+		else
+		{
+			errorMessage.setError(false);
+			errorMessage.setMessage("Sales Voucher Updation Failed");
+			
+		}
+		return errorMessage;
+		
+	}
+	
 	
 	
 	

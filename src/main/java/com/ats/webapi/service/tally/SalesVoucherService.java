@@ -13,6 +13,7 @@ public interface SalesVoucherService {
 	SalesVoucherList getAllSalesVoucher();
 
 	ErrorMessage updateSalesVouchers(int billNoList, int isTallySync);
+	ErrorMessage updateSalesVouchers(int billNoList, long isTallySync);
 
 
 }

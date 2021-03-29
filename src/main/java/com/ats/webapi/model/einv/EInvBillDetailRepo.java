@@ -19,7 +19,7 @@ public interface EInvBillDetailRepo extends JpaRepository<EInvBillDetail, Intege
 			" WHERE  m_spcake_sup.sp_id=t_bill_detail.item_id)  " + 
 			" ELSE (SELECT m_item_sup.item_uom FROM m_item_sup   " + 
 			" WHERE  m_item_sup.item_id=t_bill_detail.item_id)   " + 
-			" END AS item_uom from t_bill_detail  " + 
+			" END AS item_uom, t_bill_detail.cgst_per,t_bill_detail.sgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per from t_bill_detail  " + 
 			" WHERE bill_no=:billNo ", nativeQuery = true)
 	List<EInvBillDetail> getEInvBillDetail(@Param("billNo") int billNo);
 	
