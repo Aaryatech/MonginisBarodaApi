@@ -14,8 +14,21 @@ public interface EwayItemListRepo extends JpaRepository<EwayItemList, Integer> {
 			+ "t_bill_detail.cgst_per as cgst_rate, " + "t_bill_detail.sgst_per as sgst_rate, "
 			+ "t_bill_detail.igst_per as igst_rate, " + "t_bill_detail.cess_per as cess_rate, "
 			+ "t_bill_detail.cess_rs as cess_non_advol, " + "t_bill_detail.taxable_amt as taxable_amount, "
-			+ "m_item.item_name as product_name, " + "m_item.item_name as product_desc, "
-			+ "m_item_sup.item_hsncd as hsn_code, " + "m_item_sup.item_uom as qty_unit "
+		//	+ "m_item.item_name as product_name, " + "m_item.item_name as product_desc, "
+			+ "t_bill_detail.hsn_code as hsn_code, " //+ "m_item_sup.item_uom as qty_unit, "
+			+ ""
+			+ " CASE  WHEN t_bill_detail.cat_id=5 THEN (SELECT m_sp_cake.sp_name  FROM  m_sp_cake WHERE m_sp_cake.sp_id= t_bill_detail.item_id) \"\n" + 
+			"  ELSE (SELECT  m_item.item_name FROM m_item WHERE t_bill_detail.item_id=m_item.id)END AS product_name ,"
+			+ ""
+			+ "CASE  WHEN t_bill_detail.cat_id=5 THEN (SELECT m_sp_cake.sp_name  FROM  m_sp_cake WHERE m_sp_cake.sp_id= t_bill_detail.item_id) \\\"\\n\" + \n" + 
+			"  ELSE (SELECT  m_item.item_name FROM m_item WHERE t_bill_detail.item_id=m_item.id)END AS product_desc , \" + \n" + 
+			"			\""
+			+ " CASE WHEN t_bill_detail.cat_id=5 THEN (SELECT m_spcake_sup.sp_uom  FROM m_spcake_sup  \" + \n" + 
+			"			\" WHERE  m_spcake_sup.sp_id=t_bill_detail.item_id)  \" + \n" + 
+			"			\" ELSE (SELECT m_item_sup.item_uom FROM m_item_sup   \" + \n" + 
+			"			\" WHERE  m_item_sup.item_id=t_bill_detail.item_id)   \" + \n" + 
+			"			\" END AS qty_unit"
+			+ ""
 			+ "	FROM m_item_sup,m_item,t_bill_detail "
 			+ "WHERE m_item_sup.item_id=m_item.id AND m_item.id=t_bill_detail.item_id and t_bill_detail.bill_qty>0 "
 			+ "AND t_bill_detail.bill_no=:billNo", nativeQuery = true)

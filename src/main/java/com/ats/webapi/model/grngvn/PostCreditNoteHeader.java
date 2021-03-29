@@ -71,7 +71,19 @@ public class PostCreditNoteHeader implements Serializable {
 	String exVarchar1;//new for pune  invno of bill
 	@Column(name = "ex_float1")
 	float exFloat1;//for cess rs
+	String exVarchar2;//new for Eway bill update SAC as cp from madhvi query update required it 29-03-2021
 	
+	
+
+	public String getExVarchar2() {
+		return exVarchar2;
+	}
+
+
+	public void setExVarchar2(String exVarchar2) {
+		this.exVarchar2 = exVarchar2;
+	}
+
 
 	@Transient
 	List<PostCreditNoteDetails> postCreditNoteDetails;
