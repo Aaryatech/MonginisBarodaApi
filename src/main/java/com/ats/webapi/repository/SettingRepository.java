@@ -32,4 +32,6 @@ public interface SettingRepository extends JpaRepository<Setting, Integer> {
 
 	Setting findBySettingId(int i);
 	
+	Setting findBySettingKey(String settingKey);
+	
 }

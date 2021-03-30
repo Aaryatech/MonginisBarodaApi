@@ -758,6 +758,15 @@ System.err.println("settingId----------"+settingId);
 
 	}
 	
+	@RequestMapping(value = "/getValueBySettingKey", method = RequestMethod.POST)
+	public @ResponseBody Setting getValueBySettingKey(@RequestParam("settingKey") String settingKey) {
+
+		Setting setting = settingRepository.findBySettingKey(settingKey);
+
+		return setting;
+
+	}
+	
 	
 	@RequestMapping(value = { "/deletePettyCashData" }, method = RequestMethod.POST)
 	public @ResponseBody int deletePettyCashData(@RequestParam("id") int id) {
