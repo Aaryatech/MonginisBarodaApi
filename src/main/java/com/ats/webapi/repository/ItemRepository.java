@@ -130,7 +130,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			"			select i.id,i.item_id,i.item_name,i.item_grp1,i.item_grp2,i.item_grp3,i.item_rate1,i.item_rate2,i.item_rate3,i.item_mrp1,i.item_mrp2,i.item_mrp3,s.item_hsncd as item_image,i.item_tax1,i.item_tax2,i.item_tax3,i.item_is_used,i.item_sort_id,i.grn_two,i.del_status,i.min_qty,i.item_shelf_life from m_item i,m_item_sup s where s.item_id=i.id and   i.del_status=0 and i.item_grp1=:catId and i.item_rate2=:frId) a   ORDER BY a.item_grp1,a.item_grp2,a.item_name", nativeQuery = true)
 	public List<Item> getItemsNameByIdWithOtherItem(@Param("itemList") List<Integer> itemList,@Param("catId")int catId,@Param("frId")int frId);
 
-	public List<Item> findByItemGrp1AndItemRate2AndDelStatus(String i, double frId, int j);
+	public List<Item> findByItemGrp1AndItemRate2AndDelStatus(String catId, double frId, int j);
 
 	@Query(value = "select m_item.* from m_item where m_item.del_status=0 and m_item.item_grp1=(select cat_id from t_production_plan_header where production_header_id=:prodHeaderId)  ", nativeQuery = true)
 	public List<Item> getItemsByProductionIdCatId(@Param("prodHeaderId")int prodHeaderId);
@@ -569,5 +569,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			"        item_name",nativeQuery=true)
 	public List<Item> getAllItemsFinishGoodsStock(@Param("subCatId") List<String> subCatId);
 	//@Query(value = "select * from m_item where item_grp2 IN (:subCatId) AND del_status = 0 Order By item_grp1, item_grp2, item_sort_id, item_name", nativeQuery = true)
+
+	public List<Item> findByItemGrp1AndDelStatus(String catId, int i);
 	
 }

@@ -227,10 +227,14 @@ public class MasterController {
 	
 	
 	@RequestMapping(value = "/getOtherItemsByCatIdAndFrId", method = RequestMethod.POST)
-	public @ResponseBody List<Item> getOtherItemsByCatIdAndFrId(@RequestParam double frId) {
-
-		List<Item> items = itemRepository.findByItemGrp1AndItemRate2AndDelStatus("7",frId,0);
+	public @ResponseBody List<Item> getOtherItemsByCatIdAndFrId(@RequestParam String catId, @RequestParam double frId) {
 		
+		List<Item> items = new ArrayList<Item>();
+		try {
+			 items = itemRepository.findByItemGrp1AndItemRate2AndDelStatus(catId, frId, 0);		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return items;
 
 	}
