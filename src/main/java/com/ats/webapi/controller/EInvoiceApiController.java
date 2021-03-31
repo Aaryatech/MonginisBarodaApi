@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.einv.EInvBillDetail;
 import com.ats.webapi.model.einv.EInvBillDetailRepo;
 import com.ats.webapi.model.einv.EInvBillHeader;
@@ -55,4 +56,30 @@ public class EInvoiceApiController {
 	}
 	
 	
+	
+	@RequestMapping(value = { "/updateEInvDataInBill" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage updateEInvDataInBill(@RequestParam int billNo, @RequestParam String irnAckData) {
+		System.err.println("In Update "+irnAckData);
+		ErrorMessage errorMessage = null;
+		try {
+			int res = eInvBillHeader.updateEInvDataInBill(billNo, irnAckData);
+			
+			if(res>0) {
+				errorMessage = new ErrorMessage();
+				errorMessage.setError(false);
+				errorMessage.setMessage("Success");
+			}else {
+				errorMessage = new ErrorMessage();
+				errorMessage.setError(true);
+				errorMessage.setMessage("Failed");
+
+			}
+			
+			// errorMessage.set
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorMessage = new ErrorMessage();
+		}
+		return errorMessage;
+	}
 }

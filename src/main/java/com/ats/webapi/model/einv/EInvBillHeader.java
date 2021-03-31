@@ -37,8 +37,16 @@ public class EInvBillHeader {
 	private String partyAddress;
 	
 	private String vehNo;
+	private String irnAckData; //Split by tild ~ to seperate out irn no and ack no (stored in frcode field of bill header table)
 	
-	
+	public String getIrnAckData() {
+		return irnAckData;
+	}
+
+	public void setIrnAckData(String irnAckData) {
+		this.irnAckData = irnAckData;
+	}
+
 	@Transient
 	List<EInvBillDetail> eInvBillDetail;
 	
@@ -211,7 +219,7 @@ public class EInvBillHeader {
 				+ ", grandTotal=" + grandTotal + ", discAmt=" + discAmt + ", roundOff=" + roundOff + ", sgstSum="
 				+ sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum + ", cessSum=" + cessSum + ", partyName="
 				+ partyName + ", partyGstin=" + partyGstin + ", partyAddress=" + partyAddress + ", vehNo=" + vehNo
-				+ ", eInvBillDetail=" + eInvBillDetail + "]";
+				+ ", irnAckData=" + irnAckData + ", eInvBillDetail=" + eInvBillDetail + "]";
 	}
 	
 }
