@@ -97,4 +97,16 @@ public class SchedulerServiceImpl implements SchedulerService {
 		return schedulerList;
 
 	}
+
+	@Override
+	public int DeleteMutiScheduler(List<String> scIds) {
+		int flag=0;
+		try {
+			flag=schedulerRepository.DeleteMutiScheduler(scIds);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return flag;
+	}
 }

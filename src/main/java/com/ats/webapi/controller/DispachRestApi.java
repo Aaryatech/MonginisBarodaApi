@@ -20,9 +20,11 @@ import com.ats.webapi.model.FranchiseForDispatch;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.ItemListForDispatchReport;
+import com.ats.webapi.model.NewSectionWithType;
 import com.ats.webapi.model.SectionMaster;
 import com.ats.webapi.model.SectionMasterNew;
 import com.ats.webapi.model.StaionListWithFranchiseeList;
+import com.ats.webapi.repo.NewSectionWithTypeRepo;
 import com.ats.webapi.repo.SectionMasterNewRepository;
 import com.ats.webapi.repository.DispatchReportRepositoryForItemwiseMin;
 import com.ats.webapi.repository.FrListRepository;
@@ -37,11 +39,11 @@ import com.ats.webapi.repository.SectionMasterRepository;
 public class DispachRestApi {
 	
 	
-	
-	
+	@Autowired
+	NewSectionWithTypeRepo newSectionWithTypeRepo;	
 
 @Autowired
-	SectionMasterNewRepository  sectionMasterNewRepository;
+	SectionMasterNewRepository sectionMasterNewRepository ;
 
 	@Autowired
 	private ItemRepository itemRepository;
@@ -696,6 +698,39 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 
 			return sectionList;
 		}
+		
+		
+		
+		
+		//Akhilesh 2021-03-29
+				@RequestMapping(value = { "/getSectionListWithTypeNew" }, method = RequestMethod.GET)
+				public @ResponseBody List<NewSectionWithType> getSectionListWithTypeNew() {
+
+					List<NewSectionWithType> sectionList = new ArrayList<>();
+					try {
+
+						sectionList = newSectionWithTypeRepo.getAllSection();
+
+						for (int i = 0; i < sectionList.size(); i++) {
+
+							try {
+
+								String[] menuIds = sectionList.get(i).getMenuIds().split(",");
+								List<AllMenus> menus = new ArrayList<AllMenus>();
+								menus = mainMenuConfigurationRepository.findByMenuIdIn(menuIds);
+								sectionList.get(i).setMenuList(menus);
+
+							} catch (Exception e) {
+
+							}
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					return sectionList;
+				}
 	
 	
 	

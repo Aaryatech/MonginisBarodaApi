@@ -3261,6 +3261,36 @@ public class RestApiController {
 		return "" + JsonUtil.javaToJson(info);
 
 	}
+	
+	
+	//Akhilesh 2021-03-31 To Delete Multiple Scheduler
+	@RequestMapping(value="/deleteMultiScheduler",method=RequestMethod.POST)
+	public @ResponseBody Info deleteMultiScheduler(@RequestParam List<String> schId) {
+		Info info=new Info();
+		int flag=0;
+		try {
+			flag=schedulerService.DeleteMutiScheduler(schId);
+			if(flag>0) {
+				info.setError(false);
+				info.setMessage("Selected Scheduler Deleted");
+			}else {
+				info.setError(true);
+				info.setMessage("Unbale To Delete Selected Scheduler");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			info.setError(true);
+			info.setMessage("Unbale To Delete Selected Scheduler Exception Occuered");
+			e.printStackTrace();
+			System.err.println("Exception In /deleteMultiScheduler");
+		}
+		
+		return info;
+	}
+	
+	
+	
+	
 
 	// Delete Franchisee
 	@RequestMapping("/deleteFranchisee")
