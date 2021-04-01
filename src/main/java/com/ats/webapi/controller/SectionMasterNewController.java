@@ -15,8 +15,7 @@ import com.ats.webapi.model.AllMenus;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.SectionMasterNew;
 import com.ats.webapi.repo.SectionMasterNewRepository;
-import com.ats.webapi.repository.MainMenuConfigurationRepository;
-import com.mysql.fabric.xmlrpc.base.Array;
+import com.ats.webapi.repository.MainMenuConfigurationRepository; 
 
 @RestController
 public class SectionMasterNewController {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
- 
+
 import com.ats.webapi.model.CustomerForOps;
 import com.ats.webapi.model.newpos.Customer;
 import com.ats.webapi.repo.CustomerRepo;
@@ -81,6 +81,22 @@ public class CustomerApiController {
 
 		try {
 			serv = customerForOpsRepo.saveAndFlush(service);
+
+		} catch (Exception e) {
+			// System.err.println("Exce in saving saveCustomer " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return serv;
+	}
+
+	@RequestMapping(value = { "/getCustomerByCustIdForOps" }, method = RequestMethod.POST)
+	public @ResponseBody CustomerForOps getCustomerByCustIdForOps(@RequestParam("custId") int custId) {
+
+		CustomerForOps serv = new CustomerForOps();
+
+		try {
+			serv = customerForOpsRepo.findByCustIdAndDelStatus(custId, 0);
 
 		} catch (Exception e) {
 			// System.err.println("Exce in saving saveCustomer " + e.getMessage());

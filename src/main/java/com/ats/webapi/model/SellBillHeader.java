@@ -18,108 +18,110 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class SellBillHeader implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="sell_bill_no")
+	@Column(name = "sell_bill_no")
 	private int sellBillNo;
-	
-	@Column(name="invoice_no")
+
+	@Column(name = "invoice_no")
 	private String invoiceNo;
-	
-	@Column(name="bill_date")
+
+	@Column(name = "bill_date")
 	private Date billDate;
-	
-	@Column(name="fr_id")
+
+	@Column(name = "fr_id")
 	private int frId;
-	
-	@Column(name="fr_code")
+
+	@Column(name = "fr_code")
 	private String frCode;
-	
-	@Column(name="taxable_amt")
+
+	@Column(name = "taxable_amt")
 	private float taxableAmt;
-	
-	@Column(name="disc_type")
-	private int discType;   //new
-	
-	@Column(name="discount_per")
+
+	@Column(name = "disc_type")
+	private int discType; // new
+
+	@Column(name = "discount_per")
 	private float discountPer;
-		
-	@Column(name="discount_amt")
+
+	@Column(name = "discount_amt")
 	private float discountAmt;
-	
-	@Column(name="payable_amt")
+
+	@Column(name = "payable_amt")
 	private float payableAmt;
-	
-	@Column(name="total_tax")
+
+	@Column(name = "total_tax")
 	private float totalTax;
-	
-	@Column(name="grand_total")
+
+	@Column(name = "grand_total")
 	private float grandTotal;
-	
-	@Column(name="paid_amt")
+
+	@Column(name = "paid_amt")
 	private float paidAmt;
-	
-	@Column(name="remaining_amt")
+
+	@Column(name = "remaining_amt")
 	private float remainingAmt;
-	
-	@Column(name="disc_amt_item")
-	private float discAmtItem; //new
-	
-	@Column(name="advance_amt")
-	private float advanceAmt;  //new     
-	
-	@Column(name="payment_mode")
+
+	@Column(name = "disc_amt_item")
+	private float discAmtItem; // new
+
+	@Column(name = "advance_amt")
+	private float advanceAmt; // new
+
+	@Column(name = "payment_mode")
 	private int paymentMode;
-	
-	@Column(name="cust_id")
+
+	@Column(name = "cust_id")
 	private int custId;
-	
-	@Column(name="user_name")
+
+	@Column(name = "user_name")
 	private String userName;
-	
-	@Column(name="user_gst_no")
+
+	@Column(name = "user_gst_no")
 	private String userGstNo;
-	
-	@Column(name="user_phone")
+
+	@Column(name = "user_phone")
 	private String userPhone;
-	
-	@Column(name="status")
+
+	@Column(name = "status")
 	private int status;
-	
-	@Column(name="is_dairy_mart_bill")
-	private int isDairyMartBill;//new
-	
-	@Column(name="coupon_no")
-	private String couponNo;//new
-	
-	@Column(name="cust_loyalty_pt_rate")
-	private float custLoyaltyPtRate;//new
-	
-	@Column(name="cust_loyalty_pt")
-	private float custLoyaltyPt;//new
-	
-	@Column(name="del_status")
+
+	@Column(name = "is_dairy_mart_bill")
+	private int isDairyMartBill;// new
+
+	@Column(name = "coupon_no")
+	private String couponNo;// new
+
+	@Column(name = "cust_loyalty_pt_rate")
+	private float custLoyaltyPtRate;// new
+
+	@Column(name = "cust_loyalty_pt")
+	private float custLoyaltyPt;// new
+
+	@Column(name = "del_status")
 	private int delStatus;
 
-	@Column(name="bill_type")
+	@Column(name = "bill_type")
 	private char billType;
-	
-	
 
-	@Column(name="ext_int1")
+	@Column(name = "ext_int1")
 	private int extInt1;
-	
-	@Column(name="ext_float1")
-	private int extFloat1;
-	
-	@Column(name="ext_int2")
-	private int extInt2;
-	
-	@Column(name="ext_var1")
-	private String extVar1;
-	
-	
- 
 
-	
+	@Column(name = "ext_int2")
+	private int extInt2;
+
+	@Column(name = "ext_float1")
+	private float extFloat1;
+
+	@Column(name = "ext_float2")
+	private float extFloat2;
+
+	@Column(name = "ext_float3")
+	private float extFloat3;
+
+	@Column(name = "ext_var1")
+	private String extVar1;
+
+	@Column(name = "ext_var2")
+	private String extVar2;
 
 	public String getExtVar1() {
 		return extVar1;
@@ -129,11 +131,11 @@ public class SellBillHeader implements Serializable{
 		this.extVar1 = extVar1;
 	}
 
-	public int getExtFloat1() {
+	public float getExtFloat1() {
 		return extFloat1;
 	}
 
-	public void setExtFloat1(int extFloat1) {
+	public void setExtFloat1(float extFloat1) {
 		this.extFloat1 = extFloat1;
 	}
 
@@ -219,7 +221,7 @@ public class SellBillHeader implements Serializable{
 
 	@Transient
 	List<SellBillDetail> sellBillDetailsList;
-	
+
 	public List<SellBillDetail> getSellBillDetailsList() {
 		return sellBillDetailsList;
 	}
@@ -236,7 +238,6 @@ public class SellBillHeader implements Serializable{
 		this.sellBillNo = sellBillNo;
 	}
 
-	
 	public String getInvoiceNo() {
 		return invoiceNo;
 	}
@@ -244,12 +245,14 @@ public class SellBillHeader implements Serializable{
 	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 
 	public Date getBillDate() {
 		return billDate;
 	}
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "yyyy-MM-dd")
+
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "yyyy-MM-dd")
 	public void setBillDate(Date billDate) {
 		this.billDate = billDate;
 	}
@@ -278,7 +281,6 @@ public class SellBillHeader implements Serializable{
 		this.taxableAmt = taxableAmt;
 	}
 
-	
 	public float getTotalTax() {
 		return totalTax;
 	}
@@ -331,7 +333,6 @@ public class SellBillHeader implements Serializable{
 		return userGstNo;
 	}
 
-	
 	public String getUserPhone() {
 		return userPhone;
 	}
@@ -392,6 +393,30 @@ public class SellBillHeader implements Serializable{
 		this.extInt2 = extInt2;
 	}
 
+	public String getExtVar2() {
+		return extVar2;
+	}
+
+	public void setExtVar2(String extVar2) {
+		this.extVar2 = extVar2;
+	}
+
+	public float getExtFloat2() {
+		return extFloat2;
+	}
+
+	public void setExtFloat2(int extFloat2) {
+		this.extFloat2 = extFloat2;
+	}
+
+	public float getExtFloat3() {
+		return extFloat3;
+	}
+
+	public void setExtFloat3(int extFloat3) {
+		this.extFloat3 = extFloat3;
+	}
+
 	@Override
 	public String toString() {
 		return "SellBillHeader [sellBillNo=" + sellBillNo + ", invoiceNo=" + invoiceNo + ", billDate=" + billDate
@@ -403,8 +428,9 @@ public class SellBillHeader implements Serializable{
 				+ ", userPhone=" + userPhone + ", status=" + status + ", isDairyMartBill=" + isDairyMartBill
 				+ ", couponNo=" + couponNo + ", custLoyaltyPtRate=" + custLoyaltyPtRate + ", custLoyaltyPt="
 				+ custLoyaltyPt + ", delStatus=" + delStatus + ", billType=" + billType + ", extInt1=" + extInt1
-				+ ", extFloat1=" + extFloat1 + ", extInt2=" + extInt2 + ", extVar1=" + extVar1
-				+ ", sellBillDetailsList=" + sellBillDetailsList + "]";
+				+ ", extInt2=" + extInt2 + ", extFloat1=" + extFloat1 + ", extFloat2=" + extFloat2 + ", extFloat3="
+				+ extFloat3 + ", extVar1=" + extVar1 + ", extVar2=" + extVar2 + ", sellBillDetailsList="
+				+ sellBillDetailsList + "]";
 	}
 	
 

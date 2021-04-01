@@ -10,4 +10,6 @@ public interface CustomerForOpsRepo extends JpaRepository<CustomerForOps, Intege
 
 	List<CustomerForOps> findByDelStatusOrderByCustIdDesc(int i);
 
+	CustomerForOps findByCustIdAndDelStatus(int custId, int i);
+
 }
