@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.webapi.commons.Common;
 import com.ats.webapi.model.Customer;
 import com.ats.webapi.model.CustomerAmounts;
+import com.ats.webapi.model.CustomerForOps;
 import com.ats.webapi.model.GetTotalAmt;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.ItemOrderHis;
@@ -36,6 +37,7 @@ import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repo.OpsItemListForCustomerBillRepo;
 import com.ats.webapi.repo.TransactionDetailWithDiscRepo;
 import com.ats.webapi.repository.CustomerAmountsRepo;
+import com.ats.webapi.repository.CustomerForOpsRepo;
 import com.ats.webapi.repository.SellBillHeaderRepository;
 import com.ats.webapi.repository.TransactionDetailRepository;
 import com.ats.webapi.repository.advorder.AdvOrderForAdminDashRepo;
@@ -155,11 +157,11 @@ public class AdvanceOrderApiController {
 		AdvanceOrderHeader orderList = new AdvanceOrderHeader();
 		try {
 			orderList = advanceOrderHeaderRepo.findByAdvHeaderIdAndDelStatus(headId, 0);
-			
-			if(orderList==null) {
+
+			if (orderList == null) {
 				orderList = new AdvanceOrderHeader();
 			}
-			
+
 		} catch (Exception e) {
 			System.out.println("Exc in advanceOrderHistoryHeader" + e.getMessage());
 			e.printStackTrace();
@@ -404,28 +406,31 @@ public class AdvanceOrderApiController {
 		System.err.println("data is" + custId);
 
 		orderList1 = customerAmountsRepo.findPendingAmt(custId, frId);
-		orderList2 = customerAmountsRepo.findAadvAmt(custId, frId);
+		// orderList2 = customerAmountsRepo.findAadvAmt(custId, frId);
 
 		orderList.setCreaditAmt(orderList1.getCreaditAmt());
 
-		orderList.setAdvanceAmt(orderList2.getCreaditAmt());
+		orderList.setAdvanceAmt("0");
 		orderList.setCustId(custId);
 		return orderList;
 
 	}
+
+	@Autowired
+	CustomerForOpsRepo customerForOpsRepo;
 
 	@RequestMapping("/getSellBillByCustId")
 	public @ResponseBody List<SellBillHeader> getSellBillByCustId(@RequestParam int custId, @RequestParam int frId)
 			throws ParseException {
 		List<SellBillHeader> itm = null;
 
-		Customer cust = new Customer();
+		CustomerForOps cust = new CustomerForOps();
 		try {
 			itm = sellBillHeaderRepository.getSellBillHeaderPending(custId, frId);
 
 			System.err.println("data is" + itm.toString());
 
-			cust = customerRepo.findByCustIdAndDelStatus(custId, 0);
+			cust = customerForOpsRepo.findByCustIdAndDelStatus(custId, 0);
 
 			System.err.println("cust is " + cust.toString());
 			for (int i = 0; i < itm.size(); i++) {
@@ -577,7 +582,7 @@ public class AdvanceOrderApiController {
 
 		List<SellBillHeader> orderList = new ArrayList<SellBillHeader>();
 		System.err.println("tabType*" + tabType);
-		Customer cust = new Customer();
+		CustomerForOps cust = new CustomerForOps();
 		try {
 			if (tabType == 1) {
 				if (flag == 1) {
@@ -587,7 +592,7 @@ public class AdvanceOrderApiController {
 					orderList = sellBillHeaderRepository.getCustBillsPending50(custId, frId);
 
 				}
-				cust = customerRepo.findByCustIdAndDelStatus(custId, 0);
+				cust = customerForOpsRepo.findByCustIdAndDelStatus(custId, 0);
 
 				System.err.println("cust is " + cust.toString());
 				for (int i = 0; i < orderList.size(); i++) {
@@ -606,7 +611,7 @@ public class AdvanceOrderApiController {
 
 				System.err.println("cust is " + cust.toString());
 				for (int i = 0; i < orderList.size(); i++) {
-					cust = customerRepo.findByCustIdAndDelStatus(orderList.get(i).getCustId(), 0);
+					cust = customerForOpsRepo.findByCustIdAndDelStatus(orderList.get(i).getCustId(), 0);
 
 					orderList.get(i).setUserName(cust.getCustName());
 
