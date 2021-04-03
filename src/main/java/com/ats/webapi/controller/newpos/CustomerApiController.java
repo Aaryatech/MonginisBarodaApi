@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.CustomerForOps;
+import com.ats.webapi.model.PaymentMode;
+import com.ats.webapi.model.PaymentType;
 import com.ats.webapi.model.newpos.Customer;
 import com.ats.webapi.repo.CustomerRepo;
+import com.ats.webapi.repo.PaymentModeRepository;
 import com.ats.webapi.repository.CustomerForOpsRepo;
+import com.ats.webapi.repository.PaymentTypeRepository;
 import com.ats.webapi.repository.newpos.CustomerRepository;
 
 @RestController
@@ -27,6 +31,12 @@ public class CustomerApiController {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	PaymentModeRepository paymentModeRepository;
+
+	@Autowired
+	PaymentTypeRepository paymentTypeRepository;
+	
 	@RequestMapping(value = "/getAllCustomer", method = RequestMethod.GET)
 	public @ResponseBody List<Customer> getAllCustomer() {
 		List<Customer> customerList = new ArrayList<Customer>();
@@ -90,13 +100,29 @@ public class CustomerApiController {
 		return serv;
 	}
 
-	@RequestMapping(value = { "/getCustomerByCustIdForOps" }, method = RequestMethod.POST)
-	public @ResponseBody CustomerForOps getCustomerByCustIdForOps(@RequestParam("custId") int custId) {
+	@RequestMapping(value = { "/getPaymentModeList" }, method = RequestMethod.GET)
+	public @ResponseBody List<PaymentMode> getPaymentModeList() {
 
-		CustomerForOps serv = new CustomerForOps();
+		List<PaymentMode> serv = new ArrayList<>();
 
 		try {
-			serv = customerForOpsRepo.findByCustIdAndDelStatus(custId, 0);
+			serv = paymentModeRepository.findByDelStatus(1);
+
+		} catch (Exception e) {
+			// System.err.println("Exce in saving saveCustomer " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return serv;
+	}
+
+	@RequestMapping(value = { "/getPaymentTypeList" }, method = RequestMethod.POST)
+	public @ResponseBody List<PaymentType> getPaymentTypeList(@RequestParam("modeId") int modeId) {
+
+		List<PaymentType> serv = new ArrayList<>();
+
+		try {
+			serv = paymentTypeRepository.findByDelStatusAndPaymentModeId(1,modeId);
 
 		} catch (Exception e) {
 			// System.err.println("Exce in saving saveCustomer " + e.getMessage());
