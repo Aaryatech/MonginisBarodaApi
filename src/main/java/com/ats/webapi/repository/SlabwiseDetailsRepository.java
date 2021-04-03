@@ -31,7 +31,7 @@ public interface SlabwiseDetailsRepository extends JpaRepository<SlabwiseBill, I
 			"    where\n" + 
 			"      bill_detail_no IN(select bill_detail_no from t_bill_detail where  bill_no=:billNo)\n" + 
 			"    group by\n" + 
-			"        item_hsncd",nativeQuery=true)
+			"        item_hsncd,tax_per",nativeQuery=true)
 	List<SlabwiseBill> getSlabwiseBillData(@Param("billNo")int billNo);
 
 }
