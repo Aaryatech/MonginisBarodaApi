@@ -21,7 +21,8 @@ public interface SlabwiseDetailsRepository extends JpaRepository<SlabwiseBill, I
 			"        SUM(t_bill_detail.bill_qty) as bill_qty,\n" + 
 			"        SUM(t_bill_detail.taxable_amt) as taxable_amt,\n" + 
 			"        SUM(t_bill_detail.cgst_rs) as cgst_amt,\n" + 
-			"        SUM(t_bill_detail.sgst_rs) as sgst_amt,\n" + 
+			"        SUM(t_bill_detail.sgst_rs) as sgst_amt,"
+			+ "SUM(t_bill_detail.igst_rs) as igst_amt," + 
 			"        SUM(t_bill_detail.cess_rs) as cess_amt,\n" + 	
 			"        SUM(t_bill_detail.total_tax) as total_tax,\n" + 
 			"        SUM(t_bill_detail.grand_total) as grand_total \n" + 
