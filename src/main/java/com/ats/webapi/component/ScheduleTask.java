@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ats.webapi.commons.Common;
@@ -22,10 +24,13 @@ import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.controller.UserUtilApi;
 import com.ats.webapi.model.Franchisee;
+import com.ats.webapi.model.GetMenuShow;
 import com.ats.webapi.model.GetTotalAmt;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.SellBillHeader;
+import com.ats.webapi.model.Setting;
 import com.ats.webapi.model.ShopAnivData;
+import com.ats.webapi.model.otheritemstock.OtherSpItemDtl;
 import com.ats.webapi.model.pettycash.GetCashAdvAndExpAmt;
 import com.ats.webapi.model.pettycash.PettyCashManagmt;
 import com.ats.webapi.model.posdashboard.BillHeaderDashCount;
@@ -48,7 +53,12 @@ import com.ats.webapi.repository.FrAniversaryRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
 import com.ats.webapi.repository.GetCashAdvAndExpAmtRepo;
+import com.ats.webapi.repository.GetMenuShowRepo;
 import com.ats.webapi.repository.SellBillHeaderRepository;
+import com.ats.webapi.repository.SettingRepository;
+import com.ats.webapi.repository.othitmstock.OtherSpItemDtlRepo;
+
+import ch.qos.logback.classic.pattern.DateConverter;
 
 @Component
 public class ScheduleTask {
@@ -58,6 +68,15 @@ public class ScheduleTask {
 
 	@Autowired
 	FrAniversaryRepository frAniversaryRepository;
+	
+	@Autowired
+	OtherSpItemDtlRepo spItemRepo;
+	
+	@Autowired
+	SettingRepository settingRepository;
+	
+	@Autowired
+	GetMenuShowRepo getMenuShowRepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -511,4 +530,97 @@ public class ScheduleTask {
 		return crnReport;
 	}
 
+		
+	@Scheduled(cron = "0 0 10 * * ?")
+	public void scheduleSendMailWithOtherSpItemDtm() {
+
+		try {
+			Setting setting = settingRepository.findBySettingKey("run_other_item_cron");
+
+			if (setting.getSettingValue() == 1) {
+
+				List<Franchisee> franchisee = new ArrayList<Franchisee>();
+				franchisee = franchiseeRepository.findAllByDelStatusOrderByFrNameAsc(0);
+				String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+				List<Integer> frIds = new ArrayList<Integer>();
+				for (int i = 0; i < franchisee.size(); i++) {
+					frIds.add(franchisee.get(i).getFrId());
+				}
+
+				System.out.println("FrId List - : " +orderDate+"-"+frIds);
+
+				//List<GetMenuShow> menuList = getMenuShowRepo.getMenuListData();
+
+				String senderEmail = "atsinfosoft@gmail.com";
+				String senderPassword = "atsinfosoft#123";
+				String mailSubject = null;
+				String userName = null;
+				String frEmail = null;
+				String emailContent = null;
+				int srno = 0;
+
+				if (frIds != null) {
+					for (int i = 0; i < frIds.size(); i++) {
+						
+						List<OtherSpItemDtl> spItmList = spItemRepo.getOtherSpItemDtls(orderDate, frIds.get(i));
+						// System.err.println("OtherSpItemDtl================"+spItmList);
+
+						int flag = 0;
+
+						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
+								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
+								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
+								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
+								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
+								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
+								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
+								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
+								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
+								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
+						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
+								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
+								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
+								+ "					<th>Amount</th>\n" + "				</tr>\n"
+								+ "			</thead>\n" + "			<tbody>";
+
+						if (spItmList != null) {
+							for (int a = 0; a < spItmList.size(); a++) {
+
+								mailSubject = "Other Special Item Order on : "+ Common.convertToDMY(orderDate);
+								frEmail = spItmList.get(a).getFrEmail();
+								flag = 1;
+								srno = srno + 1;
+
+								emailContent += "<tr>\n" + "	<td>" + srno + "</td>\n" + "	<td>"
+										+ spItmList.get(a).getItemName() + "</td>\n" + "	<td>"
+										+ spItmList.get(a).getSpfName() + "</td>\n" + "	<td>"
+										+ spItmList.get(a).getOrderQty() + "</td>\n" + "	<td>"
+										+ spItmList.get(a).getOrderAmt() + "</td>\n" + "	</tr>";
+
+							}
+						} else {
+							flag = 0;
+						}
+						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+
+						if (flag == 1) {
+							System.err.println("fr : " + frIds.get(i) + " -- " + frEmail);
+							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+									mailSubject, userName, emailContent);
+						}
+
+					} // Franchise End
+				}
+
+			}
+		} catch (Exception e) {
+			System.err.println("Exception : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }
