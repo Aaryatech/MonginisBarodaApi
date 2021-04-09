@@ -5659,7 +5659,7 @@ int FridInt=Integer.parseInt(frId);
 
 		User res = new User();
 		res = userService.getUserData(username);
-		System.err.println("Resss-------" + res);
+		System.err.println("Res-------" + res);
 
 		if (res != null) {
 			OTPVerification.setUserId(res.getId());
