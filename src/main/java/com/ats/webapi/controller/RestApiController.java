@@ -5644,7 +5644,7 @@ int FridInt=Integer.parseInt(frId);
 	}
 
 	static String senderEmail = "atsinfosoft@gmail.com";
-	static String senderPassword = "atsinfosoft@123";
+	static String senderPassword = "atsinfosoft#123";
 	static String mailsubject = "";
 	String otp1 = null;
 
