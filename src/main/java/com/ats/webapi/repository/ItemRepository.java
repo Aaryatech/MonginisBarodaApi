@@ -583,4 +583,15 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			"    s.is_gate_sale=:frId AND\n" + 
 			"    i.item_grp1=:subCatId",nativeQuery=true)
 	public List<Item> findByItemGrp1AndItemRate2AndDelStatus(@Param("subCatId") String catId,@Param("frId") double frId);
+	
+	
+	//Items for Menu ID In
+	//SACHIN 14-04-2021
+	
+			
+			@Query(value=" SELECT DISTINCT m_item.* FROM m_item,m_fr_configure WHERE m_item.del_status=0 AND "
+					+ " find_in_set(m_item.id,m_fr_configure.item_show) and m_fr_configure.is_del=0 and menu_id IN (:menuIdList) " + 
+					"	",nativeQuery=true)
+			public List<Item> getItemsConfiguredToMenuIdIn(@Param("menuIdList") List<String> menuIdList);
+
 }

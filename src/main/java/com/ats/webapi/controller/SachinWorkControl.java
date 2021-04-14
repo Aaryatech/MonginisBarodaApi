@@ -161,6 +161,17 @@ public class SachinWorkControl {
 
 		}
 		
+		//Sac 14-04-2021
+		@RequestMapping("/getItemAvailByMultiMenuIds")
+		public @ResponseBody List<Item> getItemAvailByMultiMenuIds(
+				@RequestParam List<String> menuIdList) {
+			
+			List<Item> items=itemRepository.getItemsConfiguredToMenuIdIn(menuIdList);	
+
+			return items;
+
+		}
+		
 		//Sac 11-03-2021
 		@Autowired
 		AllFrIdNameRepository frNameIdRepo;
