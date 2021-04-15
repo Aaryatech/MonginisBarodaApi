@@ -73,7 +73,8 @@ public interface GetCurProdAndBillQtyRepo extends JpaRepository<GetCurProdAndBil
 			"						            group by t_production_plan_detail.item_id ) d  \n" + 
 			"			                      on a.id=d.item_id left join  \n" + 
 			"							(Select t_bill_detail.item_id,SUM( t_bill_detail.bill_qty) bill_qty FROM t_bill_header,t_bill_detail \n" + 
-			"						 WHERE t_bill_header.remark BETWEEN :timestamp AND :curTimeStamp  AND t_bill_header.bill_no=t_bill_detail.bill_no  \n" + 
+			"						 WHERE t_bill_header.remark BETWEEN :timestamp AND :curTimeStamp  AND t_bill_header.bill_no=t_bill_detail.bill_no "
+			+ " and t_bill_detail.cat_id!=5  " + 
 			"						group by t_bill_detail.item_id) e  \n" + 
 			"			                      on a.id=e.item_id ",nativeQuery=true)
 	List<GetCurProdAndBillQty> getCurProdAndBillQty(@Param("prodDate") String prodDate, @Param("catId") int catId,
@@ -144,9 +145,9 @@ public interface GetCurProdAndBillQtyRepo extends JpaRepository<GetCurProdAndBil
 			"						            AND t_production_plan_header.production_header_id=t_production_plan_detail.production_header_id   \n" + 
 			"						            group by t_production_plan_detail.item_id ) d  \n" + 
 			"			                      on a.id=d.item_id left join  \n" + 
-			"							(Select t_bill_detail.item_id,SUM( t_bill_detail.bill_qty) bill_qty FROM t_bill_header,t_bill_detail \n" + 
-			"						 WHERE t_bill_header.remark BETWEEN :timestamp AND :curTimeStamp  AND t_bill_header.bill_no=t_bill_detail.bill_no  \n" + 
-			"						group by t_bill_detail.item_id) e  \n" + 
+			"							(Select t_bill_detail.item_id,SUM( t_bill_detail.bill_qty) bill_qty FROM t_bill_header,t_bill_detail  " + 
+			"						 WHERE t_bill_header.remark BETWEEN :timestamp AND :curTimeStamp  AND t_bill_header.bill_no=t_bill_detail.bill_no   " + 
+			"						 and t_bill_detail.cat_id!=5 group by t_bill_detail.item_id) e  \n" + 
 			"			                      on a.id=e.item_id ", nativeQuery = true)
 	List<GetCurProdAndBillQty> getCurProdAndBillQtyAllCat(@Param("prodDate") String prodDate,
 			@Param("delStatus") int delStatus, @Param("timestamp") String timestamp,

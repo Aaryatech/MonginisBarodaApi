@@ -71,7 +71,7 @@ public interface GetCurrentStockRepo extends JpaRepository<GetCurrentStock, Inte
 			"            WHERE\n" + 
 			"                bh.remark BETWEEN :fromTimeStamp AND :toTimeStamp                                  \n" + 
 			"                AND     bh.bill_no = bd.bill_no                                   \n" + 
-			"                AND     bd.cat_id =:catId                                 \n" + 
+			"                AND     bd.cat_id =:catId  and bd.cat_id!=5                                \n" + 
 			"                AND bh.del_status=0                           \n" + 
 			"            GROUP BY\n" + 
 			"                bd.item_id                   \n" + 

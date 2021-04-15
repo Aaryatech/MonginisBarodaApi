@@ -10,7 +10,7 @@ import com.ats.webapi.model.DispatchStationItem;
 
 public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<DispatchStationItem, Integer>{
 
-	@Query(value="select\n" + 
+	@Query(value="select UUID() as uuid, \n" + 
 			"        CONCAT(i.id, m_franchisee.fr_id, i.item_mrp2) AS id,\n" + 
 			"        i.id as item_id,\n" + 
 			"        i.item_name,\n" + 
@@ -47,7 +47,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 	List<DispatchStationItem> getItemByFrIdAndDateMin(@Param("stationNos")List<Integer> stationNos,@Param("date") String date,@Param("frList") List<Integer> frList,
 			@Param("menuIds")List<Integer> menuIds);
 	
-	@Query(value="select \n" + 
+	@Query(value="select UUID() as uuid, \n" + 
 			"			        CONCAT(i.id, m_franchisee.fr_id, i.item_mrp2) AS id, \n" + 
 			"			        i.id as item_id, \n" + 
 			"			        i.item_name, \n" + 
@@ -79,7 +79,7 @@ public interface DispatchReportRepositoryForItemwiseMin extends JpaRepository<Di
 			@Param("menuIds")List<Integer> menuIds);
 	
 	//Sachin 23-02-2021
-	@Query(value="select \n" + 
+	@Query(value="select UUID() as uuid, \n" + 
 			"			        CONCAT(i.id, m_franchisee.fr_id, i.item_mrp2) AS id, \n" + 
 			"			        i.id as item_id, \n" + 
 			"			        i.item_name, \n" + 

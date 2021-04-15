@@ -10,8 +10,68 @@ import com.ats.webapi.model.FgsOrderToProduction;
 
 public interface FgsOrderToProductionRepo extends JpaRepository<FgsOrderToProduction, Integer> {
 
-	@Query(value="SELECT\n" + 
-			"    t1.*,\n" + 
+	/*
+	 * @Query(value="SELECT\n" + "    t1.*,\n" +
+	 * "    COALESCE(t2.production_item_id, 0) AS production_item_id,\n" +
+	 * "    COALESCE(t2.production_qty, 0) AS production_qty,\n" +
+	 * "    COALESCE(t3.bill_item_id, 0) AS bill_item_id,\n" +
+	 * "    COALESCE(t3.bill_qty, 0) AS bill_qty,\n" +
+	 * "    COALESCE(t4.opening_stock, 0) AS opening_stock\n" + "FROM\n" + "    (\n"
+	 * + "    SELECT\n" + "        m_item.id,\n" +
+	 * "        m_item.item_id AS item_code,\n" + "        m_cat_sub.sub_cat_id,\n"
+	 * + "        m_cat_sub.sub_cat_name,\n" + "        m_category.cat_name,\n" +
+	 * "        m_category.cat_id,\n" + "        m_item.item_name,\n" +
+	 * "        SUM(t_order.order_qty) AS order_qty,\n" +
+	 * "        t_order.item_id,\n" + "        t_order.production_date\n" +
+	 * "    FROM\n" + "        t_order,\n" + "        m_item,\n" +
+	 * "        m_cat_sub,\n" + "        m_category\n" + "    WHERE\n" +
+	 * "        m_item.item_grp1 = m_category.cat_id AND \n" +
+	 * "        m_item.item_grp2 = m_cat_sub.sub_cat_id AND \n" +
+	 * "        m_item.del_status = 0 AND m_item.id = t_order.item_id AND \n" +
+	 * "        t_order.production_date = :selecDate AND t_order.is_bill_generated = 0 AND \n"
+	 * + "        t_order.menu_id IN(:menuId) AND t_order.order_type = :catId\n" +
+	 * "    GROUP BY\n" + "        t_order.item_id\n" + "    ORDER BY\n" +
+	 * "        m_category.cat_id, m_cat_sub.seq_no, m_item.item_name\n" + ") t1\n"
+	 * + "LEFT JOIN(\n" + "    SELECT pd.item_id AS production_item_id,\n" +
+	 * "        SUM(pd.production_qty) AS production_qty\n" + "    FROM\n" +
+	 * "        t_production_plan_header ph,\n" +
+	 * "        t_production_plan_detail pd\n" + "    WHERE\n" +
+	 * "        pd.production_header_id = ph.production_header_id AND \n" +
+	 * "    	ph.production_date BETWEEN :prodFromDate AND :prodToDate AND \n" +
+	 * "    	ph.production_status IN(4, 5) AND \n" +
+	 * "    	ph.cat_id = :catId AND \n" + "    	ph.del_status = 0\n" +
+	 * "    GROUP BY\n" + "        pd.item_id\n" + ") t2\n" + "ON\n" +
+	 * "    t1.id = t2.production_item_id\n" + "LEFT JOIN(\n" +
+	 * "    SELECT bd.item_id AS bill_item_id,\n" +
+	 * "        SUM(bd.bill_qty) AS bill_qty,\n" +
+	 * "        SUM(bd.order_qty) AS order_qty\n" + "    FROM\n" +
+	 * "        t_bill_header bh,\n" + "        t_bill_detail bd\n" + "    WHERE\n"
+	 * + "        bh.remark BETWEEN :fromTimeStamp AND :toTimeStamp AND \n" +
+	 * "    	bh.bill_no = bd.bill_no AND \n" + "    	bd.cat_id = :catId AND \n" +
+	 * "    	bh.del_status = 0 and bd.cat_id!=5\n" + "    GROUP BY\n" +
+	 * "        bd.item_id\n" + ") t3\n" + "ON\n" + "    t1.id = t3.bill_item_id\n"
+	 * + "LEFT JOIN(\n" + "    SELECT\n" + "        fd.item_id,\n" +
+	 * "        fd.op_total AS opening_stock\n" + "    FROM\n" +
+	 * "        finished_good_stock_detail fd,\n" +
+	 * "        finished_good_stock fh\n" + "    WHERE\n" +
+	 * "        fd.fin_stock_id = fh.fin_stock_id AND \n" +
+	 * "    	fh.fin_good_stock_status = 0 AND \n" +
+	 * "    	fh.fin_good_stock_date = :currentStkDate AND \n" +
+	 * "    	fd.cat_id = :catId\n" + ") t4\n" +
+	 * "ON t1.id = t4.item_id",nativeQuery=true) List<FgsOrderToProduction>
+	 * getFsgItemsCurrentStock(@Param("currentStkDate") String
+	 * currentStkDate, @Param("selecDate") String selecDate, @Param("prodFromDate")
+	 * String prodFromDate,
+	 * 
+	 * @Param("prodToDate") String prodToDate, @Param("fromTimeStamp") String
+	 * fromTimeStamp, @Param("toTimeStamp") String toTimeStamp,
+	 * 
+	 * @Param("catId") int catId, @Param("menuId") List<String> menuId);
+	 */
+	
+	
+	@Query(value="SELECT " + 
+			"    t1.id,t1.item_code,t1.sub_cat_id,t1.sub_cat_name,t1.cat_name,t1.cat_id,t1.item_id,t1.production_date,t1.item_name,t1.item_code,(t1.t_order_qty+t1.sp_cake_qty) as order_qty, \n" + 
 			"    COALESCE(t2.production_item_id, 0) AS production_item_id,\n" + 
 			"    COALESCE(t2.production_qty, 0) AS production_qty,\n" + 
 			"    COALESCE(t3.bill_item_id, 0) AS bill_item_id,\n" + 
@@ -20,31 +80,53 @@ public interface FgsOrderToProductionRepo extends JpaRepository<FgsOrderToProduc
 			"FROM\n" + 
 			"    (\n" + 
 			"    SELECT\n" + 
-			"        m_item.id,\n" + 
-			"        m_item.item_id AS item_code,\n" + 
-			"        m_cat_sub.sub_cat_id,\n" + 
-			"        m_cat_sub.sub_cat_name,\n" + 
-			"        m_category.cat_name,\n" + 
-			"        m_category.cat_id,\n" + 
-			"        m_item.item_name,\n" + 
-			"        SUM(t_order.order_qty) AS order_qty,\n" + 
-			"        t_order.item_id,\n" + 
-			"        t_order.production_date\n" + 
-			"    FROM\n" + 
-			"        t_order,\n" + 
-			"        m_item,\n" + 
-			"        m_cat_sub,\n" + 
-			"        m_category\n" + 
-			"    WHERE\n" + 
-			"        m_item.item_grp1 = m_category.cat_id AND \n" + 
-			"        m_item.item_grp2 = m_cat_sub.sub_cat_id AND \n" + 
-			"        m_item.del_status = 0 AND m_item.id = t_order.item_id AND \n" + 
-			"        t_order.production_date = :selecDate AND t_order.is_bill_generated = 0 AND \n" + 
-			"        t_order.menu_id IN(:menuId) AND t_order.order_type = :catId\n" + 
-			"    GROUP BY\n" + 
-			"        t_order.item_id\n" + 
-			"    ORDER BY\n" + 
-			"        m_category.cat_id, m_cat_sub.seq_no, m_item.item_name\n" + 
+			"            m_item.id,\n" + 
+			"            m_item.item_id AS item_code,\n" + 
+			"            m_cat_sub.sub_cat_id,\n" + 
+			"            m_cat_sub.sub_cat_name,\n" + 
+			"            m_category.cat_name,\n" + 
+			"            m_category.cat_id,\n" + 
+			"            m_item.item_name,\n" + 
+			"            m_item.item_id,\n" + 
+			"            :selecDate as production_date  ,   \n" + 
+			"\n" + 
+			"coalesce((Select\n" + 
+			"            sum(t_order.order_qty) \n" + 
+			"        From\n" + 
+			"            t_order \n" + 
+			"        where\n" + 
+			"            t_order.production_date=:selecDate  and t_order.is_bill_generated = 0 and t_order.order_type =:catId   \n" + 
+			"            AND t_order.menu_id In(:menuId) \n" + 
+			"            AND m_item.id=t_order.item_id \n" + 
+			"           ),\n" + 
+			"        0) AS t_order_qty,\n" + 
+			"        coalesce((Select\n" + 
+			"            SUM( t_regular_sp_cake.qty) \n" + 
+			"        From\n" + 
+			"            t_regular_sp_cake \n" + 
+			"        where\n" + 
+			"            m_item.id= t_regular_sp_cake.item_id \n" + 
+			"            And t_regular_sp_cake.menu_id In(:menuId) \n" + 
+			"            AND t_regular_sp_cake.rsp_produ_date=:selecDate \n" + 
+			"            AND t_regular_sp_cake.is_bill_generated=0  ),\n" + 
+			"        0) AS sp_cake_qty \n" + 
+			"\n" + 
+			"        FROM\n" + 
+			"           \n" + 
+			"            m_item,\n" + 
+			"            m_cat_sub,\n" + 
+			"            m_category     \n" + 
+			"        WHERE\n" + 
+			"            m_item.item_grp1 = m_category.cat_id and m_category.cat_id=:catId\n" + 
+			"            AND          m_item.item_grp2 = m_cat_sub.sub_cat_id \n" + 
+			"            AND          m_item.del_status = 0 \n" + 
+			"          \n" + 
+			"        GROUP BY\n" + 
+			"            item_id     \n" + 
+			"        ORDER BY\n" + 
+			"            m_category.cat_id,\n" + 
+			"            m_cat_sub.seq_no,\n" + 
+			"            m_item.item_name \n" + 
 			") t1\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT pd.item_id AS production_item_id,\n" + 
@@ -74,7 +156,7 @@ public interface FgsOrderToProductionRepo extends JpaRepository<FgsOrderToProduc
 			"        bh.remark BETWEEN :fromTimeStamp AND :toTimeStamp AND \n" + 
 			"    	bh.bill_no = bd.bill_no AND \n" + 
 			"    	bd.cat_id = :catId AND \n" + 
-			"    	bh.del_status = 0\n" + 
+			"    	bh.del_status = 0 and bd.cat_id!=5\n" + 
 			"    GROUP BY\n" + 
 			"        bd.item_id\n" + 
 			") t3\n" + 
