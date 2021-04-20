@@ -61,6 +61,8 @@ public interface MainMenuConfigurationRepository extends JpaRepository<AllMenus,
 		//Sachin 23-03-2021
 		public List<AllMenus> findByDelStatus(int delStatus);
 		
+		
+		
 
 
 }

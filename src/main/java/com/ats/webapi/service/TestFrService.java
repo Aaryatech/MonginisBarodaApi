@@ -9,5 +9,7 @@ public interface TestFrService {
 
 	
    public List<ConfigureFranchisee> findFrMenus();
+   
+   
 
 }

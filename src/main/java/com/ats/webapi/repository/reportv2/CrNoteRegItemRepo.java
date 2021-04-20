@@ -43,19 +43,44 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 	List<CrNoteRegItem> getCrNoteRegItemByFrId(@Param("frId") int frId, @Param("fromDate") String fromDate,
 			@Param("toDate") String toDate);
 
-	@Query(value = " SELECT t_credit_note_header.crn_id,t_credit_note_header.crn_date,t_bill_header.invoice_no,"
-			+ " t_credit_note_details.crnd_id ,"
-			+ " t_bill_header.bill_date,m_franchisee.fr_name,t_credit_note_header.crn_no as fr_code,m_franchisee.fr_gst_no,t_credit_note_details.hsn_code,"
-			+ "	SUM(t_credit_note_details.grn_gvn_qty)crn_qty,SUM(t_credit_note_details.taxable_amt)crn_taxable,"
-			+ " t_credit_note_details.cgst_per,t_credit_note_details.sgst_per,t_credit_note_details.igst_per,SUM(t_credit_note_details.sgst_rs) "
-			+ " AS sgst_amt ,SUM(t_credit_note_details.cgst_rs) as cgst_amt,"
-			+ " SUM(t_credit_note_details.igst_rs) as igst_amt,"
-			+ "	SUM(t_credit_note_details.grn_gvn_amt) as crn_amt"
-			+ "	FROM t_credit_note_header,t_credit_note_details,t_bill_header,m_franchisee"
-			+ "	WHERE t_credit_note_header.crn_id=t_credit_note_details.crn_id AND t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate "
-			+ "	AND t_credit_note_header.fr_id=m_franchisee.fr_id"
-			+ "	AND t_bill_header.bill_no=t_credit_note_header.ex_int1 and t_credit_note_details.del_status=0 and t_bill_header.del_status=0 and t_credit_note_header.is_grn = :CreditNoteType"
-			+ "	GROUP BY (t_credit_note_details.cgst_per+t_credit_note_details.sgst_per),t_credit_note_details.crn_id  order by t_credit_note_header.crn_no", nativeQuery = true)
+	@Query(value = "SELECT\n" + 
+			"        t_credit_note_header.crn_id,\n" + 
+			"        t_credit_note_header.crn_date,\n" + 
+			"        t_bill_header.invoice_no,\n" + 
+			"        t_credit_note_details.crnd_id ,\n" + 
+			"        t_bill_header.bill_date,\n" + 
+			"        m_franchisee.fr_name,\n" + 
+			"        t_credit_note_header.crn_no as fr_code,\n" + 
+			"        m_franchisee.fr_gst_no,\n" + 
+			"    	  CONCAT(m_franchisee.is_same_state ,\"~\",m_franchise_sup.fr_state)   As hsn_code,\n" + 
+			"        SUM(t_credit_note_details.grn_gvn_qty)crn_qty,\n" + 
+			"        SUM(t_credit_note_details.taxable_amt)crn_taxable,\n" + 
+			"        t_credit_note_details.cgst_per,\n" + 
+			"        t_credit_note_details.sgst_per,\n" + 
+			"        t_credit_note_details.igst_per,\n" + 
+			"        SUM(t_credit_note_details.sgst_rs)  AS sgst_amt ,\n" + 
+			"        SUM(t_credit_note_details.cgst_rs) as cgst_amt,\n" + 
+			"        SUM(t_credit_note_details.igst_rs) as igst_amt,\n" + 
+			"        SUM(t_credit_note_details.grn_gvn_amt) as crn_amt \n" + 
+			"    FROM\n" + 
+			"        t_credit_note_header,\n" + 
+			"        t_credit_note_details,\n" + 
+			"        t_bill_header,\n" + 
+			"        m_franchisee ,m_franchise_sup \n" + 
+			"    WHERE\n" + 
+			"        t_credit_note_header.crn_id=t_credit_note_details.crn_id \n" + 
+			"        AND t_credit_note_header.crn_date BETWEEN :fromDate AND :toDate  \n" + 
+			"        AND t_credit_note_header.fr_id=m_franchisee.fr_id \n" + 
+			"        AND t_bill_header.bill_no=t_credit_note_header.ex_int1 \n" + 
+			"        and t_credit_note_details.del_status=0 \n" + 
+			"        and t_bill_header.del_status=0 \n" + 
+			"        and t_credit_note_header.is_grn =:CreditNoteType\n"+ 
+			"		AND m_franchisee.fr_id=m_franchise_sup.fr_id\n" + 
+			"    GROUP BY\n" + 
+			"        (t_credit_note_details.cgst_per+t_credit_note_details.sgst_per),\n" + 
+			"        t_credit_note_details.crn_id  \n" + 
+			"    order by\n" + 
+			"        t_credit_note_header.crn_id", nativeQuery = true)
 
 	List<CrNoteRegItem> getCrNoteRegItemDone(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("CreditNoteType") String CreditNoteType);
 

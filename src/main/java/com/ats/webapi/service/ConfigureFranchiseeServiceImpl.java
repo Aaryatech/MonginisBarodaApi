@@ -49,6 +49,15 @@ public class ConfigureFranchiseeServiceImpl implements ConfigureFranchiseeServic
 		
 		return frMenus;
 	}
+	
+	@Override
+	public FrMenus findByMenuId(int menuId) {
+		FrMenus configMenu=new FrMenus();
+		configMenu = frMenusRepository.findByMenuId(menuId);
+	
+	return configMenu;
+}
+	
 	@Override
 	public ConfigureFranchisee findFranchiseeById(int setting_id) {
 		ConfigureFranchisee configureFranchisee=configureFrRepository.findOne(setting_id);

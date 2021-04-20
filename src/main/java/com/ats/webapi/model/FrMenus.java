@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "m_fr_configure")
@@ -47,6 +48,7 @@ public class FrMenus {
 
 	@Column(name = "cat_id")
 	private int catId;
+
 
 	@Column(name = "is_same_day_applicable")
 	private int isSameDayApplicable;

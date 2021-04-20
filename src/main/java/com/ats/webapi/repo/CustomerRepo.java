@@ -30,6 +30,10 @@ public interface CustomerRepo extends JpaRepository<Customer,Integer> {
 	@Query(value="select * from m_customer where phone_number=:phoneNo  and del_status=:i",nativeQuery=true)
 	List<Customer> findByPhoneNumberAndDelStatus(@Param("phoneNo")String phoneNo,@Param("i") int i);
 	
+	
+	
+	@Query(value="select * from m_customer where phone_number=:phoneNo and fr_id=:frId  and del_status=:i",nativeQuery=true)
+	List<Customer>	findByPhoneNumberFridAndDelStatus(@Param("phoneNo")String phoneNo,@Param("i") int i,@Param("frId") int frId );
 
 	@Transactional
 	@Modifying

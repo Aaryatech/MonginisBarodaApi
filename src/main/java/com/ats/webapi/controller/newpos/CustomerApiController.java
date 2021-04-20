@@ -67,6 +67,23 @@ public class CustomerApiController {
 		}
 		return customerList;
 	}
+	
+	
+	
+	@RequestMapping(value = "/getAllCustomerForPosByfrId", method = RequestMethod.POST)
+	public @ResponseBody List<CustomerForOps> getAllCustomerForPosByfrId(@RequestParam("frId") int frId) {
+		List<CustomerForOps> customerList = new ArrayList<CustomerForOps>();
+		try {
+			System.out.println(frId);
+			customerList = customerForOpsRepo.findByDelStatusAndFrid(frId);
+
+		} catch (Exception e) {
+			customerList = new ArrayList<CustomerForOps>();
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return customerList;
+	}
 
 	@Autowired
 	CustomerForOpsRepo customerForOpsRepo;

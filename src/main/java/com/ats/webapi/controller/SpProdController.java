@@ -76,7 +76,7 @@ public class SpProdController {
 		RegCakeAsSpDispatchReportList reportList=new RegCakeAsSpDispatchReportList();
 		
 		Info info=new Info();
-		
+		System.err.println("Fromdate To Date--->"+fromDate+"\t"+toDate);
 		try {
 			List<RegCakeAsSpDispatchReport> regCakeAsSp=new ArrayList<>();
 			if(!frIdList.contains("0")){
@@ -106,6 +106,8 @@ public class SpProdController {
 			System.err.println("Exce in SpProdController /getRegCakeAsSpRepo" + e.getMessage() );
 			e.printStackTrace();
 		}
+		
+		System.err.println("Responce-->"+reportList.toString());
 		return reportList;
 		
 	}

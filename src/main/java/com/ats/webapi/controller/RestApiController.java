@@ -37,7 +37,6 @@ import com.ats.webapi.model.grngvn.PostCreditNoteHeader;
 import com.ats.webapi.model.grngvn.PostCreditNoteHeaderList;
 import com.ats.webapi.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.webapi.model.newsetting.NewSetting;
-import com.ats.webapi.model.pettycash.FrEmpMaster;
 import com.ats.webapi.model.phpwebservice.Admin;
 import com.ats.webapi.model.phpwebservice.Flavor;
 import com.ats.webapi.model.phpwebservice.GetLogin;
@@ -46,7 +45,6 @@ import com.ats.webapi.model.phpwebservice.SpecialCakeBeanList;
 import com.ats.webapi.model.remarks.GetAllRemarksList;
 import com.ats.webapi.model.stock.FinishedGoodStock;
 import com.ats.webapi.model.stock.FinishedGoodStockDetail;
-import com.ats.webapi.repo.FrEmpMasterRepo;
 import com.ats.webapi.repo.GetBillAmtGroupByFrRepo;
 import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repository.ConfigureFrListRepository;
@@ -448,9 +446,6 @@ public class RestApiController {
 	
 	@Autowired
 	FinishedGoodStockDetailRepo finishedGoodStockDetailRepo;
-	
-	@Autowired
-	FrEmpMasterRepo frEmpRepo;	
 	
 	@Autowired
 	FinishedGoodStockRepo finishedGoodStockRepo;
@@ -1493,8 +1488,6 @@ public class RestApiController {
 		return billHeaderList;
 
 	}
-	
-	
 
 	@RequestMapping(value = "/getBillHeaderByBillNo", method = RequestMethod.POST)
 	public @ResponseBody GetBillHeader getBillHeaderByBillNo(@RequestParam("billNo") int billNo) {
@@ -2599,49 +2592,8 @@ public class RestApiController {
 				FrSetting frSettingSaveResponse = frSettingRepo.save(frSettingSave);
 				System.out.println(frSettingSaveResponse.toString());
 			}
-			
-			if(frResponse.getFrId()>0) {
-				
-				Setting empCode = settingRepository.findBySettingId(54);
-				
-				FrEmpMaster emp = new FrEmpMaster();
-				String empJson="[{\"exVar1\":\"\",\"mappingName\":\"newPos\",\"view\":1,\"exInt1\":0,\"settingValue\":0,\"moduleName\":\"OPS\",\"moduleId\":1,\"icons\":\"icon4.png\"},{\"exVar1\":\"\",\"mappingName\":\"viewBill\",\"view\":1,\"exInt1\":0,\"settingValue\":0,\"moduleName\":\"View Sale Bill\",\"moduleId\":2,\"icons\":\"nav-orderbook.png\"},{\"exVar1\":\"\",\"mappingName\":\"Goods Return\",\"view\":1,\"exInt1\":0,\"settingValue\":0,\"moduleName\":\"Goods Return\",\"moduleId\":4,\"icons\":\"fa fa-refresh\"},{\"exVar1\":\"\",\"mappingName\":\"showPriceList\",\"view\":1,\"exInt1\":0,\"settingValue\":0,\"moduleName\":\"Price List\",\"moduleId\":6,\"icons\":\"fa fa-list icon\"},{\"exVar1\":\"\",\"mappingName\":\"showExpenseList\",\"view\":1,\"exInt1\":0,\"settingValue\":0,\"moduleName\":\"Expense List\",\"moduleId\":8,\"icons\":\"fa fa-list icon\"}]";
-				
-				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-				Date date = new Date();				
-				Date currDte = sf.parse(sf.format(date));
-				
-				emp.setFrEmpId(0);
-				emp.setCurrentBillAmt(1);
-				emp.setDelStatus(0);
-				emp.setDesignation(2);
-				emp.setEmpCode(String.valueOf(empCode.getSettingValue()));
-				emp.setExInt1(0);
-				emp.setExInt2(0);
-				emp.setExInt3(0);			
-				emp.setExVar2("NA");
-				emp.setExVar3("NA");
-				emp.setFrEmpAddress("NA");
-				emp.setFrEmpContact("NA");
-				System.out.println("NA");
-				emp.setFrEmpJoiningDate(currDte);
-				emp.setFrEmpName("ATS");
-				emp.setFrId(frResponse.getFrId());
-				emp.setFromDate(currDte);
-				emp.setToDate(currDte);
-				emp.setIsActive(0);
-				emp.setPassword("123456");
-				emp.setTotalLimit(1);
-				emp.setUpdateDatetime(sf.format(date));
-				emp.setExVar1(empJson);
-				
-				FrEmpMaster frEmp = frEmpRepo.save(emp);
-				if(frEmp.getFrEmpId()>0) {
-					System.out.println("Emp Saved : "+frEmp);
-				}				
-			}
 		}
-		
+
 		return frResponse;
 	}
 
@@ -5644,7 +5596,7 @@ int FridInt=Integer.parseInt(frId);
 	}
 
 	static String senderEmail = "atsinfosoft@gmail.com";
-	static String senderPassword = "atsinfosoft#123";
+	static String senderPassword = "atsinfosoft@123";
 	static String mailsubject = "";
 	String otp1 = null;
 
@@ -5659,7 +5611,7 @@ int FridInt=Integer.parseInt(frId);
 
 		User res = new User();
 		res = userService.getUserData(username);
-		System.err.println("Res-------" + res);
+		System.err.println("Resss-------" + res);
 
 		if (res != null) {
 			OTPVerification.setUserId(res.getId());
@@ -6161,22 +6113,26 @@ int FridInt=Integer.parseInt(frId);
 			}
 			return resp;
 		}
-	
-	
-		@RequestMapping(value = { "/getFranchiseByFrIdList" }, method = RequestMethod.POST)
-		public @ResponseBody List<Franchisee> getFranchiseByFrIdList(@RequestParam("frids") List<Integer> frids) {
-			List<Franchisee> frList= franchiseeRepository.findByDelStatusAndFrIdIn(0,frids);
-
-			return frList;
-		}
 		
-		@RequestMapping(value = { "/getFranchiseByFrId" }, method = RequestMethod.POST)
-		public @ResponseBody Franchisee getFranchiseByFrId(@RequestParam("frId") int frId) {
-			Franchisee franchisee = franchiseeService.findFranchisee(frId);
+		
+		//Akhilesh 2021-04-19
+		
+		@RequestMapping(value = "/getFrConfigByMenuId", method = RequestMethod.POST)
+		public @ResponseBody FrMenus getFrConfigByMenuId(@RequestParam int menuId) {
 
-			return franchisee;
+			FrMenus  ConfigureFranchisees = new FrMenus() ;
+			System.out.println("input param menuId= " + menuId);
+			try {
+				ConfigureFranchisees=connfigureService.findByMenuId(menuId);
+				System.out.println("Selected Configuration-->" + ConfigureFranchisees.toString());
+
+			} catch (Exception e) {
+				System.out.println("Exception fr Menu " + e.getMessage());
+			}
+
+			return ConfigureFranchisees;
+
 		}
-	
 
 
 }

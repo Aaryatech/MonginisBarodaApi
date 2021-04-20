@@ -57,6 +57,9 @@ public class AdvanceOrderApiController {
 
 	@Autowired
 	GetTotalAmtRepo getTotalAmtRepo;
+	
+	@Autowired
+	CustomerForOpsRepo custForOpsRepo;
 
 	@Autowired
 	TransactionDetailRepository transactionDetailRepository;
@@ -131,6 +134,36 @@ public class AdvanceOrderApiController {
 
 		} catch (Exception e) {
 			System.err.println("Exce in checkEmployeeEmail  " + e.getMessage());
+		}
+
+		return info;
+
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = { "/checkEmployeeEmailWithFrid" }, method = RequestMethod.POST)
+	public @ResponseBody Info checkEmployeeEmailWithFrid(@RequestParam String phoneNo,@RequestParam int frId) {
+
+		Info info = new Info();
+		List<CustomerForOps> emp = new ArrayList<CustomerForOps>();
+		try {
+
+			emp = custForOpsRepo.findByPhoneNumberFridAndDelStatus(phoneNo, 0, frId);
+			System.err.println(emp.toString() + "phoneNo" + phoneNo);
+			if (emp.size() > 0) {
+				info.setError(true);
+				info.setMessage("" + emp.get(0).getCustId());
+			} else {
+				info.setError(false);
+				info.setMessage("0");
+
+			}
+
+		} catch (Exception e) {
+			System.err.println("Exce in checkEmployeeEmailWithFrid  " + e.getMessage());
 		}
 
 		return info;

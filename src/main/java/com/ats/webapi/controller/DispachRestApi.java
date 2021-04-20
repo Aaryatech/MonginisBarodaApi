@@ -688,7 +688,8 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 						sectionList.get(i).setMenuList(menus);
 
 					} catch (Exception e) {
-
+						e.printStackTrace();
+						
 					}
 				}
 
