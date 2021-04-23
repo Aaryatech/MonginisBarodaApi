@@ -21,7 +21,7 @@ public interface SpCakeOrdersRepository extends JpaRepository<SpCakeOrders,Integ
 	List<SpCakeOrders> findByFrIdInAndSpProdDate(List<Integer> frId, Date prodDate);
 	
 	
-	@Query(value="select count(*) from t_sp_cake where sp_prod_date=:sqlSpProduDate AND is_slot_used=1",nativeQuery=true)
+	@Query(value="select count(*) from t_sp_cake where t_sp_cake.del_status=0 and  sp_prod_date=:sqlSpProduDate AND is_slot_used=1",nativeQuery=true)
 	int findCountByProduDateAndIsSlotUsed(@Param("sqlSpProduDate")String sqlSpProduDate);
 	
 

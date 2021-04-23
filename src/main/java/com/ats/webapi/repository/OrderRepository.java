@@ -43,6 +43,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
 	Orders findByOrderId(int orderId);
 
+	@Query(value = "SELECT * FROM t_order WHERE  t_order.order_id=:orderId", nativeQuery = true)
+	Orders getOneOrder(
+			@Param("orderId") long orderId);
 	
 	/*@Transactional
 	@Modifying

@@ -67,7 +67,7 @@ public interface GrnGvnForCreditNoteRepositoty extends JpaRepository<GetGrnGvnFo
 			"        END " + 
 			"        AND  t_grn_gvn.is_credit_note=0  " + 
 			"        AND t_grn_gvn.grn_gvn_status=6  AND  t_grn_gvn.grn_gvn_date between :fromDate and :toDate AND  t_grn_gvn.fr_id IN(:frId)" + 
-			"    group by" + 
+			"   and t_grn_gvn.apr_qty_acc>0 group by" + 
 			"        t_grn_gvn.grn_gvn_id "
 			, nativeQuery = true)
 	

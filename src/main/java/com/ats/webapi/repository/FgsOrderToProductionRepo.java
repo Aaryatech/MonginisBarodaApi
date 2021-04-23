@@ -175,7 +175,7 @@ public interface FgsOrderToProductionRepo extends JpaRepository<FgsOrderToProduc
 			"    	fh.fin_good_stock_date = :currentStkDate AND \n" + 
 			"    	fd.cat_id = :catId\n" + 
 			") t4\n" + 
-			"ON t1.id = t4.item_id",nativeQuery=true)
+			"ON t1.id = t4.item_id ",nativeQuery=true)
 	List<FgsOrderToProduction> getFsgItemsCurrentStock(@Param("currentStkDate") String currentStkDate, @Param("selecDate") String selecDate, @Param("prodFromDate") String prodFromDate,
 			 @Param("prodToDate") String prodToDate, @Param("fromTimeStamp") String fromTimeStamp, @Param("toTimeStamp") String toTimeStamp, 
 			 @Param("catId") int catId, @Param("menuId") List<String> menuId);

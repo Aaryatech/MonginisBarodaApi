@@ -17,6 +17,11 @@ public interface SpCkDeleteOrderRepository extends JpaRepository<SpCakeOrder, In
 	@Transactional
 	@Modifying
 	@Query(" DELETE FROM SpCakeOrder WHERE  spOrderNo=:spOrderNo")
+	int deleteSpCkOrder_old(@Param("spOrderNo") int spOrderNo);
+
+	@Transactional
+	@Modifying
+	@Query(" UPDATE  SpCakeOrder SET delStatus=1 WHERE  spOrderNo=:spOrderNo")
 	int deleteSpCkOrder(@Param("spOrderNo") int spOrderNo);
 
 }

@@ -1037,19 +1037,22 @@ public class RestApiController {
 	// 21 march Front End Manual GRN
 	@RequestMapping(value = "/getItemsForManGrn", method = RequestMethod.POST)
 	public @ResponseBody GetGrnItemConfigList getItemsForManGrn(@RequestParam("frId") int frId,
-			@RequestParam("billNo") int billNo) {
+			@RequestParam("billNo") int billNo,@RequestParam("isGrn") int isGrn) {
 		System.out.println("inside rest /getItemsForManGrn");
 		GetGrnItemConfigList grnItemConfigList = null;
 
 		try {
-
+			if(isGrn>0) {
 			grnItemConfigList = getGrnItemConfigService.getItemForManualGrn(billNo, frId);
+			}else {//Sachin 23-04-2021
+				grnItemConfigList = getGrnItemConfigService.getItemForManualGvnAdmin(billNo, frId);
+			}
 
 			System.out.println("grn Item getItemForManualGrn  Rest: " + grnItemConfigList.toString());
 
 		} catch (Exception e) {
 
-			System.out.println("restApi Exce for Getting Man GRN Item Conf /getItemsForManGrn" + e.getMessage());
+			System.out.println("restApi Exce for Getting Man GRN Item Conf /getItemsForManGrn/GVN " + e.getMessage());
 			e.printStackTrace();
 		}
 

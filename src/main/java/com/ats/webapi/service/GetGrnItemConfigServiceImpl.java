@@ -129,6 +129,43 @@ GetGrnItemConfigList getGrnItemConfigList=new GetGrnItemConfigList();
 		
 		
 	}
+
+	@Override
+	public GetGrnItemConfigList getItemForManualGvnAdmin(int billNo, int frId) {
+
+GetGrnItemConfigList getGrnItemConfigList=new GetGrnItemConfigList();
+		
+		Info info=new Info();
+		try {
+		
+		List<GetGrnItemConfig> getGrnItemConfigs=grnItemConfigRepository.getItemForManGvnAtAdmin(billNo, frId);
+		System.err.println("Response front end man grn iTems" +getGrnItemConfigs.toString());
+		if(!getGrnItemConfigs.isEmpty()) {
+			
+			getGrnItemConfigList.setGetGrnItemConfigs(getGrnItemConfigs);
+			
+			info.setError(false);
+			info.setMessage("success grn confi get");
+			
+			
+		}
+		else {
+			
+			info.setError(true);
+			info.setMessage("error grn confi get");
+		
+			
+		}
+		
+		getGrnItemConfigList.setInfo(info);
+		}
+		catch (Exception e) {
+			System.out.println("exce in service Impl get Grn Item Conf");
+		}
+		
+	return getGrnItemConfigList;
+		
+	}
 	
 
 }

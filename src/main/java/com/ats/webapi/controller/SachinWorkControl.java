@@ -17,6 +17,7 @@ import com.ats.webapi.model.AllFrIdName;
 import com.ats.webapi.model.AllFrIdNameList;
 import com.ats.webapi.model.AllMenuJsonResponse;
 import com.ats.webapi.model.AllMenus;
+import com.ats.webapi.model.ChangeOrderRecord;
 import com.ats.webapi.model.ConfigureFranchisee;
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Flavour;
@@ -25,8 +26,10 @@ import com.ats.webapi.model.FlavourList;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.ItemForMOrder;
+import com.ats.webapi.model.Orders;
 import com.ats.webapi.model.newsetting.NewSetting;
 import com.ats.webapi.repository.AllFrIdNameRepository;
+import com.ats.webapi.repository.ChangeOrderRecordRepo;
 import com.ats.webapi.repository.ConfiSpCodeRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
@@ -35,6 +38,7 @@ import com.ats.webapi.repository.ItemForMOrderRepository;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.NewSettingRepository;
+import com.ats.webapi.repository.OrderRepository;
 
 @RestController
 public class SachinWorkControl {
@@ -294,4 +298,33 @@ public class SachinWorkControl {
 
 			return flavourList;
 		}
+		
+		
+		
+		//sac 22-04-2021
+		
+		@Autowired
+		ChangeOrderRecordRepo changeOrdeRecRepo;
+		@Autowired
+		OrderRepository ordRepo;
+
+		@RequestMapping(value = "/saveChangeOrderRecord", method = RequestMethod.POST)
+		public @ResponseBody ChangeOrderRecord saveChangeOrderRecord(@RequestBody ChangeOrderRecord reqBody) {
+			System.out.println("inside REST Sachin Work Controller saveChangeOrderRecord");
+			ChangeOrderRecord res = new ChangeOrderRecord();
+			try {
+				Orders ord = ordRepo.getOneOrder(reqBody.getOrderId());
+				System.err.println("Orders " + ord);
+				reqBody.setItemId(Integer.parseInt(ord.getItemId()));
+				reqBody.setFrId(ord.getFrId());
+				res = changeOrdeRecRepo.save(reqBody);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				res = new ChangeOrderRecord();
+			}
+
+			return res;
+		}
+		
 }

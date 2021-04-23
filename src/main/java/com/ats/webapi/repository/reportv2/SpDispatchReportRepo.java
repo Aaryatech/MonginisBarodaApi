@@ -17,7 +17,7 @@ public interface SpDispatchReportRepo extends JpaRepository<SpDispatchReport, In
 			+ " sp_selected_weight,fr_id,sp_flavour_id,"
 			+ " CONCAT(t_sp_cake.sp_id\n" + 
 			"        ,sp_flavour_id,sp_selected_weight) as new_item "
-			+ " FROM t_sp_cake,m_sp_cake,m_sp_flavour WHERE "
+			+ " FROM t_sp_cake,m_sp_cake,m_sp_flavour WHERE t_sp_cake.del_status=0 and  "
 			+ " m_sp_cake.sp_id=t_sp_cake.sp_id and m_sp_flavour.spf_id=t_sp_cake.sp_flavour_id "
 			+ " AND t_sp_cake.sp_delivery_date=:deliveryDateYMD AND t_sp_cake.fr_id in (:frId) AND t_sp_cake.menu_id in (:menu)\n"
 			+ " GROUP by t_sp_cake.sp_id, t_sp_cake.sp_flavour_id, sp_selected_weight,fr_id "
@@ -31,7 +31,7 @@ public interface SpDispatchReportRepo extends JpaRepository<SpDispatchReport, In
 			"			 sp_selected_weight,fr_id,sp_flavour_id, " + 
 			"			  CONCAT(t_sp_cake.sp_id "
 			+ "    ,sp_flavour_id,sp_selected_weight) as new_item FROM t_sp_cake,"
-			+ "    m_sp_cake, m_sp_flavour WHERE m_sp_cake.sp_id=t_sp_cake.sp_id "
+			+ "    m_sp_cake, m_sp_flavour WHERE t_sp_cake.del_status=0 and m_sp_cake.sp_id=t_sp_cake.sp_id "
 			+ "    and m_sp_flavour.spf_id=t_sp_cake.sp_flavour_id "
 			+ "    AND t_sp_cake.sp_delivery_date=:deliveryDateYMD AND t_sp_cake.fr_id in (:frId) "
 			+ " AND t_sp_cake.menu_id in (:menu)  "
