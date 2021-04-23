@@ -6136,6 +6136,35 @@ int FridInt=Integer.parseInt(frId);
 			return ConfigureFranchisees;
 
 		}
+		
+		
+		
+		//Akhilesh 2021-04-22
+		@RequestMapping(value = { "/updateMultiBillStatusAdm" }, method = RequestMethod.POST)
+		public @ResponseBody Info updateMultiBillStatusAdm(@RequestParam List<String> billNo, @RequestParam int status) {
+
+			System.out.println("Data  " + billNo + " " + status);
+
+			Info info = new Info();
+			try {
+				int res = admUpdtbil.updateMultiBillStatusAdmin(billNo, status);
+
+				if (res > 0) {
+					info.setError(false);
+					info.setMessage("Update Successfully");
+
+				} else {
+					info.setError(true);
+					info.setMessage("update Unsuccessfull : RestApi");
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return info;
+
+		}
 
 
 }

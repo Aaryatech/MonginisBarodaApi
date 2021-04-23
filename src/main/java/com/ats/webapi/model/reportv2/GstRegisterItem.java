@@ -37,12 +37,28 @@ public class GstRegisterItem {
 	private float cgstAmt;
 
 	private float sgstAmt;
+	
+	private float igstAmt;
 
 	private float totalTax;
 
 	private float grandTotal;
 
 	private float billQty;
+	
+	private String frState;
+	
+	
+	
+	
+
+	public String getFrState() {
+		return frState;
+	}
+
+	public void setFrState(String frState) {
+		this.frState = frState;
+	}
 
 	public int getBillDetailNo() {
 		return billDetailNo;
@@ -173,13 +189,24 @@ public class GstRegisterItem {
 		this.billQty = billQty;
 	}
 
+	public float getIgstAmt() {
+		return igstAmt;
+	}
+
+	public void setIgstAmt(float igstAmt) {
+		this.igstAmt = igstAmt;
+	}
+
 	@Override
 	public String toString() {
-		return "GstRegisterItem [billDetailNo=" + billDetailNo + ", invoiceNo=" + invoiceNo + ", billDate=" + billDate
-				+ ", frName=" + frName + ", frGstNo=" + frGstNo + ", billNo=" + billNo + ", cgstPer=" + cgstPer
-				+ ", sgstPer=" + sgstPer + ", taxPer=" + taxPer + ", taxableAmt=" + taxableAmt + ", cgstAmt=" + cgstAmt
-				+ ", sgstAmt=" + sgstAmt + ", totalTax=" + totalTax + ", grandTotal=" + grandTotal + ", hsnCode="
-				+ hsnCode + ", billQty=" + billQty + "]";
+		return "GstRegisterItem [billDetailNo=" + billDetailNo + ", hsnCode=" + hsnCode + ", invoiceNo=" + invoiceNo
+				+ ", billDate=" + billDate + ", frName=" + frName + ", frGstNo=" + frGstNo + ", billNo=" + billNo
+				+ ", cgstPer=" + cgstPer + ", sgstPer=" + sgstPer + ", taxPer=" + taxPer + ", taxableAmt=" + taxableAmt
+				+ ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt + ", igstAmt=" + igstAmt + ", totalTax=" + totalTax
+				+ ", grandTotal=" + grandTotal + ", billQty=" + billQty + ", frState=" + frState + "]";
 	}
+
+
+
 
 }

@@ -35,6 +35,25 @@ public class CrNoteRegItem {
 	private float igstAmt;
 	
 	private float crnAmt;
+	
+	
+	//Akhilesh 2021-04-21
+	private String frState;
+	
+	
+	
+	//Akhilesh 2021-04-21
+	private int isSameState;
+	
+	
+
+	public String getFrState() {
+		return frState;
+	}
+
+	public void setFrState(String frState) {
+		this.frState = frState;
+	}
 
 	public String getHsnCode() {
 		return hsnCode;
@@ -180,13 +199,28 @@ public class CrNoteRegItem {
 		this.crndId = crndId;
 	}
 
+	public int getIsSameState() {
+		return isSameState;
+	}
+
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
+
 	@Override
 	public String toString() {
 		return "CrNoteRegItem [crndId=" + crndId + ", hsnCode=" + hsnCode + ", crnId=" + crnId + ", crnDate=" + crnDate
 				+ ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frName=" + frName + ", frCode=" + frCode
 				+ ", frGstNo=" + frGstNo + ", crnQty=" + crnQty + ", crnTaxable=" + crnTaxable + ", cgstPer=" + cgstPer
 				+ ", sgstPer=" + sgstPer + ", igstPer=" + igstPer + ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt
-				+ ", igstAmt=" + igstAmt + ", crnAmt=" + crnAmt + "]";
+				+ ", igstAmt=" + igstAmt + ", crnAmt=" + crnAmt + ", frState=" + frState + ", isSameState="
+				+ isSameState + "]";
 	}
+
+
+
+	
+	
+	
 	
 }

@@ -31,6 +31,11 @@ public class PDispatchReport implements Serializable{
 	
 	private int isBillGenerated;
 	
+	private String slipNo;
+	
+	private String cakeNo;
+	
+	
 
 	public int getIsBillGenerated() {
 		return isBillGenerated;
@@ -120,12 +125,33 @@ public class PDispatchReport implements Serializable{
 		this.editQty = editQty;
 	}
 
+	
+	
+	public String getSlipNo() {
+		return slipNo;
+	}
+
+	public void setSlipNo(String slipNo) {
+		this.slipNo = slipNo;
+	}
+
+	public String getCakeNo() {
+		return cakeNo;
+	}
+
+	public void setCakeNo(String cakeNo) {
+		this.cakeNo = cakeNo;
+	}
+
 	@Override
 	public String toString() {
 		return "PDispatchReport [orderId=" + orderId + ", catId=" + catId + ", subCatId=" + subCatId + ", catName="
 				+ catName + ", frId=" + frId + ", frName=" + frName + ", itemId=" + itemId + ", itemName=" + itemName
-				+ ", orderQty=" + orderQty + ", editQty=" + editQty + "]";
+				+ ", orderQty=" + orderQty + ", editQty=" + editQty + ", isBillGenerated=" + isBillGenerated
+				+ ", slipNo=" + slipNo + ", cakeNo=" + cakeNo + "]";
 	}
+
+
 	
 	
 }

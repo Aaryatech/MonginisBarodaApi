@@ -19,6 +19,7 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			+ "	  ROUND(SUM(t_bill_detail.taxable_amt), 2) as taxable_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.cgst_rs), 2) as cgst_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.sgst_rs), 2) as sgst_amt,"
+			+ "	  ROUND(SUM(t_bill_detail.igst_rs), 2) as igst_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.total_tax), 2) as total_tax,"
 			+ "	  ROUND(SUM(t_bill_detail.grand_total), 2) as grand_total," + "	  "
 			+ "	  ROUND(SUM(t_bill_detail.bill_qty), 2) as bill_qty, t_bill_detail.hsn_code as "
@@ -36,6 +37,7 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			+ "	  ROUND(SUM(t_bill_detail.taxable_amt), 2) as taxable_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.cgst_rs), 2) as cgst_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.sgst_rs), 2) as sgst_amt,"
+			+ "	  ROUND(SUM(t_bill_detail.igst_rs), 2) as igst_amt,"
 			+ "	  ROUND(SUM(t_bill_detail.total_tax), 2) as total_tax,"
 			+ "	  ROUND(SUM(t_bill_detail.grand_total), 2) as grand_total," + "	  "
 			+ "	  ROUND(SUM(t_bill_detail.bill_qty), 2) as bill_qty, t_bill_detail.hsn_code as "
@@ -60,12 +62,13 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			"        COALESCE(t2.total_tax, 0) + COALESCE(t3.total_tax, 0) AS total_tax,\n" + 
 			"        COALESCE(t2.cgst_amt, 0) + COALESCE(t3.cgst_amt, 0) AS cgst_amt,\n" + 
 			"        COALESCE(t2.sgst_amt, 0) + COALESCE(t3.sgst_amt, 0) AS sgst_amt,\n" + 
+			"	   COALESCE(t2.igst_amt, 0) + COALESCE(t3.igst_amt, 0) AS igst_amt,"+
 			"        COALESCE(t2.grand_total, 0) + COALESCE(t3.grand_total, 0) AS grand_total,\n" + 
 			"        COALESCE(t2.bill_qty, 0) + COALESCE(t3.bill_qty, 0) AS bill_qty\n" + 
 			"    FROM\n" + 
 			"        (\n" + 
 			"        SELECT\n" + 
-			"            d.bill_detail_no,\n" + 
+			"          m_franchise_sup.fr_state, d.bill_detail_no,\n" + 
 			"            h.invoice_no,\n" + 
 			"            h.bill_date,\n" + 
 			"            h.party_name AS fr_name,\n" + 
@@ -77,9 +80,9 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			"            d.hsn_code\n" + 
 			"        FROM\n" + 
 			"            t_bill_header h,\n" + 
-			"            t_bill_detail d\n" + 
+			"            t_bill_detail d,m_franchise_sup\n" + 
 			"        WHERE\n" + 
-			"            h.bill_no = d.bill_no AND h.del_status = 0 AND d.del_status = 0 AND h.bill_date BETWEEN :fromDate AND :toDate AND h.fr_id IN(:frIdList)\n" + 
+			"            h.bill_no = d.bill_no AND h.fr_id=m_franchise_sup.fr_id AND h.del_status = 0 AND d.del_status = 0 AND h.bill_date BETWEEN :fromDate AND :toDate AND h.fr_id IN(:frIdList)\n" + 
 			"        GROUP BY\n" + 
 			"            h.bill_no,\n" + 
 			"            d.hsn_code\n" + 
@@ -94,6 +97,8 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			"        2) AS cgst_amt,\n" + 
 			"        ROUND(SUM(d.sgst_rs),\n" + 
 			"        2) AS sgst_amt,\n" + 
+			"        ROUND(SUM(d.igst_rs),\n" + 
+			"        2) AS igst_amt,\n" + 
 			"        ROUND(SUM(d.total_tax),\n" + 
 			"        2) AS total_tax,\n" + 
 			"        ROUND(SUM(d.grand_total),\n" + 
@@ -122,6 +127,8 @@ public interface GstRegisterItemRepo extends JpaRepository<GstRegisterItem, Inte
 			"        2) AS cgst_amt,\n" + 
 			"        ROUND(SUM(d.sgst_rs),\n" + 
 			"        2) AS sgst_amt,\n" + 
+			"        ROUND(SUM(d.igst_rs),\n" + 
+			"        2) AS igst_amt,\n" + 
 			"        ROUND(SUM(d.total_tax),\n" + 
 			"        2) AS total_tax,\n" + 
 			"        ROUND(SUM(d.grand_total),\n" + 

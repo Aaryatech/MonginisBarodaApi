@@ -47,7 +47,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 			"			t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per," + 
 			"			t_bill_detail.cat_id,t_bill_detail.menu_id,t_bill_detail.disc_per,t_bill_detail.hsn_code," + 
 			"			t_bill_header.fr_id,t_bill_header.invoice_no FROM t_bill_header ,t_bill_detail,m_item " + 
-			"			WHERE t_bill_header.fr_id=:frId AND t_bill_detail.bill_no=t_bill_header.bill_no AND t_bill_header.status=2 " + 
+			"			WHERE t_bill_header.fr_id=:frId AND t_bill_detail.bill_no=t_bill_header.bill_no " + 
 			" AND t_bill_detail.item_id=m_item.id AND t_bill_detail.grn_type !=0 AND " + 
 			" t_bill_detail.bill_no=:billNo ", nativeQuery = true)
 	

@@ -11,7 +11,7 @@ import com.ats.webapi.model.reportv2.CrNoteRegItem;
 public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer> {
 
 	@Query(value = " SELECT t_credit_note_header.crn_id,t_credit_note_header.crn_date,t_bill_header.invoice_no,"
-			+ " t_credit_note_details.crnd_id ,"
+			+ " 'NA' AS fr_state, 0 AS is_same_state,  t_credit_note_details.crnd_id ,"
 			+ " t_bill_header.bill_date,m_franchisee.fr_name,t_credit_note_header.crn_no as fr_code,m_franchisee.fr_gst_no,t_credit_note_details.hsn_code,"
 			+ "	SUM(t_credit_note_details.grn_gvn_qty)crn_qty,SUM(t_credit_note_details.taxable_amt)crn_taxable,"
 			+ " t_credit_note_details.cgst_per,t_credit_note_details.sgst_per,t_credit_note_details.igst_per,SUM(t_credit_note_details.sgst_rs) "
@@ -27,7 +27,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 	List<CrNoteRegItem> getCrNoteRegItem(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
 	@Query(value = " SELECT t_credit_note_header.crn_id,t_credit_note_header.crn_date,t_bill_header.invoice_no,"
-			+ " t_credit_note_details.crnd_id ,"
+			+ "'NA' AS fr_state, 0 AS is_same_state , t_credit_note_details.crnd_id ,"
 			+ " t_bill_header.bill_date,m_franchisee.fr_name,t_credit_note_header.crn_no as fr_code,m_franchisee.fr_gst_no,t_credit_note_details.hsn_code,"
 			+ "	SUM(t_credit_note_details.grn_gvn_qty)crn_qty,SUM(t_credit_note_details.taxable_amt)crn_taxable,"
 			+ " t_credit_note_details.cgst_per,t_credit_note_details.sgst_per,t_credit_note_details.igst_per,SUM(t_credit_note_details.sgst_rs) "
@@ -44,7 +44,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 			@Param("toDate") String toDate);
 
 	@Query(value = "SELECT\n" + 
-			"        t_credit_note_header.crn_id,\n" + 
+			"   'NA' AS fr_state, 0 AS is_same_state,     t_credit_note_header.crn_id,\n" + 
 			"        t_credit_note_header.crn_date,\n" + 
 			"        t_bill_header.invoice_no,\n" + 
 			"        t_credit_note_details.crnd_id ,\n" + 
@@ -84,7 +84,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 
 	List<CrNoteRegItem> getCrNoteRegItemDone(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("CreditNoteType") String CreditNoteType);
 
-	@Query(value = " SELECT t_credit_note_header.crn_id,t_credit_note_header.crn_date,t_bill_header.invoice_no,"
+	@Query(value = " SELECT 'NA' AS fr_state,0 AS is_same_state, t_credit_note_header.crn_id,t_credit_note_header.crn_date,t_bill_header.invoice_no,"
 			+ " t_credit_note_details.crnd_id ,"
 			+ " t_bill_header.bill_date,m_franchisee.fr_name,t_credit_note_header.crn_no as fr_code,m_franchisee.fr_gst_no,t_credit_note_details.hsn_code,"
 			+ "	SUM(t_credit_note_details.grn_gvn_qty)crn_qty,SUM(t_credit_note_details.taxable_amt)crn_taxable,"
@@ -122,7 +122,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 			"    FROM\n" + 
 			"        (\n" + 
 			"        SELECT\n" + 
-			"            h.crn_id,\n" + 
+			"          m_franchise_sup.fr_state AS fr_state,f.is_same_state AS is_same_state, h.crn_id,\n" + 
 			"            h.crn_date,\n" + 
 			"            bh.invoice_no,\n" + 
 			"            d.crnd_id,\n" + 
@@ -135,9 +135,9 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 			"            t_credit_note_header h,\n" + 
 			"            t_credit_note_details d,\n" + 
 			"            t_bill_header bh,\n" + 
-			"            m_franchisee f\n" + 
+			"            m_franchisee f ,m_franchise_sup\n" + 
 			"        WHERE\n" + 
-			"            h.crn_id = d.crn_id AND h.crn_date BETWEEN :fromDate AND :toDate AND h.fr_id = f.fr_id AND bh.bill_no = h.ex_int1 AND d.del_status = 0 AND bh.del_status = 0 AND f.del_status = 0\n" + 
+			"            h.crn_id = d.crn_id AND h.crn_date BETWEEN :fromDate AND :toDate AND h.fr_id = f.fr_id AND h.fr_id=m_franchise_sup.fr_id AND bh.bill_no = h.ex_int1 AND d.del_status = 0 AND bh.del_status = 0 AND f.del_status = 0\n" + 
 			"        GROUP BY\n" + 
 			"            h.crn_id,\n" + 
 			"            d.hsn_code\n" + 

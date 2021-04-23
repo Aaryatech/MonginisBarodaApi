@@ -20,9 +20,9 @@ public interface OrderCountsRepository extends JpaRepository<OrderCounts, Intege
 	 */
 	
     @Query (value=" SELECT SUM(t_order.order_qty) as total,m_fr_menu_show.menu_id,"
-            + " m_fr_menu_show.menu_title FROM t_order,m_fr_menu_show where "
+            + " m_fr_menu_show.menu_title,  m_fr_configure.to_time FROM t_order,m_fr_menu_show, m_fr_configure where "
             + " production_date =:cDate and "
-            + " m_fr_menu_show.menu_id=t_order.menu_id GROUP BY menu_id " +
+            + " m_fr_menu_show.menu_id=t_order.menu_id and  m_fr_configure.menu_id=t_order.menu_id  GROUP BY menu_id    " +
             " ",nativeQuery=true)
 
 	List<OrderCounts> getOrderTotal(@Param("cDate") String cDate);

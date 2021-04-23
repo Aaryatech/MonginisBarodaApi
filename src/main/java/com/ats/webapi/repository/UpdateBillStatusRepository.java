@@ -1,5 +1,7 @@
 package com.ats.webapi.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +22,11 @@ public interface UpdateBillStatusRepository extends JpaRepository<UpdateBillStat
 	@Transactional
 	@Query(value="UPDATE t_bill_header SET status=:status WHERE bill_no=:billNo",nativeQuery=true)
 	int updateBillStatusAdmin(@Param("billNo") int billNo, @Param("status") int status);
+	
+	@Modifying
+	@Transactional
+	@Query(value="UPDATE t_bill_header SET status=:status WHERE bill_no IN(:billNo)",nativeQuery=true)
+	int updateMultiBillStatusAdmin(@Param("billNo") List<String> billNo, @Param("status") int status);
 	
 	
 }

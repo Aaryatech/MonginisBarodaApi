@@ -26,6 +26,8 @@ public class OrderCounts implements Serializable{
 	
 	int total;
 	
+	String toTime;
+	
 	public int getMenuId() {
 		return menuId;
 	}
@@ -48,10 +50,19 @@ public class OrderCounts implements Serializable{
 	public void setTotal(int total) {
 		this.total = total;
 	}
+	public String getToTime() {
+		return toTime;
+	}
+	public void setToTime(String toTime) {
+		this.toTime = toTime;
+	}
 	@Override
 	public String toString() {
-		return "OrderCounts [menuId=" + menuId + ", menuTitle=" + menuTitle + ", Total=" + total + "]";
+		return "OrderCounts [menuId=" + menuId + ", menuTitle=" + menuTitle + ", total=" + total + ", toTime=" + toTime
+				+ "]";
 	}
+	
+	
 	
 	
 	
