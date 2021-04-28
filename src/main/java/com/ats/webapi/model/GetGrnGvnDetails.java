@@ -207,6 +207,22 @@ public class GetGrnGvnDetails {
 	int isSameState;
 	//23 FEB new Fields to handle qty variation between entry(insert) and dispatch
 	
+	
+	
+	private int billDetailNo;
+	
+	
+		
+	
+	
+	public int getBillDetailNo() {
+		return billDetailNo;
+	}
+
+	public void setBillDetailNo(int billDetailNo) {
+		this.billDetailNo = billDetailNo;
+	}
+
 	public int getMenuId() {
 		return menuId;
 	}
@@ -705,7 +721,7 @@ public class GetGrnGvnDetails {
 				+ aprQtyAcc + ", aprTaxableAmt=" + aprTaxableAmt + ", aprTotalTax=" + aprTotalTax + ", aprSgstRs="
 				+ aprSgstRs + ", aprCgstRs=" + aprCgstRs + ", aprIgstRs=" + aprIgstRs + ", aprGrandTotal="
 				+ aprGrandTotal + ", aprCessRs=" + aprCessRs + ", aprROff=" + aprROff + ", isSameState=" + isSameState
-				+ "]";
+				+ ", billDetailNo=" + billDetailNo + "]";
 	}
 
 

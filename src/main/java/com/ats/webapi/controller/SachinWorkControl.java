@@ -327,4 +327,34 @@ public class SachinWorkControl {
 			return res;
 		}
 		
+		
+		/*27-04-2021-For Acc GRN GVN Qty Validation for Approval
+		 */
+		
+		/*SELECT SUM(gg.apr_qty_acc) as all_apr_qty,bd.bill_qty, gg.bill_detail_no
+		FROM t_grn_gvn gg,t_bill_detail bd 
+		WHERE gg.bill_detail_no IN(12249) and gg.grn_gvn_id NOT IN (3369) and gg.grn_gvn_status=6 and bd.bill_detail_no=gg.bill_detail_no 
+		GROUP by gg.bill_detail_no*/
+		@Autowired AprQtyGGRepo aprQtyGgRepo;
+		
+		@RequestMapping(value = { "/getBillDetailForGGAccAproval" }, method = RequestMethod.POST)
+		public @ResponseBody List<AprQtyGG> getBillDetailForGGAccAproval(
+				@RequestParam("billDetailNoList") List<Integer> billDetailNoList,
+				@RequestParam("grnGvnIdList") List<Integer> grnGvnIdList
+				) {
+			
+			List<AprQtyGG> aprGGQtyList=new ArrayList<AprQtyGG>();
+			try {
+				aprGGQtyList=aprQtyGgRepo.getAprQtyGG(billDetailNoList, grnGvnIdList);
+				if(aprGGQtyList.isEmpty()) {
+					aprGGQtyList=new ArrayList<AprQtyGG>();
+				}
+			}catch (Exception e) {
+				System.err.println("Ex in getBillDetailForGGAccAproval "+e.getMessage());
+				e.printStackTrace();
+			}
+					return aprGGQtyList;
+			
+		}
+		
 }

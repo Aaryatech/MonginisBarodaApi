@@ -11,8 +11,8 @@ import com.ats.webapi.model.GetGrnGvnDetails;
 public interface GetGrnGvnDetailsRepository extends JpaRepository<GetGrnGvnDetails, Integer> {
 	
 	
-	@Query(value = "SELECT "
-			+ "t_grn_gvn.apr_qty_gate,t_grn_gvn.apr_qty_store,t_grn_gvn.apr_qty_acc,t_grn_gvn.apr_taxable_amt,t_grn_gvn.apr_total_tax, t_grn_gvn.apr_sgst_rs,t_grn_gvn.apr_cgst_rs,t_grn_gvn.apr_igst_rs,t_grn_gvn.apr_cess_rs,t_grn_gvn.apr_grand_total,t_grn_gvn.apr_r_off,t_grn_gvn.is_same_state,"
+	@Query(value = "SELECT t_grn_gvn.bill_detail_no,"
+			+ " t_grn_gvn.apr_qty_gate,t_grn_gvn.apr_qty_store,t_grn_gvn.apr_qty_acc,t_grn_gvn.apr_taxable_amt,t_grn_gvn.apr_total_tax, t_grn_gvn.apr_sgst_rs,t_grn_gvn.apr_cgst_rs,t_grn_gvn.apr_igst_rs,t_grn_gvn.apr_cess_rs,t_grn_gvn.apr_grand_total,t_grn_gvn.apr_r_off,t_grn_gvn.is_same_state,"
 			+ ""
 			+ ""
 			+ "t_grn_gvn.grn_gvn_id,t_grn_gvn.hsn_code as item_hsncd,t_grn_gvn.grn_gvn_header_id,t_grn_gvn.grn_gvn_entry_datetime,t_grn_gvn.grn_gvn_date,t_grn_gvn.bill_no,t_grn_gvn.fr_id,t_grn_gvn.item_id,t_grn_gvn.item_rate,\n" + 
@@ -32,8 +32,8 @@ public interface GetGrnGvnDetailsRepository extends JpaRepository<GetGrnGvnDetai
 	
 	List<GetGrnGvnDetails> getAllGrnDetails(@Param("fromDate") String fromDate ,@Param("toDate") String toDate);
 
-	@Query(value = "SELECT "
-			+ "t_grn_gvn.apr_qty_gate,t_grn_gvn.apr_qty_store,t_grn_gvn.apr_qty_acc,t_grn_gvn.apr_taxable_amt,t_grn_gvn.apr_total_tax, t_grn_gvn.apr_sgst_rs,t_grn_gvn.apr_cgst_rs,t_grn_gvn.apr_igst_rs,t_grn_gvn.apr_cess_rs,t_grn_gvn.apr_grand_total,t_grn_gvn.apr_r_off,t_grn_gvn.is_same_state,"
+	@Query(value = "SELECT t_grn_gvn.bill_detail_no, "
+			+ " t_grn_gvn.apr_qty_gate,t_grn_gvn.apr_qty_store,t_grn_gvn.apr_qty_acc,t_grn_gvn.apr_taxable_amt,t_grn_gvn.apr_total_tax, t_grn_gvn.apr_sgst_rs,t_grn_gvn.apr_cgst_rs,t_grn_gvn.apr_igst_rs,t_grn_gvn.apr_cess_rs,t_grn_gvn.apr_grand_total,t_grn_gvn.apr_r_off,t_grn_gvn.is_same_state,"
 			+ ""
 			+ " t_grn_gvn.grn_gvn_id,t_grn_gvn.hsn_code as item_hsncd,t_grn_gvn.grn_gvn_entry_datetime,t_grn_gvn.grn_gvn_date,t_grn_gvn.bill_no,t_grn_gvn.fr_id,t_grn_gvn.item_id,t_grn_gvn.item_rate,\n" + 
 			"t_grn_gvn.item_mrp,t_grn_gvn.grn_gvn_qty,t_grn_gvn.grn_gvn_amt,t_grn_gvn.grn_type,t_grn_gvn.is_grn,t_grn_gvn.is_grn_edit,\n" + 
@@ -52,7 +52,7 @@ public interface GetGrnGvnDetailsRepository extends JpaRepository<GetGrnGvnDetai
 	
 	List<GetGrnGvnDetails> getAllGvnDetails(@Param("fromDate") String fromDate ,@Param("toDate") String toDate);
 	
-	@Query(value =  " SELECT t_grn_gvn.hsn_code AS item_hsncd,"
+	@Query(value =  " SELECT t_grn_gvn.bill_detail_no, t_grn_gvn.hsn_code AS item_hsncd,"
 			
 			+ "CASE WHEN t_grn_gvn.cat_id=5 THEN (SELECT m_sp_cake.sp_name FROM m_sp_cake WHERE m_sp_cake.sp_id=t_grn_gvn.item_id) " + 
 			"			ELSE (SELECT m_item.item_name FROM m_item WHERE t_grn_gvn.item_id=m_item.id) END AS item_name,"
@@ -75,7 +75,7 @@ public interface GetGrnGvnDetailsRepository extends JpaRepository<GetGrnGvnDetai
 	
 	List<GetGrnGvnDetails> getFrGvnDetails(@Param("grnGvnHeaderId") int grnGvnHeaderId);
 //changed on 16 feb for grnGvnHeaderId
-	@Query(value = "SELECT t_grn_gvn.hsn_code  AS item_hsncd, "
+	@Query(value = "SELECT t_grn_gvn.bill_detail_no, t_grn_gvn.hsn_code  AS item_hsncd, "
 		
 			+ "CASE WHEN t_grn_gvn.cat_id=5 THEN (SELECT m_sp_cake.sp_name FROM m_sp_cake WHERE m_sp_cake.sp_id=t_grn_gvn.item_id) " + 
 			"		ELSE (SELECT m_item.item_name FROM m_item WHERE t_grn_gvn.item_id=m_item.id) END AS item_name,"
