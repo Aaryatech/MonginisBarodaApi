@@ -1,31 +1,53 @@
 package com.ats.webapi.controller;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
+import com.ats.webapi.commons.DateConvertor;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.AlbumEnquiry;
 import com.ats.webapi.model.ErrorMessage;
+import com.ats.webapi.model.Flavour;
+import com.ats.webapi.model.FlavourConf;
+import com.ats.webapi.model.FrMenus;
 import com.ats.webapi.model.Info;
+import com.ats.webapi.model.OrderSpecialCake;
+import com.ats.webapi.model.SearchSpCakeResponse;
 import com.ats.webapi.model.Setting;
+import com.ats.webapi.model.Shape;
+import com.ats.webapi.model.SpCakeOrders;
 import com.ats.webapi.model.SpecialCake;
 import com.ats.webapi.model.rejectRemark;
+import com.ats.webapi.model.frsetting.FrSetting;
 import com.ats.webapi.model.newsetting.NewSetting;
+import com.ats.webapi.repo.ShapeRepo;
 import com.ats.webapi.repository.AlbumEnquiryRepository;
+import com.ats.webapi.repository.FlavourConfRepository;
+import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.FrMenusRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.NewSettingRepository;
+import com.ats.webapi.repository.SpCakeOrdersRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
 import com.ats.webapi.repository.UserRepository;
 import com.ats.webapi.repository.rejectRemarkRepository;
 import com.ats.webapi.repository.settingSpCakeRepository;
+import com.ats.webapi.repository.frsetting.FrSettingRepo;
 import com.ats.webapi.service.SpecialCakeService;
 
 //Akhilesh 2021-03-06  
@@ -278,19 +300,147 @@ System.err.println("error");
 	}
 	
 	
-	
+	@Autowired
+	private SpecialCakeService specialcakeService;
+@Autowired FlavourRepository flavRepo;
+
+@Autowired FrMenusRepository frMenuRepo;
+
+@Autowired
+FlavourConfRepository flavourConfRepository;
+@Autowired SpCakeOrdersRepository saveSpOrdRepo;
+
+@Autowired FrSettingRepo frSetRepo;
+
+@Autowired ShapeRepo shapeRepo;
+
 	//To Place New Order From Enq App
 	@RequestMapping(value="/placeSpcakeOrderFromApp",method=RequestMethod.POST)
 	public @ResponseBody Info placeSpcakeOrderFromApp(@RequestParam int frid,@RequestParam int menuId,@RequestParam int spId,
 													@RequestParam int flavourId,@RequestParam int shapeId, @RequestParam String message,
-													@RequestParam String  spInstruction,@RequestParam int extraCharg,@RequestParam int selWeight,
-													@RequestParam int enqId )  {
+													@RequestParam String  spInstruction,@RequestParam int extraCharg,@RequestParam float selWeight,
+													@RequestParam int enqId,
+		@RequestParam String delDate,@RequestParam String  custMobNo,@RequestParam String custName,
+		@RequestParam String orderPhoto,@RequestParam float advAmt,@RequestParam int custId)  {
 		Info info=new Info();
 		int flag=0;
+		SpCakeOrders saveOrderRes=new SpCakeOrders();
+		try {
+			
+			SearchSpCakeResponse searchSpCakeResponse = specialcakeService.searchSpecialCakeBySpId(spId);
+			//A M_SP_CAKE
+			OrderSpecialCake spCake=searchSpCakeResponse.getSpecialCake();
+			System.err.println("spCake " +spCake);
+			//B flavor
+			Flavour flavor=flavRepo.findOne(flavourId);
+			
+			spCake.setSpSelectedWt(selWeight);
+			spCake.setExCharges(extraCharg);
+			spCake.setAdvAmt(advAmt);
+			
+			//C Menu
+			FrMenus menu=frMenuRepo.findByMenuId(menuId);
+			SpCakeOrders order=new SpCakeOrders();
+			spCake=	setSpCakeOrderData(spCake,flavor,menu);
+			
+			DateConvertor dateConv=new DateConvertor();
+			
+			
+			
+			order.setFrId(frid);
+			
+			order.setItemId(spCake.getSpCode());
+			order.setSpId(spId);
+			order.setMenuId(menuId);
+			
+			order.setOrderDate(new Date());//cur date
+			
+			order.setSpCustDob(new Date());
+			order.setSpCustMobNo(custMobNo);
+			order.setSpCustName(custName);
+			
+			Date deliveryDate=dateConv.getUtilDateFromStrYMDDate(delDate);
+			order.setSpDeliveryDate(deliveryDate);
+		    
+			order.setIsBillGenerated(0);
+			order.setIsAllocated(1);
+			order.setIsSlotUsed(0);
+			order.setSlipNo("0");
+			order.setSpBookedForName("1");
+			order.setSpBookForDob(new Date());
+			order.setSpBookForMobNo("0");
+			
+
+			FrSetting frSetting=frSetRepo.findByFrId(frid);
+			String spNoNewStr= "";
+			int spNo = frSetting.getSpNo();
+
+			int length = String.valueOf(spNo).length();
+			length = 5 - length;
+			StringBuilder spNoNew = new StringBuilder(frSetting.getFrCode()+"-");
+
+			for (int i = 0; i < length; i++) {
+				String j = "0";
+				spNoNew.append(j);
+			}
+			spNoNew.append(String.valueOf(spNo));
+			spNoNewStr=""+spNoNew;
+			
+			order.setSpDeliveryPlace(spNoNewStr); //ie orderNo For User
+			order.setFrCode(frSetting.getFrCode()); //get from Service
+			
+			order.setSpFlavourId(flavourId);
+			order.setSpSelectedWeight(selWeight);
+			String currDate=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			
+			Date estDeliDate=DateConvertor.getUtilDateByAddSubGivenDays(currDate, Integer.parseInt(spCake.getSpBookb4()));
+			order.setSpEstDeliDate(estDeliDate);
+			
+			order.setSpEvents("--");
+			
+			order.setSpType(flavor.getSpType());
+			order.setSpProdTime(Integer.parseInt(spCake.getSpBookb4()));
+			
+			Date prodDate=DateConvertor.getUtilDateByAddSubGivenDays(delDate, -Integer.parseInt(spCake.getSpBookb4()));
+
+			order.setSpProdDate(prodDate);
+			order.setSpOrderNo(0);
+			order.setSpMaxWeight(Float.parseFloat(spCake.getSpMaxwt()));
+			order.setSpInstructions(spInstruction);
+			order.setSpEventsName(message);
+			
+			order.setOrderPhoto(orderPhoto);
+			order.setOrderPhoto2("");
+			order.setCustEmail("-");
+			order.setCustGstin("-");
+			
+			Shape shape=shapeRepo.findByShapeId(shapeId);
+			order.setExInt1(custId);
+			order.setExInt2(0);
+			order.setExVar1(""+shape.getShapeName());//ie ctype in frontend
+			order.setExVar2("ORDER From APP");
+			
+			order= spCalc( spCake,
+					order);
+			 saveOrderRes=	saveSpOrdRepo.save(order);
+			
+			System.err.println("order " +order);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	
 		try {
 			//Check Condition  Sp Cake Opreder Placed 
-			int orederNo=111111;
-			if(true) {
+			int orederNo=0;
+			try {
+			 orederNo=saveOrderRes.getSpOrderNo();
+			}catch (Exception e) {
+				orederNo=0;
+			}
+			if(orederNo>0) {
+				
+				int	updateResponse = frSetRepo.updateFrSettingSpNo(frid);
+				
 				flag=enquiryRepo.updateAddToProdFlag(enqId, String.valueOf(orederNo));
 				if(flag>0) {
 					info.setError(false);
@@ -327,10 +477,166 @@ System.err.println("error");
 		return info;
 	}
 	
+	public SpCakeOrders spCalc(OrderSpecialCake mspCake,   
+			SpCakeOrders spCakeOrder) {
+		float wt = mspCake.getSpSelectedWt();
+		//1
+		float flavourAdonRate=mspCake.getSprAddOnRate();
+		float mrp=mspCake.getSprRateMrp();
+		float profitPer=mspCake.getProfitPer();
+		
+		float spTotAddonRate=flavourAdonRate*wt;
+		//console.log("spTotAddonRate",spTotAddonRate)
+		float tax3 =(float) mspCake.getSpTax3();
+		float tax1 =(float) mspCake.getSpTax1();
+		float tax2 =(float) mspCake.getSpTax2();
+		
+		float sp_ex_charges =mspCake.getExCharges();
+		float sp_disc = 0;
+		float advAmt=mspCake.getAdvAmt();
+		float spPrice=mrp*wt;
+		float spSubTotal=(spTotAddonRate+spPrice+sp_ex_charges);
+		float spBackEndRate=(spSubTotal-(spSubTotal*profitPer)/100);
+		
+		float spBackEndRateNew=spBackEndRate;
+		float discAmt=spSubTotal*(sp_disc/100);
+		//tc
+		float disc_amt_entered=0f;
+		float menu_disc_per=mspCake.getMenuDiscPer();
+		float menuDISCAMT=0f;
+		menuDISCAMT=spSubTotal*(menu_disc_per/100);
+		//document.getElementById("menu_disc_rs").setAttribute('value',
+				//menuDISCAMT.toFixed(2));
+		
+		discAmt=menuDISCAMT;
+		if(sp_disc>0){
+			float tot_disc_per=menu_disc_per+sp_disc;
+			discAmt=spSubTotal*(tot_disc_per/100);
+			float discAmt2=spSubTotal*(sp_disc/100);
+			 //document.getElementById("sp_disc_rs").value=discAmt2.toFixed(2);
+		}else if(disc_amt_entered>0){
+			discAmt=disc_amt_entered+menuDISCAMT;
+			float discPer=(disc_amt_entered/(spSubTotal/100));
+			// document.getElementById("sp_disc").value=discPer.toFixed(2);
+		}
+		float spGrandTot=(spTotAddonRate+spPrice+sp_ex_charges)-discAmt;
+		float taxableAmt= ((spGrandTot*100)/100+tax3);
+		float spSubTotalTemp=spSubTotal-discAmt;
+		float mrpBaseRate = (spSubTotalTemp * 100) / (tax3 + 100);
+
+		float gstInRs = 0;
+		float taxPerPerc1 = 0;
+		float taxPerPerc2 = 0;
+		float tax1Amt = 0f;
+		float tax2Amt = 0f;
+		
+		if (tax3 == 0) {
+			gstInRs = 0;
+		} else {
+			gstInRs = (mrpBaseRate * tax3) / 100;
+
+			if (tax1 == 0) {
+				taxPerPerc1 = 0;
+			} else {
+				taxPerPerc1 = (tax1 * 100) / tax3;
+				tax1Amt = (gstInRs * taxPerPerc1) / 100;
+			}
+			if (tax2 == 0) {
+				taxPerPerc2 = 0;
+			} else {
+				taxPerPerc2 = (tax2 * 100) / tax3;
+				tax2Amt = (gstInRs * taxPerPerc2) / 100;
+			}
+		}
+		float mGstAmt = mrpBaseRate;
+		float gst_rs=taxableAmt;
+		float m_gst_amt=mGstAmt;
+		
+		float sp_calc_price=spPrice;
+		float sp_add_rate=spTotAddonRate;
+		float sp_sub_total=spSubTotal;
+		
+		float sp_grand=spGrandTot;
+		float total_amt=spSubTotal;
+		float rm_amount=spGrandTot-advAmt;
+		float t1amt=tax1Amt;
+		float t2amt=tax2Amt;
+		DecimalFormat df = new DecimalFormat("#.00");
+
+		spCakeOrder.setSpGrandTotal(Float.parseFloat(df.format(sp_grand)));
+		spCakeOrder.setSpMinWeight(mspCake.getMenuDiscPer());
+		spCakeOrder.setRmAmount(Float.parseFloat(df.format(rm_amount)));
+		spCakeOrder.setSpTotalAddRate(Float.parseFloat(df.format(sp_add_rate)));
+		spCakeOrder.setSpAdvance(Float.parseFloat(df.format(advAmt)));
+		spCakeOrder.setSpSubTotal(Float.parseFloat(df.format(sp_sub_total)));
+		spCakeOrder.setSpPrice(Float.parseFloat(df.format(sp_calc_price)));
+		spCakeOrder.setTax1(Float.parseFloat(df.format(tax1)));
+		spCakeOrder.setTax1Amt(Float.parseFloat(df.format(t1amt)));
+		spCakeOrder.setTax2Amt(Float.parseFloat(df.format(t2amt)));
+		spCakeOrder.setTax2(Float.parseFloat(df.format(tax2)));
+
+		spCakeOrder.setExtraCharges(Float.parseFloat(df.format(sp_ex_charges)));
+		spCakeOrder.setDisc(sp_disc);
+		spCakeOrder.setSpBackendRate(Float.parseFloat(df.format(spBackEndRateNew)));
+		
+		return spCakeOrder;
+		
+	}
 	
-	
-	
-	
-	
+	public OrderSpecialCake setSpCakeOrderData(OrderSpecialCake spCake, Flavour flavor, FrMenus menu) {
+		System.err.println("Menu  " + menu);
+		float spBackEndRate = 0.0f;
+		float mrp_sprRate = 0.0f;
+		float addOnRate = 0.0f;
+		float profitPer = menu.getProfitPer();
+
+		if (menu.getRateSettingFrom() == 0) {
+			// By Master
+			if (menu.getRateSettingType() == 1) {
+				mrp_sprRate = spCake.getMrpRate1();
+			} else if (menu.getRateSettingType() == 2) {
+				mrp_sprRate = spCake.getMrpRate2();
+			} else {
+				mrp_sprRate = spCake.getMrpRate3();
+			}
+		} else {
+			// By Flavor Confi
+			// Get Flavor Configuration By SpId
+			FlavourConf spFlavConf = new FlavourConf();
+
+			if (flavor != null) {
+				try {
+					System.err.println("flavor In " + flavor);
+					spFlavConf = flavourConfRepository.findBySpIdAndSpfIdAndDelStatus(spCake.getSpId(),flavor.getSpfId(),0);
+				} catch (HttpClientErrorException e) {
+					System.err.println("at here " + e.getResponseBodyAsString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (menu.getRateSettingType() == 1) {
+				mrp_sprRate = spFlavConf.getMrp1();
+			} else if (menu.getRateSettingType() == 2) {
+				mrp_sprRate = spFlavConf.getMrp2();
+			} else {
+				mrp_sprRate = spFlavConf.getMrp3();
+			}
+		}
+		if (menu.getRateSettingFrom() == 0 && spCake.getIsAddonRateAppli() == 1) {
+			addOnRate = (float) flavor.getSpfAdonRate();
+		}
+		System.err.println("addOnRate " + addOnRate);
+		//mrp_sprRate = mrp_sprRate + addOnRate;
+		spBackEndRate = (mrp_sprRate - (mrp_sprRate * profitPer) / 100);
+
+		spCake.setSprRateMrp(mrp_sprRate);
+		spCake.setSpBackendRate(spBackEndRate);
+		spCake.setSprAddOnRate(addOnRate);
+		spCake.setProfitPer(profitPer);
+		spCake.setMenuDiscPer(menu.getDiscPer());
+		System.err.println("mrp_sprRate  " + mrp_sprRate + "spBackEndRate " + spBackEndRate + "addOnRate " + addOnRate);
+		
+		return spCake;
+	}
 
 }

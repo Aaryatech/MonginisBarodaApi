@@ -103,6 +103,86 @@ public class OrderSpecialCake implements Serializable {
 	private int noOfChars;
 	
 	
+	/*SACHIN 28-04-2021*/
+	
+	
+	//Sachin 3-3-2021 Baroda
+		//Sachin Temp Field Added 01-02-2021
+		@Transient
+			float sprRateMrp;
+		@Transient
+			float spBackendRate;
+		@Transient
+			int menuSettingDelDays;
+		@Transient
+			float menuDiscPer; //SAC 05-03-2021
+		
+			private float sprAddOnRate;//existing just pinched below
+			
+		@Transient
+		private float profitPer;
+		
+		//SAC 29-04-2021 3 fields added
+		@Transient
+		private float spSelectedWt;
+		
+		@Transient
+		private float exCharges;
+		
+		@Transient
+		private float advAmt;
+		
+	
+	
+	
+	public float getSpSelectedWt() {
+			return spSelectedWt;
+		}
+		public void setSpSelectedWt(float spSelectedWt) {
+			this.spSelectedWt = spSelectedWt;
+		}
+		public float getExCharges() {
+			return exCharges;
+		}
+		public void setExCharges(float exCharges) {
+			this.exCharges = exCharges;
+		}
+		public float getAdvAmt() {
+			return advAmt;
+		}
+		public void setAdvAmt(float advAmt) {
+			this.advAmt = advAmt;
+		}
+	public float getSprRateMrp() {
+			return sprRateMrp;
+		}
+		public void setSprRateMrp(float sprRateMrp) {
+			this.sprRateMrp = sprRateMrp;
+		}
+		public float getSpBackendRate() {
+			return spBackendRate;
+		}
+		public void setSpBackendRate(float spBackendRate) {
+			this.spBackendRate = spBackendRate;
+		}
+		public int getMenuSettingDelDays() {
+			return menuSettingDelDays;
+		}
+		public void setMenuSettingDelDays(int menuSettingDelDays) {
+			this.menuSettingDelDays = menuSettingDelDays;
+		}
+		public float getMenuDiscPer() {
+			return menuDiscPer;
+		}
+		public void setMenuDiscPer(float menuDiscPer) {
+			this.menuDiscPer = menuDiscPer;
+		}
+		public float getProfitPer() {
+			return profitPer;
+		}
+		public void setProfitPer(float profitPer) {
+			this.profitPer = profitPer;
+		}
 	public int getNoOfChars() {
 		return noOfChars;
 	}
@@ -148,7 +228,7 @@ public class OrderSpecialCake implements Serializable {
 	
 	private float sprRate;
 	
-	private float sprAddOnRate;
+	//private float sprAddOnRate;
 	
 	public float getSprRate() {
 		return sprRate;
@@ -336,7 +416,10 @@ public class OrderSpecialCake implements Serializable {
 				+ ", isCustChoiceCk=" + isCustChoiceCk + ", isAddonRateAppli=" + isAddonRateAppli + ", mrpRate1="
 				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + ", spRate1=" + spRate1 + ", spRate2="
 				+ spRate2 + ", spRate3=" + spRate3 + ", isSlotUsed=" + isSlotUsed + ", noOfChars=" + noOfChars
-				+ ", sprRate=" + sprRate + ", sprAddOnRate=" + sprAddOnRate + "]";
+				+ ", sprRateMrp=" + sprRateMrp + ", spBackendRate=" + spBackendRate + ", menuSettingDelDays="
+				+ menuSettingDelDays + ", menuDiscPer=" + menuDiscPer + ", sprAddOnRate=" + sprAddOnRate
+				+ ", profitPer=" + profitPer + ", spSelectedWt=" + spSelectedWt + ", exCharges=" + exCharges
+				+ ", advAmt=" + advAmt + ", sprRate=" + sprRate + "]";
 	}
 	
 }
