@@ -111,6 +111,43 @@ public class ReportControllerV2 {
 
 		return saleList;
 	}
+	
+	
+	
+	
+	// Akhilesh---->2020-04-29--------------->
+		@RequestMapping(value = { "/getHsnReportFilterGrnGvnSubcat" }, method = RequestMethod.POST)
+		public @ResponseBody List<HSNWiseReport> getHsnReportFilterGrnGvnSubcat(@RequestParam("fromDate") String fromDate,
+				@RequestParam("toDate") String toDate, @RequestParam("grngvnType") List<Integer> grngvnType) {
+
+			List<HSNWiseReport> saleList = new ArrayList<>();
+			try {
+
+				saleList = hSNWiseReportRepo.getReportHsnInForSubcat(fromDate, toDate, grngvnType);
+				System.out.println(saleList.toString());
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+			return saleList;
+		}
+		
+		// Akhilesh---->2020-04-29--------------->
+		@RequestMapping(value = { "/getHsnBillReportSubcat" }, method = RequestMethod.POST)
+		public @ResponseBody List<HSNWiseReport> getHsnBillReportSubcat(@RequestParam("fromDate") String fromDate,
+				@RequestParam("toDate") String toDate) {
+			List<HSNWiseReport> saleList = new ArrayList<>();
+			try {
+
+				saleList = hSNWiseReportRepo.getReportSubcat(fromDate, toDate);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			return saleList;
+		}
+	
+	
 
 	@RequestMapping(value = { "/getHsnReportByFrId" }, method = RequestMethod.POST)
 	public @ResponseBody List<HSNWiseReport> getHsnReportByFrId(@RequestParam("frId") int frId,
