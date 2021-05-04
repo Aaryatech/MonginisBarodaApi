@@ -11,11 +11,11 @@ import com.ats.webapi.model.CustomerForOps;
 
 public interface CustomerForOpsRepo extends JpaRepository<CustomerForOps, Integer> {
 
-	List<CustomerForOps> findByDelStatusOrderByCustIdDesc(int i);
+	List<CustomerForOps> findByDelStatusOrderByCustName(int i);
 
 	CustomerForOps findByCustIdAndDelStatus(int custId, int i);
 	
-	@Query(value="SELECT * FROM m_customer1 WHERE del_status=0 AND fr_id=:frId",nativeQuery=true)
+	@Query(value="SELECT * FROM m_customer1 WHERE del_status=0 AND fr_id=:frId ORDER BY cust_name ",nativeQuery=true)
 	List<CustomerForOps> findByDelStatusAndFrid(@Param("frId") int frId);
 	
 	@Query(value="select * from m_customer1 where phone_number=:phoneNo and fr_id=:frId  and del_status=:i",nativeQuery=true)

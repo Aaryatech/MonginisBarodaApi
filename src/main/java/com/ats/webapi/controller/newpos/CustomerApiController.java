@@ -88,11 +88,11 @@ public class CustomerApiController {
 	@Autowired
 	CustomerForOpsRepo customerForOpsRepo;
 
-	@RequestMapping(value = { "/getAllCustomersForOps" }, method = RequestMethod.GET)
-	public @ResponseBody List<CustomerForOps> getAllCustomers() {
+	@RequestMapping(value = { "/getAllCustomersForOps" }, method = RequestMethod.POST)
+	public @ResponseBody List<CustomerForOps> getAllCustomers(@RequestParam int frId) {
 		List<CustomerForOps> servicsList = new ArrayList<CustomerForOps>();
 		try {
-			servicsList = customerForOpsRepo.findByDelStatusOrderByCustIdDesc(0);
+			servicsList = customerForOpsRepo.findByDelStatusAndFrid(frId);
 		} catch (Exception e) {
 			// System.err.println("Exce in getAllServices " + e.getMessage());
 		}
@@ -116,14 +116,31 @@ public class CustomerApiController {
 		}
 		return serv;
 	}
+	@RequestMapping(value = { "/getCustomerByCustIdForOps" }, method = RequestMethod.POST)
+	public @ResponseBody CustomerForOps getCustomerByCustIdForOps(@RequestParam int custId ) {
 
+		CustomerForOps cust = new CustomerForOps();
+
+		try {
+			cust = customerForOpsRepo.findByCustIdAndDelStatus(custId, 0);
+		} catch (Exception e) {
+			// System.err.println("Exce in saving saveCustomer " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return cust;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = { "/getPaymentModeList" }, method = RequestMethod.GET)
 	public @ResponseBody List<PaymentMode> getPaymentModeList() {
 
 		List<PaymentMode> serv = new ArrayList<>();
 
 		try {
-			serv = paymentModeRepository.findByDelStatus(1);
+			serv = paymentModeRepository.findByDelStatus(0);
 
 		} catch (Exception e) {
 			// System.err.println("Exce in saving saveCustomer " + e.getMessage());
@@ -139,7 +156,7 @@ public class CustomerApiController {
 		List<PaymentType> serv = new ArrayList<>();
 
 		try {
-			serv = paymentTypeRepository.findByDelStatusAndPaymentModeId(1,modeId);
+			serv = paymentTypeRepository.findByDelStatusAndPaymentModeId(0,modeId);
 
 		} catch (Exception e) {
 			// System.err.println("Exce in saving saveCustomer " + e.getMessage());

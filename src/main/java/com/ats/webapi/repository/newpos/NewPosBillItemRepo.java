@@ -57,7 +57,7 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			"    WHERE\n" + 
 			"        m_item.id IN(:itemList) AND m_item.id=m_item_sup.item_id\n" + 
 			"    ORDER BY\n" + 
-			"        item_name ASC\n" + 
+			"        ORDER by m_item.item_grp2, m_item.item_name ASC " + 
 			") a\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT\n" + 
@@ -161,7 +161,7 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			") f\n" + 
 			"ON\n" + 
 			"    a.id = f.item_id  \n" + 
-			"ORDER BY a.item_name ASC",nativeQuery=true)
+			" ",nativeQuery=true)
 	List<NewPosBillItem> getNewPosBillItems(@Param("frId") int frId,
 											@Param("fromDt") String fromDt,
 											@Param("toDt") String toDt,
@@ -227,10 +227,8 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			+ "        WHERE\n"
 			+ "            m_item.id IN(:itemList) \n"
 			+ "            AND m_item.id=m_item_sup.item_id     \n"
-			+ "        ORDER BY\n"
-			+ "            item_name ASC ) a  \n"
-			+ "                ORDER BY\n"
-			+ "                    a.item_name ASC",nativeQuery=true)
+			+ "        ORDER by m_item.item_grp2, m_item.item_name ) a  \n"
+			+ "                ",nativeQuery=true)
 	List<NewPosBillItem> getNewPosBillItems(@Param("frId") int frId, @Param("itemList") List<Integer> itemList);
 	
 
