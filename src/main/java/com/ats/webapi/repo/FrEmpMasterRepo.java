@@ -53,5 +53,9 @@ public interface FrEmpMasterRepo extends JpaRepository<FrEmpMaster, Integer> {
 	public FrEmpMaster findByfrEmpContactAndFrEmpId(String mob, int empId);
 
 	public FrEmpMaster findByFrEmpIdAndDelStatus(int userId, int i);
+	
+	@Query(value="SELECT  COUNT(*)  FROM  m_fr_emp  WHERE m_fr_emp.fr_id=:frId",nativeQuery=true)
+	public int getCountOfEmpByFrid(@Param("frId") int frId);
+	
 
 }

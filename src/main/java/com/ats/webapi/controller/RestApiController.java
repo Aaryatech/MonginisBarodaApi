@@ -49,6 +49,7 @@ import com.ats.webapi.repo.GetBillAmtGroupByFrRepo;
 import com.ats.webapi.repo.ItemListForCustomerBillRepo;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
+import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
@@ -158,8 +159,13 @@ import com.ats.webapi.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+
 @RestController
 public class RestApiController {
+	
+	
+	@Autowired
+	FlavourConfRepository flavConfigRepo;
 
 	public static String incrementDate(String date, int day) {
 
@@ -1972,7 +1978,37 @@ public class RestApiController {
 		return spCakeOrderRes;
 
 	}
+	
+//Akhilesh 2021-05-05
+	@RequestMapping(value = { "/getSpByFlavId" }, method = RequestMethod.POST)
+	public @ResponseBody List<FlavourConf> getSpOrderByFlavId(@RequestParam("flavIds") List<String> flavIds)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+		List<FlavourConf> resp=new ArrayList<>();
+		 resp = flavConfigRepo.getSpByFlavours(flavIds);
+		return resp;
 
+	}
+	@RequestMapping(value = { "/getSpBySpId" }, method = RequestMethod.POST)
+	public @ResponseBody List<FlavourConf> getSpBySpId(@RequestParam("flavIds") List<String> spIds)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+		List<FlavourConf> resp=new ArrayList<>();
+		 resp = flavConfigRepo.getSpBySpId(spIds);
+		return resp;
+
+	}
+	
+	
+	@RequestMapping(value = { "/getSpBySingleSpId" }, method = RequestMethod.POST)
+	public @ResponseBody List<FlavourConf> getSpBySingleSpId(@RequestParam("flavIds") int spId)
+			throws ParseException, JsonParseException, JsonMappingException, IOException {
+		List<FlavourConf> resp=new ArrayList<>();
+		 resp = flavConfigRepo.getSpBySingleSpId(spId);
+		return resp;
+
+	}
+	
+	
+	
 	// Search Special Cake By SpecialCake Code
 	@RequestMapping("/searchSpecialCake")
 	public @ResponseBody SearchSpCakeResponse searchSpecialCake(@RequestParam String spCode) {
@@ -5599,7 +5635,7 @@ int FridInt=Integer.parseInt(frId);
 	}
 
 	static String senderEmail = "atsinfosoft@gmail.com";
-	static String senderPassword = "atsinfosoft@123";
+	static String senderPassword = "atsinfosoft#123";
 	static String mailsubject = "";
 	String otp1 = null;
 

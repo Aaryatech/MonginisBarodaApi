@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ats.webapi.model.FlavourConf;
+import com.ats.webapi.model.SpCakeOrders;
 
 @Repository
 public interface FlavourConfRepository extends JpaRepository<FlavourConf, Integer>{
@@ -38,6 +39,84 @@ public interface FlavourConfRepository extends JpaRepository<FlavourConf, Intege
 	@Transactional
 	@Modifying
 	int deleteBySpFlavConfId(@Param("spFlavConfId")int spFlavConfId);
+	
+	
+	@Query(value="SELECT\n" + 
+			"    `sp_flav_conf_id`,\n" + 
+			"   m_sp_flavour_conf.spf_id,\n" + 
+			"    m_sp_flavour_conf.sp_id,\n" + 
+			"    m_sp_flavour_conf.sp_type,\n" + 
+			"    `rate`,\n" + 
+			"    `mrp1`,\n" + 
+			"    `mrp2`,\n" + 
+			"    `mrp3`,\n" + 
+			"    m_sp_flavour_conf.del_status,\n" + 
+			"    CONCAT(\n" + 
+			"        m_sp_cake.sp_name\n" + 
+			"        ,\n" + 
+			"        '+',\n" + 
+			"        m_sp_flavour.spf_name\n" + 
+			"    ) ex_var1,\n" + 
+			"    `ex_int1`\n" + 
+			"FROM\n" + 
+			"    `m_sp_flavour_conf`,\n" + 
+			"    m_sp_flavour,\n" + 
+			"    m_sp_cake\n" + 
+			"WHERE\n" + 
+			"    m_sp_flavour_conf.spf_id IN(:flavIds) AND m_sp_flavour_conf.spf_id = m_sp_flavour.spf_id AND m_sp_cake.sp_id = m_sp_flavour_conf.sp_id",nativeQuery=true)
+	List<FlavourConf> getSpByFlavours(@Param("flavIds")  List<String> flavIds);
+	
+	
+	
+	
+	
+	@Query(value="SELECT\n" + 
+			"    `sp_flav_conf_id`,\n" + 
+			"   m_sp_flavour_conf.spf_id,\n" + 
+			"    m_sp_flavour_conf.sp_id,\n" + 
+			"    m_sp_flavour_conf.sp_type,\n" + 
+			"    `rate`,\n" + 
+			"    `mrp1`,\n" + 
+			"    `mrp2`,\n" + 
+			"    `mrp3`,\n" + 
+			"    m_sp_flavour_conf.del_status,\n" + 
+			"    CONCAT(\n" + 
+			"        m_sp_cake.sp_name\n" + 
+			"        ,\n" + 
+			"        '+',\n" + 
+			"        m_sp_flavour.spf_name\n" + 
+			"    ) ex_var1,\n" + 
+			"    `ex_int1`\n" + 
+			"FROM\n" + 
+			"    `m_sp_flavour_conf`,\n" + 
+			"    m_sp_flavour,\n" + 
+			"    m_sp_cake\n" + 
+			"WHERE\n" + 
+			"    m_sp_flavour_conf.sp_id IN(:spIds) AND m_sp_flavour_conf.spf_id = m_sp_flavour.spf_id AND m_sp_cake.sp_id = m_sp_flavour_conf.sp_id",nativeQuery=true)
+	List<FlavourConf> getSpBySpId(@Param("spIds")  List<String> spIds);
+	
+	@Query(value="SELECT\n" + 
+			"    `sp_flav_conf_id`,\n" + 
+			"    m_sp_flavour_conf.spf_id,\n" + 
+			"    m_sp_flavour_conf.sp_id,\n" + 
+			"    m_sp_flavour_conf.sp_type,\n" + 
+			"    `rate`,\n" + 
+			"    `mrp1`,\n" + 
+			"    `mrp2`,\n" + 
+			"    `mrp3`,\n" + 
+			"    m_sp_flavour_conf.del_status,\n" + 
+			"    m_sp_flavour.spf_name  AS ex_var1,\n" + 
+			"    `ex_int1`\n" + 
+			"FROM\n" + 
+			"    `m_sp_flavour_conf`,\n" + 
+			"    m_sp_flavour\n" + 
+			"  \n" + 
+			"WHERE\n" + 
+			"    m_sp_flavour_conf.sp_id =:spId AND m_sp_flavour_conf.spf_id = m_sp_flavour.spf_id  ",nativeQuery=true)
+	List<FlavourConf> getSpBySingleSpId(@Param("spId")  int spId);
+	
+	
+	
 	
 	
 }

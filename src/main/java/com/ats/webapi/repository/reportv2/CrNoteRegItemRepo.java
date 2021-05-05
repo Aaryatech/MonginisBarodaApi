@@ -44,7 +44,7 @@ public interface CrNoteRegItemRepo extends JpaRepository<CrNoteRegItem, Integer>
 			@Param("toDate") String toDate);
 
 	@Query(value = "SELECT\n" + 
-			"   'NA' AS fr_state, 0 AS is_same_state,     t_credit_note_header.crn_id,\n" + 
+			"   m_franchise_sup.fr_state AS fr_state, m_franchisee.is_same_state AS is_same_state,     t_credit_note_header.crn_id,\n" + 
 			"        t_credit_note_header.crn_date,\n" + 
 			"        t_bill_header.invoice_no,\n" + 
 			"        t_credit_note_details.crnd_id ,\n" + 

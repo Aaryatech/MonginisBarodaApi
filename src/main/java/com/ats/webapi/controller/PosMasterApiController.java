@@ -12,14 +12,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.Customer;
+import com.ats.webapi.model.CustomerForOps;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.repo.CustomerRepo;
+import com.ats.webapi.repository.CustomerForOpsRepo;
 
 @RestController
 public class PosMasterApiController {
 	
 	@Autowired
 	CustomerRepo customerRepo;
+	
+	@Autowired
+	CustomerForOpsRepo custOpsRepo;
 
 	@RequestMapping(value = { "/saveCustomer" }, method = RequestMethod.POST)
 	public @ResponseBody Customer saveCustomer(@RequestBody Customer service) {
@@ -66,6 +71,20 @@ public class PosMasterApiController {
 			servc = customerRepo.findByCustIdAndDelStatus(custId, 0);
 		} catch (Exception e) {
 			System.err.println("Exce in getServiceById" + e.getMessage());
+		}
+		return servc;
+	}
+	
+	
+	
+	
+	@RequestMapping(value = { "/getCustomerByCustIdNew" }, method = RequestMethod.POST)
+	public @ResponseBody CustomerForOps getCustomerByCustIdNew(@RequestParam int custId) {
+		CustomerForOps servc = new CustomerForOps();
+		try {
+			servc = custOpsRepo.getCustById(custId, 0);
+		} catch (Exception e) {
+			System.err.println("Exce in getCustomerByCustIdNew" + e.getMessage());
 		}
 		return servc;
 	}

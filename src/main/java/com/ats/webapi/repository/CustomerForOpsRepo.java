@@ -22,5 +22,8 @@ public interface CustomerForOpsRepo extends JpaRepository<CustomerForOps, Intege
 	List<CustomerForOps>	findByPhoneNumberFridAndDelStatus(@Param("phoneNo")String phoneNo,@Param("i") int i,@Param("frId") int frId );
 	
 	
+	@Query(value="SELECT * FROM  m_customer1 WHERE cust_id=:custId AND del_status=:i",nativeQuery=true)
+	CustomerForOps getCustById(@Param("custId")int custId,@Param("i") int i);
+	
 
 }

@@ -316,6 +316,22 @@ public class PettyCashApiController {
 
 	}
 	
+	@RequestMapping(value="/getCountOfEmpByFrid",method=RequestMethod.POST)
+	public @ResponseBody int getCountOfEmpByFrid(@RequestParam int frId) {
+		int res=0;
+		try {
+			res=frEmpRepo.getCountOfEmpByFrid(frId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception In /getCountOfEmpByFrid");
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = { "/getAllFrEmp" }, method = RequestMethod.POST)
 	public List<FrEmpMaster> getAllFrEmp(@RequestParam int frId) {
 		List<FrEmpMaster> list = new ArrayList<FrEmpMaster>();

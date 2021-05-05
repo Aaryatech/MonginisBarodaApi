@@ -1062,6 +1062,7 @@ public class MasterController {
 				@ResponseBody
 				public List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(
 						@RequestParam String spDeliveryDt,@RequestParam int  frId,@RequestParam List<String> catId) {
+					System.err.println("Hit /getRegSpCakeOrderHistory");
 					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId,catId);
 					return regSpCakeOrder;
 				}
