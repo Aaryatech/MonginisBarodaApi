@@ -77,6 +77,10 @@ public class ScheduleTask {
 	
 	@Autowired
 	GetMenuShowRepo getMenuShowRepo;
+	
+	
+	@Autowired
+	FranchiseeRepository franRepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -623,4 +627,375 @@ public class ScheduleTask {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	//Akhilesg Cron Job For FDA Lic Exp FR Email
+	
+	/*@Scheduled(cron = "0/20 * * * * ?")*/
+	public void scheduleSendMailToFrExpFdaLic() {
+System.err.println("In FDA Cron");
+		try {
+			
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			Date date=new Date();
+			 Calendar c = Calendar.getInstance();
+		     c.setTime(date);
+		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     Date currentDatePlusOne = c.getTime();
+			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
+				List<Franchisee> resp=new ArrayList<>();
+			
+				resp=franRepo.getExpFdaLicenceDate(sdf.format(date),sdf.format(currentDatePlusOne));
+			
+			
+			
+			
+			
+			
+
+				//List<GetMenuShow> menuList = getMenuShowRepo.getMenuListData();
+
+				String senderEmail = "atsinfosoft@gmail.com";
+				String senderPassword = "atsinfosoft#123";
+				String mailSubject = null;
+				String userName = null;
+				String frEmail = null;
+				String emailContent = null;
+				int srno = 0;
+
+				
+					for (int i = 0; i < resp.size(); i++) {
+						
+						
+						// System.err.println("OtherSpItemDtl================"+spItmList);
+
+						int flag = 0;
+
+						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
+								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
+								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
+								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
+								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
+								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
+								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
+								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
+								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
+								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
+						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
+								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
+								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
+								+ "					<th>Amount</th>\n" + "				</tr>\n"
+								+ "			</thead>\n" + "			<tbody>";
+
+						
+
+								mailSubject = "FDA License Expier : ";
+								frEmail = resp.get(i).getFrEmail();
+								flag = 1;
+								srno = srno + 1;
+
+								emailContent += "Please Update FDA License";
+
+							}
+						
+						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+
+					
+							System.err.println("fr  Email: "+ frEmail);
+							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+									mailSubject, userName, emailContent);
+						
+
+					// Franchise End
+	
+
+			
+		} catch (Exception e) {
+			System.err.println("Exception : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	/*@Scheduled(cron = "0/20 * * * * ?")*/
+	public void scheduleSendMailToFrExpAgree() {
+System.err.println("In Agreement Cron");
+		try {
+			
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			Date date=new Date();
+			 Calendar c = Calendar.getInstance();
+		     c.setTime(date);
+		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     Date currentDatePlusOne = c.getTime();
+			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
+				List<Franchisee> resp=new ArrayList<>();
+			
+				resp=franRepo.getExpAgreementDate(sdf.format(date),sdf.format(currentDatePlusOne));
+			
+			
+			
+			
+			
+			
+
+				//List<GetMenuShow> menuList = getMenuShowRepo.getMenuListData();
+
+				String senderEmail = "atsinfosoft@gmail.com";
+				String senderPassword = "atsinfosoft#123";
+				String mailSubject = null;
+				String userName = null;
+				String frEmail = null;
+				String emailContent = null;
+				int srno = 0;
+
+				
+					for (int i = 0; i < resp.size(); i++) {
+						
+						
+						// System.err.println("OtherSpItemDtl================"+spItmList);
+
+						int flag = 0;
+
+						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
+								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
+								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
+								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
+								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
+								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
+								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
+								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
+								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
+								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
+						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
+								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
+								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
+								+ "					<th>Amount</th>\n" + "				</tr>\n"
+								+ "			</thead>\n" + "			<tbody>";
+
+						
+
+								mailSubject = "Agreement Expieres : ";
+								frEmail = resp.get(i).getFrEmail();
+								flag = 1;
+								srno = srno + 1;
+
+								emailContent += "Please Update Agreement";
+
+							}
+						
+						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+
+					
+							System.err.println("fr  Email: "+ frEmail);
+							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+									mailSubject, userName, emailContent);
+						
+
+					// Franchise End
+	
+
+			
+		} catch (Exception e) {
+			System.err.println("Exception : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	/*@Scheduled(cron = "0/20 * * * * ?")*/
+	public void scheduleSendMailToFrBirthdayWish() {
+System.err.println("In Birthday Cron");
+		try {
+			
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			Date date=new Date();
+			 Calendar c = Calendar.getInstance();
+		     c.setTime(date);
+		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     Date currentDatePlusOne = c.getTime();
+			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
+				List<Franchisee> resp=new ArrayList<>();
+			
+				resp=franRepo.getOwnerBirthDate(sdf.format(currentDatePlusOne));
+			
+			
+			
+			
+			
+			
+
+				//List<GetMenuShow> menuList = getMenuShowRepo.getMenuListData();
+
+				String senderEmail = "atsinfosoft@gmail.com";
+				String senderPassword = "atsinfosoft#123";
+				String mailSubject = null;
+				String userName = null;
+				String frEmail = null;
+				String emailContent = null;
+				int srno = 0;
+
+				
+					for (int i = 0; i < resp.size(); i++) {
+						
+						
+						// System.err.println("OtherSpItemDtl================"+spItmList);
+
+						int flag = 0;
+
+						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
+								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
+								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
+								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
+								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
+								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
+								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
+								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
+								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
+								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
+						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
+								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
+								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
+								+ "					<th>Amount</th>\n" + "				</tr>\n"
+								+ "			</thead>\n" + "			<tbody>";
+
+						
+
+								mailSubject = "Happy Birthday : "+resp.get(i).getFrOwner();
+								frEmail = resp.get(i).getFrEmail();
+								flag = 1;
+								srno = srno + 1;
+
+								emailContent += "Happy Birthday";
+
+							}
+						
+						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+
+					
+							System.err.println("fr  Email: "+ frEmail);
+							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+									mailSubject, userName, emailContent);
+						
+
+					// Franchise End
+	
+
+			
+		} catch (Exception e) {
+			System.err.println("Exception : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	/*@Scheduled(cron = "0/20 * * * * ?")*/
+	public void scheduleSendMailToFrShopOpening() {
+System.err.println("In Shop Opening Cron");
+		try {
+			
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			Date date=new Date();
+			 Calendar c = Calendar.getInstance();
+		     c.setTime(date);
+		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     Date currentDatePlusOne = c.getTime();
+			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
+				List<Franchisee> resp=new ArrayList<>();
+			
+				resp=franRepo.getOwnerBirthDate(sdf.format(currentDatePlusOne));
+			
+			
+			
+			
+			
+			
+
+				//List<GetMenuShow> menuList = getMenuShowRepo.getMenuListData();
+
+				String senderEmail = "atsinfosoft@gmail.com";
+				String senderPassword = "atsinfosoft#123";
+				String mailSubject = null;
+				String userName = null;
+				String frEmail = null;
+				String emailContent = null;
+				int srno = 0;
+
+				
+					for (int i = 0; i < resp.size(); i++) {
+						
+						
+						// System.err.println("OtherSpItemDtl================"+spItmList);
+
+						int flag = 0;
+
+						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
+								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
+								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
+								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
+								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
+								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
+								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
+								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
+								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
+								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
+								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
+								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
+						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
+								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
+								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
+								+ "					<th>Amount</th>\n" + "				</tr>\n"
+								+ "			</thead>\n" + "			<tbody>";
+
+						
+
+								mailSubject = "Shop Opening Birthday : "+resp.get(i).getFrOwner();
+								frEmail = resp.get(i).getFrEmail();
+								flag = 1;
+								srno = srno + 1;
+
+								emailContent += "Happy Birthday";
+
+							}
+						
+						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+
+					
+							System.err.println("fr  Email: "+ frEmail);
+							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+									mailSubject, userName, emailContent);
+						
+
+					// Franchise End
+	
+
+			
+		} catch (Exception e) {
+			System.err.println("Exception : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 }

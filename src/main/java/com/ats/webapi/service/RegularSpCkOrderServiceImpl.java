@@ -164,7 +164,7 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 		List<GetRegSpCakeOrders> regularSpCkOrdersList=null;
 		try {
 			regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistory(spDeliveryDt,frId,catId);
-		
+		System.err.println("Service Resp-->"+regularSpCkOrdersList.toString());
 		}catch (Exception e) {
 			regularSpCkOrdersList=new ArrayList<GetRegSpCakeOrders>();
 			e.printStackTrace();

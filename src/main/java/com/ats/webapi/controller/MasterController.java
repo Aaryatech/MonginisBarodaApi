@@ -1062,8 +1062,9 @@ public class MasterController {
 				@ResponseBody
 				public List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(
 						@RequestParam String spDeliveryDt,@RequestParam int  frId,@RequestParam List<String> catId) {
-					System.err.println("Hit /getRegSpCakeOrderHistory");
+					System.err.println("Hit /getRegSpCakeOrderHistory MENU"+catId+"\t Fr "+frId+"\t Date"+spDeliveryDt);
 					List<GetRegSpCakeOrders> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistory(spDeliveryDt, frId,catId);
+					System.err.println("Api Resp-->"+regSpCakeOrder.toString());
 					return regSpCakeOrder;
 				}
 				  public static boolean contains(int[] arr, int item) {

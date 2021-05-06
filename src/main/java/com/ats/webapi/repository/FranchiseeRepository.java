@@ -69,6 +69,26 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		
 		
 		
+		//Akhilesh 2021-05-05  
+				@Query(value="SELECT * FROM m_franchisee WHERE fba_license_date BETWEEN :Cdate AND :Tdate AND del_status=0",nativeQuery=true)
+						List<Franchisee> getExpFdaLicenceDate(@Param("Cdate") String Cdate,@Param("Tdate") String Tdate);
+				
+				//Akhilesh 2021-05-05  
+				@Query(value="SELECT * FROM m_franchisee WHERE fr_agreement_date BETWEEN :Cdate AND :Tdate AND del_status=0",nativeQuery=true)
+						List<Franchisee> getExpAgreementDate(@Param("Cdate") String Cdate,@Param("Tdate") String Tdate);
+				
+				
+				//Akhilesh 2021-05-05  
+				@Query(value="SELECT * FROM m_franchisee WHERE DATE_FORMAT(m_franchisee.owner_birth_date, '%m-%d') = DATE_FORMAT(:Cdate, '%m-%d') AND del_status=0",nativeQuery=true)
+						List<Franchisee> getOwnerBirthDate(@Param("Cdate") String Cdate);
+				
+				
+				//Akhilesh 2021-05-05  
+				@Query(value="SELECT * FROM m_franchisee WHERE DATE_FORMAT(m_franchisee.fr_opening_date, '%m-%d') = DATE_FORMAT(:Cdate, '%m-%d') AND del_status=0",nativeQuery=true)
+						List<Franchisee> getShopOpningDate(@Param("Cdate") String Cdate);
+				
+						 
+		
 		@Query(value="SELECT DISTINCT fr_route_id FROM `m_franchisee` WHERE del_status=0",nativeQuery=true)
 		public List<Integer> getfrRouteIds();
 
