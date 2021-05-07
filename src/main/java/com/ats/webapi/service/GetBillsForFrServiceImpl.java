@@ -118,5 +118,39 @@ public class GetBillsForFrServiceImpl implements GetBillsForFrService  {
 		return billsForFrList;
 	}
 
+	@Override
+	public GetBillsForFrList getBillForFrBetDate(int frId, String fd, String td) {
+		// TODO Auto-generated method stub
+		GetBillsForFrList billsForFrList=new GetBillsForFrList();
+		try {
+		List<GetBillsForFr> getBillForFr=getBillsForFrRepository.getBillForSelectedFrByDate(frId, fd,td);
+		
+		Info info=new Info();
+		
+		if(getBillForFr!=null) {
+		
+			billsForFrList.setGetBillsForFr(getBillForFr);
+			
+			info.setError(false);
+			info.setMessage("bills for Fr received successfully");
+		
+		}
+		
+		else {
+			
+			info.setError(true);
+			info.setMessage("Error !: bills for Fr not received ");
+			
+		}
+		
+		billsForFrList.setInfo(info);
+		}catch (Exception e) {
+			System.out.println("Ex in Getting bIll for Fr Id "+e.getMessage());
+			e.printStackTrace();
+		}
+		return billsForFrList;
+		
+	}
+
 
 }

@@ -38,7 +38,7 @@ public interface ConfigureFrRepository extends JpaRepository<ConfigureFranchisee
 	@Query(value = "SELECT c.* FROM m_fr_configure c WHERE c.is_del=0 AND c.setting_id IN(SELECT menu_id FROM m_fr_menu_configure WHERE is_del=0 AND fr_id=:frId)", nativeQuery = true)
 	public List<ConfigureFranchisee> getAllFrConfByFrId(@Param("frId") int frId);
 	
-	@Query(value = "SELECT c.* FROM m_fr_configure c WHERE c.is_del=0 AND c.cat_id=:catId AND c.setting_id IN(SELECT menu_id FROM m_fr_menu_configure WHERE is_del=0 AND fr_id=:frId)", nativeQuery = true)
+	@Query(value = "SELECT c.* FROM m_fr_configure c WHERE c.is_del=0 AND c.cat_id=:catId AND c.menu_id IN(SELECT menu_id FROM m_fr_menu_configure WHERE is_del=0 AND fr_id=:frId)", nativeQuery = true)
 	public List<ConfigureFranchisee> getAllFrConfByFrIdAndCat(@Param("frId") int frId,@Param("catId") int catId);
 
 	//sac 02-03-2021

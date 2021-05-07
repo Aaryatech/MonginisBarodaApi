@@ -1,6 +1,9 @@
 package com.ats.webapi.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.commons.Common;
 import com.ats.webapi.model.AllFrIdName;
 import com.ats.webapi.model.AllFrIdNameList;
 import com.ats.webapi.model.AllMenuJsonResponse;
@@ -23,6 +27,8 @@ import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Flavour;
 import com.ats.webapi.model.FlavourConf;
 import com.ats.webapi.model.FlavourList;
+import com.ats.webapi.model.GetBillDetails;
+import com.ats.webapi.model.GetBillsForFrList;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.ItemForMOrder;
@@ -34,11 +40,13 @@ import com.ats.webapi.repository.ConfiSpCodeRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
+import com.ats.webapi.repository.GetBillDetailsRepository;
 import com.ats.webapi.repository.ItemForMOrderRepository;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
 import com.ats.webapi.repository.NewSettingRepository;
 import com.ats.webapi.repository.OrderRepository;
+import com.ats.webapi.service.GetBillsForFrService;
 
 @RestController
 public class SachinWorkControl {
@@ -357,4 +365,108 @@ public class SachinWorkControl {
 			
 		}
 		
+		//SAC 05-05-2021
+		@Autowired
+		GetBillDetailsRepository getBillDetailsRepository;
+		@RequestMapping(value = "/getGrnItemsByExpiryDate", method = RequestMethod.POST)
+		public @ResponseBody List<GetBillDetails> getGrnItemsByExpiryDate(@RequestParam("frId") int frId,
+				@RequestParam("expiryDate") String expiryDate) {
+			List<GetBillDetails> getBillDetailsrList = null;
+			try {
+
+				getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpiryDate(frId, expiryDate);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			return getBillDetailsrList;
+		}
+
+		@RequestMapping(value = "/getGrnItemsByIds", method = RequestMethod.POST)
+		public @ResponseBody List<GetBillDetails> getGrnItemsByIds(@RequestParam("frId") int frId,
+				@RequestParam("ids") List<Integer> idList) {
+			List<GetBillDetails> getBillDetailsrList = null;
+			try {
+
+				getBillDetailsrList = getBillDetailsRepository.getGrnItemsByIds(frId, idList);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			return getBillDetailsrList;
+		}
+		
+		
+		
+		@RequestMapping(value = "/getGrnItemsByExpDateAndItems", method = RequestMethod.POST)
+		public @ResponseBody List<GetBillDetails> getGrnItemsByExpDateAndItems(@RequestParam("frId") int frId,
+				@RequestParam("expiryDate") String expiryDate,@RequestParam("ids") List<Integer> idList,
+				@RequestParam("catId") int catId) {
+			List<GetBillDetails> getBillDetailsrList = new ArrayList<GetBillDetails>();
+			try {
+				if(catId<1)
+				getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpDateAndItems(frId, expiryDate,idList);
+				else
+					getBillDetailsrList = getBillDetailsRepository.getGrnItemsByExpDateAndCatId(frId, expiryDate, catId);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			return getBillDetailsrList;
+		}
+		
+		
+		@Autowired
+		GetBillsForFrService getBillsForFrService;
+
+		
+		@RequestMapping(value = "/getBillsForFrBetDate", method = RequestMethod.POST)
+		public @ResponseBody GetBillsForFrList getBillsForFrService(@RequestParam("frId") int frId,
+				@RequestParam("fd") String fd,@RequestParam("td") String td,
+				@RequestParam("x") int x) {
+			GetBillsForFrList billsForFrLisr=null;
+			try {
+			if(x==1) {	
+			NewSetting sett=new NewSetting();
+			
+			java.util.Date cDate = new java.util.Date();
+			String curDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
+			
+			sett=newSettRepo.findBySettingKeyAndDelStatus("GVN_DATE_DIFF_DAYS", 0);
+			
+			String backDays = incrementDate(curDate, -Integer.parseInt(sett.getSettingValue1()));
+			
+			java.sql.Date cDate1 = Common.convertToSqlDate(curDate);
+			java.sql.Date back15Date = Common.convertToSqlDate(backDays);
+
+			  billsForFrLisr = getBillsForFrService.getBillForFr(frId, back15Date, cDate1);
+			}else {
+				  billsForFrLisr = getBillsForFrService.getBillForFrBetDate(frId, fd, td);
+				
+			}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return billsForFrLisr;
+		}
+		
+		public String incrementDate(String date, int day) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			Calendar c = Calendar.getInstance();
+			try {
+				c.setTime(sdf.parse(date));
+
+			} catch (ParseException e) {
+				System.out.println("Exception while incrementing date " + e.getMessage());
+				e.printStackTrace();
+			}
+			c.add(Calendar.DATE, day); // number of days to add
+			date = sdf.format(c.getTime());
+			return date;
+
+		}
 }

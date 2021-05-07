@@ -426,7 +426,7 @@ FlavourConfRepository flavourConfRepository;
 			
 			System.err.println("order " +order);
 		}catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	
 		try {
@@ -438,16 +438,21 @@ FlavourConfRepository flavourConfRepository;
 				orederNo=0;
 			}
 			if(orederNo>0) {
-				
+				info.setError(false);
+				info.setMessage("Special Cake Order Placed Successfully");
 				int	updateResponse = frSetRepo.updateFrSettingSpNo(frid);
-				
+				try {
 				flag=enquiryRepo.updateAddToProdFlag(enqId, String.valueOf(orederNo));
-				if(flag>0) {
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.err.println("flag " +flag);
+				if(flag>-1) {
 					info.setError(false);
-					info.setMessage("Special Cake Order Placed Successfully");
+					info.setMessage("Special Cake Order Placed Successfully Enq Updated");
 				}else {
 					info.setError(true);
-					info.setMessage("Ubable To Place Special Cake Order");
+					info.setMessage("Order Placed. Ubable To Update Enq");
 				}
 				
 				
@@ -459,7 +464,9 @@ FlavourConfRepository flavourConfRepository;
 					}
 				}
 				
-				
+			}else {
+				info.setError(true);
+				info.setMessage("Failed to Place Special Cake Order");
 			}
 			
 			

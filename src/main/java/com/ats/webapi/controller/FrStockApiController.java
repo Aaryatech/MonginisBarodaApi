@@ -159,6 +159,7 @@ public class FrStockApiController {
 
 						detailList.get(i).setItemName(itemName);
 						detailList.get(i).setItemCode(itemCode);
+						break;
 
 					}
 
@@ -261,6 +262,7 @@ public class FrStockApiController {
 			System.err.println("*****************ITEM ID******************" + itemId + "frId" + frId + "currentMonth"
 					+ currentMonth + "year" + year + "catId" + catId + "strFirstDay" + strFirstDay + "fromDateTime"
 					+ fromDateTime);
+			System.err.println("fr"+frId+"month"+ calMonth+"year"+calYear+"ItemId"+itemId+"catId"+catId);
 			postFrItemStockDetail = getItemStockService.getOpeningStock(frId, calMonth, calYear, itemId, catId);
 
 			int regOpStock = postFrItemStockDetail.getRegOpeningStock();
