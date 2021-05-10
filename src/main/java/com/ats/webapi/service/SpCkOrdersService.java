@@ -17,5 +17,7 @@ public interface SpCkOrdersService {
 
 	public List<GetSpCkOrder> getSpCkOrder(List<String> spOrderNo);
 	
-
+	public List<SpCakeOrdersBean> findSpCakeList(List<Integer> spMenuId,List<Integer> frId,String fromdDate,String todDate);
+	
+	public List<SpCakeOrdersBean> findSpCakeOrderAllFr1(List<Integer> spMenuId,String fromdDate,String todDate);
 }

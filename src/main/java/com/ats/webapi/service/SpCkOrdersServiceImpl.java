@@ -44,6 +44,18 @@ public class SpCkOrdersServiceImpl implements SpCkOrdersService {
 		return spCakeOrders;
 	}
 
+		@Override
+	public List<SpCakeOrdersBean> findSpCakeList(List<Integer> spMenuId,List<Integer> frId, String fromDate,String toDate) {
+		List<SpCakeOrdersBean> spCakeOrders=null;
+		try {
+			spCakeOrders=spCakeOrdersRepository.FindAllSpCakeList(spMenuId,frId, fromDate,toDate);
+					
+		
+		}catch (Exception e) {
+			System.out.println("inside sp cake order service impl ex"+e.getMessage());
+		}
+		return spCakeOrders;
+	}
 
 	@Override
 	public List<SpCakeOrdersBean> findSpCakeOrderAllFr(List<Integer> spMenuId,String prodDate) {
@@ -51,6 +63,22 @@ public class SpCkOrdersServiceImpl implements SpCkOrdersService {
 		List<SpCakeOrdersBean> spCakeOrders=null;
 		try {
 			spCakeOrders=spCakeOrdersRepository.FindAllSpCakeOrderAllFr(spMenuId,prodDate);
+					
+		
+		}catch (Exception e) {
+			System.out.println("inside sp cake order service impl ex"+e.getMessage());
+		}
+		return spCakeOrders;
+		
+		
+	}
+	
+		@Override
+	public List<SpCakeOrdersBean> findSpCakeOrderAllFr1(List<Integer> spMenuId,String fromDate,String toDate) {
+		
+		List<SpCakeOrdersBean> spCakeOrders=null;
+		try {
+			spCakeOrders=spCakeOrdersRepository.FindAllSpCakeOrderAllFr1(spMenuId,fromDate,toDate);
 					
 		
 		}catch (Exception e) {
