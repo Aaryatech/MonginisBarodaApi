@@ -51,6 +51,7 @@ import com.ats.webapi.model.GetFrMenuConfigure;
 import com.ats.webapi.model.GetItemSup;
 import com.ats.webapi.model.GetMenuShow;
 import com.ats.webapi.model.GetRegSpCakeOrders;
+import com.ats.webapi.model.GetRegSpCakeOrdersNew;
 import com.ats.webapi.model.GetSpCkSupplement;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
@@ -1075,6 +1076,23 @@ public class MasterController {
 				      }
 				      return false;
 				   }
+				  
+				  
+				  @RequestMapping(value = { "/getRegSpCakeOrderHistoryNew" }, method = RequestMethod.POST)
+					@ResponseBody
+					public List<GetRegSpCakeOrdersNew> getRegSpCakeOrderHistoryNew(
+							@RequestParam String spDeliveryDt,@RequestParam int  frId,@RequestParam List<String> catId) {
+						System.err.println("Hit /getRegSpCakeOrderHistory MENU"+catId+"\t Fr "+frId+"\t Date"+spDeliveryDt);
+						List<GetRegSpCakeOrdersNew> regSpCakeOrder = regularSpCkOrderService.getRegSpCakeOrderHistoryNew(spDeliveryDt, frId,catId);
+						System.err.println("Api Resp-->"+regSpCakeOrder.toString());
+						return regSpCakeOrder;
+					}
+					  
+				  
+				  
+				  
+				  
+				  
 				@RequestMapping(value = "/updateConfiguredItems", method = RequestMethod.POST)
 				public @ResponseBody Info updateConfiguredItems(@RequestParam List<String> frIdList,@RequestParam int menuId,@RequestParam List<String> itemIdList,@RequestParam int catId)
 				{

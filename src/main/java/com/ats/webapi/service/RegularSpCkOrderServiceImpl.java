@@ -12,11 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.GetRegSpCakeOrders;
+import com.ats.webapi.model.GetRegSpCakeOrdersNew;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.RegSpCkOrderResponse;
 import com.ats.webapi.model.RegularSpCake;
 import com.ats.webapi.model.RegularSpCkOrders;
 import com.ats.webapi.repository.GetRegSpCakeOrdersRepository;
+import com.ats.webapi.repository.GetRegSpCakeOrdersRepositoryNew;
 import com.ats.webapi.repository.RegularCkOrderDelRepository;
 import com.ats.webapi.repository.RegularSpCkOrderAdminRepo;
 import com.ats.webapi.repository.RegularSpCkOrderRepository;
@@ -32,6 +34,9 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 	
 	@Autowired
 	GetRegSpCakeOrdersRepository getRegSpCakeOrdersRepository;
+	
+	@Autowired
+	GetRegSpCakeOrdersRepositoryNew getRegSpCakeOrdersRepositoryNew;
 	
 	@Autowired
 	RegularCkOrderDelRepository regularCkOrderDelRepository;
@@ -163,7 +168,15 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 		System.err.println("In getRegSpCakeOrderHistory Of ServImpl");
 		List<GetRegSpCakeOrders> regularSpCkOrdersList=null;
 		try {
-			regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistory(spDeliveryDt,frId,catId);
+			if(catId.get(0).contains("-1")) {
+				System.err.println("In If");
+				regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistoryAllMEnu(spDeliveryDt, frId);	
+			}else {
+				System.err.println("In Else");
+				regularSpCkOrdersList=getRegSpCakeOrdersRepository.findRegularCakeOrderHistory(spDeliveryDt,frId,catId);
+			}
+			
+			
 		System.err.println("Service Resp-->"+regularSpCkOrdersList.toString());
 		}catch (Exception e) {
 			regularSpCkOrdersList=new ArrayList<GetRegSpCakeOrders>();
@@ -172,5 +185,35 @@ public class RegularSpCkOrderServiceImpl implements RegularSpCkOrderService{
 		
 		return regularSpCkOrdersList;
 	}
+	
+	
+	
+	
+	@Override
+	public List<GetRegSpCakeOrdersNew> getRegSpCakeOrderHistoryNew(String spDeliveryDt, int frId,List<String> catId) {
+		System.err.println("In getRegSpCakeOrderHistory Of ServImpl");
+		List<GetRegSpCakeOrdersNew> regularSpCkOrdersList=null;
+		try {
+			if(catId.get(0).contains("-1")) {
+				System.err.println("In If");
+				regularSpCkOrdersList=getRegSpCakeOrdersRepositoryNew.findRegularCakeOrderHistoryAllMEnu(spDeliveryDt, frId);	
+			}else {
+				System.err.println("In Else");
+				regularSpCkOrdersList=getRegSpCakeOrdersRepositoryNew.findRegularCakeOrderHistory(spDeliveryDt,frId,catId);
+			}
+			
+			
+		System.err.println("Service Resp-->"+regularSpCkOrdersList.toString());
+		}catch (Exception e) {
+			regularSpCkOrdersList=new ArrayList<GetRegSpCakeOrdersNew>();
+			e.printStackTrace();
+		}
+		
+		return regularSpCkOrdersList;
+	}
+	
+	
+	
+	
 
 }

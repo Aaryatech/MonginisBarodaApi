@@ -8,6 +8,7 @@ import com.ats.webapi.model.SpCakeOrderRes;
 import com.ats.webapi.model.SpCakeOrders;
 import com.ats.webapi.model.SpCakeOrdersList;
 import com.ats.webapi.model.SpCkOrderHisList;
+import com.ats.webapi.model.SpCkOrderHisListNew;
 
 public interface SpCakeOrdersService {
 
@@ -15,6 +16,8 @@ public interface SpCakeOrdersService {
 	//public List<SpCakeOrders> findSpCakeOrder(List<Integer> frCode,Date prodDate);
 	public List<SpCakeOrders> findSpCakeOrder(List<Integer> frId,Date prodDate);// changed para Integer to String
 	SpCkOrderHisList searchOrderHistory( List<String> menuList, String spDeliveryDt,String frCode);
+	
+	SpCkOrderHisListNew searchOrderHistoryNEW( List<String> menuList, String spDeliveryDt,String frCode);
 	
 	int findCountOfSlotUsedByProduDate(String sqlSpProduDate);
 	

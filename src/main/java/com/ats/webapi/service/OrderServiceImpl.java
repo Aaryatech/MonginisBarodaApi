@@ -11,12 +11,15 @@ import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.AllFrIdName;
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.ItemOrderHis;
+import com.ats.webapi.model.ItemOrderHisNew;
 import com.ats.webapi.model.ItemOrderList;
+import com.ats.webapi.model.ItemOrderListNew;
 import com.ats.webapi.model.OrderDelete;
 import com.ats.webapi.model.Orders;
 import com.ats.webapi.repository.AllFrIdNameRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.ItemOrderHisRepository;
+import com.ats.webapi.repository.ItemOrderHisRepositoryNew;
 import com.ats.webapi.repository.OrderDeleteRepository;
 import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.OrdersRepository;
@@ -31,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	ItemOrderHisRepository itemOrderHisRepository;
+	
+	@Autowired
+	ItemOrderHisRepositoryNew itemOrderHisRepositoryNew;
 
 	@Autowired
 	AllFrIdNameRepository allFrIdNameRepository;
@@ -143,6 +149,54 @@ public class OrderServiceImpl implements OrderService {
 
 		} catch (Exception e) {
 			itemOrderList = new ItemOrderList();
+			errorMessage = new ErrorMessage();
+
+			errorMessage.setError(true);
+			errorMessage.setMessage("Orders Not Found(EXC)");
+
+			itemOrderList.setErrorMessage(errorMessage);
+		}
+		return itemOrderList;
+	}
+	
+	
+	
+	
+	@Override
+	public ItemOrderListNew searchOrderHistoryNew(List<String> catId, Date deliveryDate, int frId) {
+		List<ItemOrderHisNew> orderList = null;
+		ErrorMessage errorMessage;
+		ItemOrderListNew itemOrderList;
+		try {
+			
+			if(catId.contains("-1")) {
+				orderList = itemOrderHisRepositoryNew.findByMenuIdInAndDeliveryDateAll(deliveryDate, frId);
+
+			}else {
+			orderList = itemOrderHisRepositoryNew.findByMenuIdInAndDeliveryDate(catId, deliveryDate, frId);
+			}
+			if (orderList == null) {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderListNew();
+
+				errorMessage.setError(true);
+				errorMessage.setMessage("Orders Not Found");
+
+				itemOrderList.setErrorMessage(errorMessage);
+			} else {
+				errorMessage = new ErrorMessage();
+				itemOrderList = new ItemOrderListNew();
+
+				errorMessage.setError(false);
+				errorMessage.setMessage("Orders found Successfully");
+
+				itemOrderList.setItemOrderList(orderList);
+				itemOrderList.setErrorMessage(errorMessage);
+
+			}
+
+		} catch (Exception e) {
+			itemOrderList = new ItemOrderListNew();
 			errorMessage = new ErrorMessage();
 
 			errorMessage.setError(true);

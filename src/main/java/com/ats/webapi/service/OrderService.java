@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.repository.query.Param;
 
 import com.ats.webapi.model.ItemOrderList;
+import com.ats.webapi.model.ItemOrderListNew;
 import com.ats.webapi.model.Orders;
 
 public interface OrderService {
@@ -13,6 +14,9 @@ public interface OrderService {
 	List<Orders> placeOrder(List<Orders> list);
 
 	ItemOrderList searchOrderHistory(List<String> catId, Date deliveryDate, int frId);
+	
+	ItemOrderListNew searchOrderHistoryNew(List<String> catId, Date deliveryDate, int frId);
+	
 
 	ItemOrderList searchAdvOrderHistory(int advHeadId, Date deliveryDate, int frId);
 

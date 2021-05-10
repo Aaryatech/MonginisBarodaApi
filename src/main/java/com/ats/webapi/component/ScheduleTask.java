@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ats.webapi.commons.ApiConstants;
 import com.ats.webapi.commons.Common;
 import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
@@ -30,6 +31,7 @@ import com.ats.webapi.model.Info;
 import com.ats.webapi.model.SellBillHeader;
 import com.ats.webapi.model.Setting;
 import com.ats.webapi.model.ShopAnivData;
+import com.ats.webapi.model.bill.Company;
 import com.ats.webapi.model.otheritemstock.OtherSpItemDtl;
 import com.ats.webapi.model.pettycash.GetCashAdvAndExpAmt;
 import com.ats.webapi.model.pettycash.PettyCashManagmt;
@@ -49,6 +51,7 @@ import com.ats.webapi.repo.posdashboard.BillTransactionDetailDashCountRepo;
 import com.ats.webapi.repo.posdashboard.CreaditAmtDashRepo;
 import com.ats.webapi.repo.posdashboard.DashAdvanceOrderCountsRepo;
 import com.ats.webapi.repo.posdashboard.SellBillHeaderDashCountsRepo;
+import com.ats.webapi.repository.CompanyRepository;
 import com.ats.webapi.repository.FrAniversaryRepository;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.FranchiseeRepository;
@@ -81,6 +84,9 @@ public class ScheduleTask {
 	
 	@Autowired
 	FranchiseeRepository franRepo;
+	
+	@Autowired
+	CompanyRepository companyRepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -631,7 +637,7 @@ public class ScheduleTask {
 	
 	//Akhilesg Cron Job For FDA Lic Exp FR Email
 	
-	/*@Scheduled(cron = "0/20 * * * * ?")*/
+/*	@Scheduled(cron = "0/20 * * * * ?")*/
 	public void scheduleSendMailToFrExpFdaLic() {
 System.err.println("In FDA Cron");
 		try {
@@ -647,7 +653,7 @@ System.err.println("In FDA Cron");
 			
 				resp=franRepo.getExpFdaLicenceDate(sdf.format(date),sdf.format(currentDatePlusOne));
 			
-			
+				Company companyInfo =companyRepo.findOne(1);
 			
 			
 			
@@ -664,46 +670,203 @@ System.err.println("In FDA Cron");
 				int srno = 0;
 
 				
-					for (int i = 0; i < resp.size(); i++) {
+				if(resp.size()>0) {
+					
+					
+					
+					
+for (int i = 0; i < resp.size(); i++) {
 						
-						
+
 						// System.err.println("OtherSpItemDtl================"+spItmList);
 
 						int flag = 0;
 
-						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
-								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
-								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
-								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
-								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
-								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
-								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
-								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
-								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
-								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
-						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
-								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
-								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
-								+ "					<th>Amount</th>\n" + "				</tr>\n"
-								+ "			</thead>\n" + "			<tbody>";
+						emailContent="<!doctype html>\n" + 
+								"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" + 
+								
+								"<head>\n" + 
+								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" + 
+								"<title>:: Monginis ::</title>\n" + 
+								"</head>\n" + 
+								"<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"\n" + 
+								"	yahoo=\"fix\"\n" + 
+								"	style=\"font-family: Arial, sans-serif; background: #e3ebef;\">\n" + 
+								"	\n" + 
+								"		<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n" + 
+								"		align=\"center\" style=\"margin-top: 10px; margin-bottom: 10px;\">\n" + 
+								"		<tr>\n" + 
+								"			\n" + 
+								"				<td width=\"100%\" valign=\"top\" bgcolor=\"#e3ebef\">\n" + 
+								"				\n" + 
+								"					<table width=\"700\" id=\"tborder\" class=\"deviceWidth\"\n" + 
+								"					bgcolor=\"#f5f5f5\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"					style=\"position: relative; border: 2px solid #d8e0e4;\">\n" + 
+								"					\n" + 
+								"					<tr>\n" + 
+								"					\n" + 
+								"						<td cellspacing=\"0\" cellpadding=\"0\" style=\"padding: 0;\">\n" + 
+								"							\n" + 
+								"							<table\n" + 
+								"								width=\"100%\" id=\"\" class=\"\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"								align=\"center\" background=\"#000\" border=\"0\" style=\"padding: 0;\">\n" + 
+								"								\n" + 
+								"								<tr>\n" + 
+								"									<td align=\"center\" style=\"background: #FFF;\"><img\n" + 
+								"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/logo.png\" alt=\"logo\"\n" + 
+								"										style=\"border: none; max-width: 100%; padding: 15px 0; float: none;\">\n" + 
+								"									</td>\n" + 
+								"								</tr>\n" + 
+								"								<tr>\n" + 
+								"									<td style=\"background: #FFF;\"><img\n" + 
+								"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/seprator.jpg\" alt=\"seprator\"\n" + 
+								"										style=\"border: none; max-width: 100%; float: left; padding: 0 0 28px 0;\"></td>\n" + 
+								"								</tr>\n" + 
+								"								<tr>\n" + 
+								"									<td cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"										style=\"position: relative; padding: 0 40px 10px 40px; background: #FFF;\"\n" + 
+								"										border=\"0\">\n" + 
+								"										\n" + 
+								"										\n" + 
+								"										<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"											cellpadding=\"0\" align=\"center\">\n" + 
+								"\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"text-align: center; font-size: 14px; text-transform: uppercase; padding: 0 0 5px 0; color: #ec268f;\"><strong>DEAR "+resp.get(i).getFrOwner()+"</strong></td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"text-align: center; padding: 0 0 0 0; font-size: 14px; line-height: 22px; color: #333333;\">Your Following Document Is Expire Soon Please Renew It,If Already Renewed Please Update In Edit Profile Or Contact Admin</td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												\n" + 
+								"													\n" + 
+								"													\n" + 
+								"													<td style=\"text-align: center;\">\n" + 
+								"																<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"																	cellpadding=\"0\" style=\"border: 1px solid #CCC;\">\n" + 
+								"																	<tr\n" + 
+								"																		style=\"background: #ec268f; color: #FFF; padding: 6px; font-size: 14px;\">\n" + 
+								"																		<th style=\"padding: 8px;\">Sr. No.</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Franchisee Name</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Document Name</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Expiry Date</th>\n" + 
+								"																		\n" + 
+								"																	</tr>\n" + 
+								"																	 <tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">"+i+1+"</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">"+resp.get(i).getFrName()+"\n" + 
+								"																			</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">FDA Licenses</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">"+resp.get(i).getFbaLicenseDate()+"\n" + 
+								"																		</td>\n" + 
+								"																		\n" + 
+								"																	</tr>\n" + 
+								"																	<!-- <tr style=\"font-size: 14px; background: #FFFFFF;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr>\n" + 
+								"																	<tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr> \n" + 
+								"																	<tr style=\"font-size: 14px; background: #FFFFFF;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr>\n" + 
+								"																	<tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr> -->\n" + 
+								"																</table>\n" + 
+								"															</td>\n" + 
+								"													\n" + 
+								"													\n" + 
+								"													\n" + 
+								"											</tr>\n" + 
+								"\n" + 
+								"										</table></td>\n" + 
+								"								</tr>\n" + 
+								"\n" + 
+								"								<tr>\n" + 
+								"									<td cellspacing=\"0\" cellpadding=\"0\" style=\"position: relative;\"\n" + 
+								"										border=\"0\"><table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"											cellpadding=\"0\">\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"line-height: 24px; padding: 10px 40px 40px 40px; color: #262626; text-align: center; font-size: 14px; background: #FFF;\">\n" + 
+								"													\n" + 
+								"												<b>Thank You For Being Part Of Monginis Family!!!</b>	\n" + 
+								"													</td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"background: #edf2f6; font-size: 12px; text-align: center; color: #66696c; padding: 10px 0; line-height: 20px;\">\n" + 
+								"													<!-- isn't that you? <a href=\"#\"\n" + 
+								"													style=\"text-decoration: underline; color: #33358f;\">Unsubscibe\n" + 
+								"														from this email</a> --> <br>"+companyInfo.getCompName()+"<br>"+companyInfo.getFactAddress()+companyInfo.getPhoneNo1()+"\n" + 
+								"												</td>\n" + 
+								"											</tr>\n" + 
+								"								\n" + 
+								"							</table>\n" + 
+								"						\n" + 
+								"						\n" + 
+								"						</td>\n" + 
+								"					\n" + 
+								"					</tr>\n" + 
+								"					\n" + 
+								"					\n" + 
+								"					</table>\n" + 
+								"				\n" + 
+								"			\n" + 
+								"			\n" + 
+								"				</td>\n" + 
+								"		\n" + 
+								"		</tr>\n" + 
+								"		\n" + 
+								"		\n" + 
+								"		\n" + 
+								"		</table>\n" + 
+								"\n" + 
+								"</body>\n" + 
+								"</html>";
 
 						
-
-								mailSubject = "FDA License Expier : ";
-								frEmail = resp.get(i).getFrEmail();
-								flag = 1;
-								srno = srno + 1;
-
-								emailContent += "Please Update FDA License";
-
-							}
 						
-						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
-
+						frEmail=resp.get(i).getFrEmail();
+						mailSubject = "FDA  Expieres : ";
+						
+						flag = 1;
+						srno = srno + 1;
 					
 							System.err.println("fr  Email: "+ frEmail);
 							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
@@ -713,7 +876,17 @@ System.err.println("In FDA Cron");
 					// Franchise End
 	
 
-			
+			}
+					
+					
+					
+					
+				}
+				
+				
+				
+				
+						
 		} catch (Exception e) {
 			System.err.println("Exception : " + e.getMessage());
 			e.printStackTrace();
@@ -739,9 +912,9 @@ System.err.println("In Agreement Cron");
 			
 				resp=franRepo.getExpAgreementDate(sdf.format(date),sdf.format(currentDatePlusOne));
 			
+			System.err.println("resp-->"+resp.toString());
 			
-			
-			
+			Company companyInfo =companyRepo.findOne(1);
 			
 			
 
@@ -763,38 +936,191 @@ System.err.println("In Agreement Cron");
 
 						int flag = 0;
 
-						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
-								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
-								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
-								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
-								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
-								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
-								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
-								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
-								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
-								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
-						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
-								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
-								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
-								+ "					<th>Amount</th>\n" + "				</tr>\n"
-								+ "			</thead>\n" + "			<tbody>";
+						emailContent="<!doctype html>\n" + 
+								"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" + 
+								
+								"<head>\n" + 
+								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" + 
+								"<title>:: Monginis ::</title>\n" + 
+								"</head>\n" + 
+								"<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"\n" + 
+								"	yahoo=\"fix\"\n" + 
+								"	style=\"font-family: Arial, sans-serif; background: #e3ebef;\">\n" + 
+								"	\n" + 
+								"		<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n" + 
+								"		align=\"center\" style=\"margin-top: 10px; margin-bottom: 10px;\">\n" + 
+								"		<tr>\n" + 
+								"			\n" + 
+								"				<td width=\"100%\" valign=\"top\" bgcolor=\"#e3ebef\">\n" + 
+								"				\n" + 
+								"					<table width=\"700\" id=\"tborder\" class=\"deviceWidth\"\n" + 
+								"					bgcolor=\"#f5f5f5\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"					style=\"position: relative; border: 2px solid #d8e0e4;\">\n" + 
+								"					\n" + 
+								"					<tr>\n" + 
+								"					\n" + 
+								"						<td cellspacing=\"0\" cellpadding=\"0\" style=\"padding: 0;\">\n" + 
+								"							\n" + 
+								"							<table\n" + 
+								"								width=\"100%\" id=\"\" class=\"\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"								align=\"center\" background=\"#000\" border=\"0\" style=\"padding: 0;\">\n" + 
+								"								\n" + 
+								"								<tr>\n" + 
+								"									<td align=\"center\" style=\"background: #FFF;\"><img\n" + 
+								"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/logo.png\" alt=\"logo\"\n" + 
+								"										style=\"border: none; max-width: 100%; padding: 15px 0; float: none;\">\n" + 
+								"									</td>\n" + 
+								"								</tr>\n" + 
+								"								<tr>\n" + 
+								"									<td style=\"background: #FFF;\"><img\n" + 
+								"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/seprator.jpg\" alt=\"seprator\"\n" + 
+								"										style=\"border: none; max-width: 100%; float: left; padding: 0 0 28px 0;\"></td>\n" + 
+								"								</tr>\n" + 
+								"								<tr>\n" + 
+								"									<td cellspacing=\"0\" cellpadding=\"0\"\n" + 
+								"										style=\"position: relative; padding: 0 40px 10px 40px; background: #FFF;\"\n" + 
+								"										border=\"0\">\n" + 
+								"										\n" + 
+								"										\n" + 
+								"										<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"											cellpadding=\"0\" align=\"center\">\n" + 
+								"\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"text-align: center; font-size: 14px; text-transform: uppercase; padding: 0 0 5px 0; color: #ec268f;\"><strong>DEAR "+resp.get(i).getFrOwner()+"</strong></td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"text-align: center; padding: 0 0 0 0; font-size: 14px; line-height: 22px; color: #333333;\">Your Following Document Is Expire Soon Please Renew It,If Already Renewed Please Update In Edit Profile Or Contact Admin</td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												\n" + 
+								"													\n" + 
+								"													\n" + 
+								"													<td style=\"text-align: center;\">\n" + 
+								"																<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"																	cellpadding=\"0\" style=\"border: 1px solid #CCC;\">\n" + 
+								"																	<tr\n" + 
+								"																		style=\"background: #ec268f; color: #FFF; padding: 6px; font-size: 14px;\">\n" + 
+								"																		<th style=\"padding: 8px;\">Sr. No.</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Franchisee Name</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Document Name</th>\n" + 
+								"																		<th style=\"padding: 8px;\">Expiry Date</th>\n" + 
+								"																		\n" + 
+								"																	</tr>\n" + 
+								"																	 <tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">"+i+1+"</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">"+resp.get(i).getFrName()+"\n" + 
+								"																			</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">FDA Licenses</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">"+resp.get(i).getFbaLicenseDate()+"\n" + 
+								"																		</td>\n" + 
+								"																		\n" + 
+								"																	</tr>\n" + 
+								"																	<!-- <tr style=\"font-size: 14px; background: #FFFFFF;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr>\n" + 
+								"																	<tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr> \n" + 
+								"																	<tr style=\"font-size: 14px; background: #FFFFFF;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr>\n" + 
+								"																	<tr style=\"font-size: 14px; background: #f5f5f5;\">\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\">01</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Akhilesh\n" + 
+								"																			Dani</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">akhilesh@gmail.com</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: left;\">Ashoka\n" + 
+								"																			Marg, Nashik</td>\n" + 
+								"																		<td style=\"padding: 8px; text-align: center;\"><a\n" + 
+								"																			href=\"#\"\n" + 
+								"																			style=\"text-decoration: none; color: #3a3c8b;\">Edit</a></td>\n" + 
+								"																	</tr> -->\n" + 
+								"																</table>\n" + 
+								"															</td>\n" + 
+								"													\n" + 
+								"													\n" + 
+								"													\n" + 
+								"											</tr>\n" + 
+								"\n" + 
+								"										</table></td>\n" + 
+								"								</tr>\n" + 
+								"\n" + 
+								"								<tr>\n" + 
+								"									<td cellspacing=\"0\" cellpadding=\"0\" style=\"position: relative;\"\n" + 
+								"										border=\"0\"><table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+								"											cellpadding=\"0\">\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"line-height: 24px; padding: 10px 40px 40px 40px; color: #262626; text-align: center; font-size: 14px; background: #FFF;\">\n" + 
+								"													\n" + 
+								"												<b>Thank You For Being Part Of Monginis Family!!!</b>	\n" + 
+								"													</td>\n" + 
+								"											</tr>\n" + 
+								"											<tr>\n" + 
+								"												<td\n" + 
+								"													style=\"background: #edf2f6; font-size: 12px; text-align: center; color: #66696c; padding: 10px 0; line-height: 20px;\">\n" + 
+								"													<!-- isn't that you? <a href=\"#\"\n" + 
+								"													style=\"text-decoration: underline; color: #33358f;\">Unsubscibe\n" + 
+								"														from this email</a> --> <br>"+companyInfo.getCompName()+"<br>"+companyInfo.getFactAddress()+companyInfo.getPhoneNo1()+"\n" + 
+								"												</td>\n" + 
+								"											</tr>\n" + 
+								"								\n" + 
+								"							</table>\n" + 
+								"						\n" + 
+								"						\n" + 
+								"						</td>\n" + 
+								"					\n" + 
+								"					</tr>\n" + 
+								"					\n" + 
+								"					\n" + 
+								"					</table>\n" + 
+								"				\n" + 
+								"			\n" + 
+								"			\n" + 
+								"				</td>\n" + 
+								"		\n" + 
+								"		</tr>\n" + 
+								"		\n" + 
+								"		\n" + 
+								"		\n" + 
+								"		</table>\n" + 
+								"\n" + 
+								"</body>\n" + 
+								"</html>";
 
 						
-
-								mailSubject = "Agreement Expieres : ";
-								frEmail = resp.get(i).getFrEmail();
-								flag = 1;
-								srno = srno + 1;
-
-								emailContent += "Please Update Agreement";
-
-							}
 						
-						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
+						frEmail=resp.get(i).getFrEmail();
+						mailSubject = "FDA  Expieres : ";
+						
+						flag = 1;
+						srno = srno + 1;
 
 					
 							System.err.println("fr  Email: "+ frEmail);
@@ -805,7 +1131,7 @@ System.err.println("In Agreement Cron");
 					// Franchise End
 	
 
-			
+					}
 		} catch (Exception e) {
 			System.err.println("Exception : " + e.getMessage());
 			e.printStackTrace();
@@ -825,14 +1151,14 @@ System.err.println("In Birthday Cron");
 			Date date=new Date();
 			 Calendar c = Calendar.getInstance();
 		     c.setTime(date);
-		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     c.add(Calendar.DAY_OF_MONTH, 1);
 		     Date currentDatePlusOne = c.getTime();
 			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
 				List<Franchisee> resp=new ArrayList<>();
 			
 				resp=franRepo.getOwnerBirthDate(sdf.format(currentDatePlusOne));
 			
-			
+				Company companyInfo =companyRepo.findOne(1);
 			
 			
 			
@@ -849,53 +1175,163 @@ System.err.println("In Birthday Cron");
 				int srno = 0;
 
 				
-					for (int i = 0; i < resp.size(); i++) {
-						
-						
-						// System.err.println("OtherSpItemDtl================"+spItmList);
-
-						int flag = 0;
-
-						emailContent = "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<style>\n" + "#customers {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 80%;\n" + "}\n" + "\n" + "h5 {\n"
-								+ "	font-family: Arial, Helvetica, sans-serif;\n" + "	border-collapse: collapse;\n"
-								+ "	width: 78%;\n" + "	border: 1px solid #ddd;\n" + "	padding: 8px;\n"
-								+ "	background-color: #ec268f;\n" + "	color: white;\n" + "	text-align: center;\n"
-								+ "	font-size: 17px;\n" + "}\n" + "\n" + "#customers td, #customers th {\n"
-								+ "	border: 1px solid #ddd;\n" + "	padding: 8px;\n" + "}\n" + "\n"
-								+ "#customers tr:nth-child(even) {\n" + "	background-color: #f2f2f2;\n" + "}\n" + "\n"
-								+ "#customers tr:hover {\n" + "	background-color: #ddd;\n" + "}\n" + "\n"
-								+ "#customers th {\n" + "	padding-top: 12px;\n" + "	padding-bottom: 12px;\n"
-								+ "	text-align: left;\n" + "	background-color: #ec268f;\n" + "	color: white;\n"
-								+ "}\n" + "\n" + ".container {\n" + "	margin-left: 100px;\n" + "	width: 100%;\n"
-								+ "}\n" + "</style>\n" + "</head>\n" + "<body>\n" + "	<div class=\"container\">";
-						emailContent += "<table id=\"customers\">\n" + "			<thead>\n" + "				<tr>\n"
-								+ "					<th>Sr No.</th>\n" + "					<th>Item Name</th>\n"
-								+ "					<th>Flavour</th>\n" + "					<th>Qty.</th>\n"
-								+ "					<th>Amount</th>\n" + "				</tr>\n"
-								+ "			</thead>\n" + "			<tbody>";
-
-						
-
-								mailSubject = "Happy Birthday : "+resp.get(i).getFrOwner();
-								frEmail = resp.get(i).getFrEmail();
-								flag = 1;
-								srno = srno + 1;
-
-								emailContent += "Happy Birthday";
-
-							}
-						
-						emailContent += "</tbody>\n" + "	</table>\n" + "	</div>\n" + "	</body>\n" + "	</html>";
-
+				if(resp.size()>0) {
 					
-							System.err.println("fr  Email: "+ frEmail);
-							Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
-									mailSubject, userName, emailContent);
+					
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+											
+
+											// System.err.println("OtherSpItemDtl================"+spItmList);
+
+											int flag = 0;
+
+											emailContent="<!doctype html>\n" + 
+													"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" + 
+													
+													"<head>\n" + 
+													"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" + 
+													"<title>:: Monginis ::</title>\n" + 
+													"</head>\n" + 
+													"<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"\n" + 
+													"	yahoo=\"fix\"\n" + 
+													"	style=\"font-family: Arial, sans-serif; background: #e3ebef;\">\n" + 
+													"	\n" + 
+													"		<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n" + 
+													"		align=\"center\" style=\"margin-top: 10px; margin-bottom: 10px;\">\n" + 
+													"		<tr>\n" + 
+													"			\n" + 
+													"				<td width=\"100%\" valign=\"top\" bgcolor=\"#e3ebef\">\n" + 
+													"				\n" + 
+													"					<table width=\"700\" id=\"tborder\" class=\"deviceWidth\"\n" + 
+													"					bgcolor=\"#f5f5f5\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+													"					style=\"position: relative; border: 2px solid #d8e0e4;\">\n" + 
+													"					\n" + 
+													"					<tr>\n" + 
+													"					\n" + 
+													"						<td cellspacing=\"0\" cellpadding=\"0\" style=\"padding: 0;\">\n" + 
+													"							\n" + 
+													"							<table\n" + 
+													"								width=\"100%\" id=\"\" class=\"\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+													"								align=\"center\" background=\"#000\" border=\"0\" style=\"padding: 0;\">\n" + 
+													"								\n" + 
+													"								<tr>\n" + 
+													"									<td align=\"center\" style=\"background: #FFF;\"><img\n" + 
+													"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/logo.png\" alt=\"logo\"\n" + 
+													"										style=\"border: none; max-width: 100%; padding: 15px 0; float: none;\">\n" + 
+													"									</td>\n" + 
+													"								</tr>\n" + 
+													"								<tr>\n" + 
+													"									<td style=\"background: #FFF;\"><img\n" + 
+													"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/seprator.jpg\" alt=\"seprator\"\n" + 
+													"										style=\"border: none; max-width: 100%; float: left; padding: 0 0 28px 0;\"></td>\n" + 
+													"								</tr>\n" + 
+													"								<tr>\n" + 
+													"									<td cellspacing=\"0\" cellpadding=\"0\"\n" + 
+													"										style=\"position: relative; padding: 0 40px 10px 40px; background: #FFF;\"\n" + 
+													"										border=\"0\">\n" + 
+													"										\n" + 
+													"										\n" + 
+													"										<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+													"											cellpadding=\"0\" align=\"center\">\n" + 
+													"\n" + 
+													"											<tr>\n" + 
+													"												<td\n" + 
+													"													style=\"text-align: center; font-size: 14px; text-transform: uppercase; padding: 0 0 5px 0; color: #ec268f;\"><strong>HAPPY BIRTHDAY "+resp.get(i).getFrOwner()+"</strong></td>\n" + 
+													"											</tr>\n" + 
+													"											<tr>\n" + 
+													"												<td\n" + 
+													"													style=\"text-align: center; padding: 0 0 0 0; font-size: 14px; line-height: 22px; color: #333333;\">Here\n" + 
+													"													Best wishes to you on your special day, sir. I hope this birthday brings you all the strength needed for a successful year ahead.</td>\n" + 
+													"											</tr>\n" + 
+													"											<tr>\n" + 
+													"												\n" + 
+													"													\n" + 
+													"													\n" + 
+													"													<td style=\"text-align: center;\">\n" + 
+													"																<td style=\"text-align: center; padding: 30px 0 10px 0\"><!-- <a\n" + 
+													"													href=\"#\"\n" + 
+													"													style=\"background: #3a3c8b; padding: 9px 30px; color: #FFF; font-size: 30px; text-transform: uppercase; letter-spacing: 5px; text-decoration: none;\">722948</a> -->\n" + 
+													"													<img\n" + 
+													"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/emailerCake.jpg\" alt=\"logo\"\n" + 
+													"										style=\"border: none; max-width: 50%; padding: 15px 0; float: none;\">\n" + 
+													"													\n" + 
+													"													</td>\n" + 
+													"															</td>\n" + 
+													"													\n" + 
+													"													\n" + 
+													"													\n" + 
+													"											</tr>\n" + 
+													"\n" + 
+													"										</table></td>\n" + 
+													"								</tr>\n" + 
+													"\n" + 
+													"								<tr>\n" + 
+													"									<td cellspacing=\"0\" cellpadding=\"0\" style=\"position: relative;\"\n" + 
+													"										border=\"0\"><table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+													"											cellpadding=\"0\">\n" + 
+													"											<tr>\n" + 
+													"												<td\n" + 
+													"													style=\"line-height: 24px; padding: 10px 40px 40px 40px; color: #262626; text-align: center; font-size: 14px; background: #FFF;\">\n" + 
+													"													\n" + 
+													"												<b>Thank You For Being Part Of Monginis Family!!!</b>	\n" + 
+													"													</td>\n" + 
+													"											</tr>\n" + 
+													"											<tr>\n" + 
+													"												<td\n" + 
+													"													style=\"background: #edf2f6; font-size: 12px; text-align: center; color: #66696c; padding: 10px 0; line-height: 20px;\">\n" + 
+													"													<!-- isn't that you? <a href=\"#\"\n" + 
+													"													style=\"text-decoration: underline; color: #33358f;\">Unsubscibe\n" + 
+													"														from this email</a> --> <br>"+companyInfo.getCompName()+"<br>"+companyInfo.getFactAddress()+companyInfo.getPhoneNo1()+"\n" + 
+													"												</td>\n" + 
+													"											</tr>\n" + 
+													"								\n" + 
+													"							</table>\n" + 
+													"						\n" + 
+													"						\n" + 
+													"						</td>\n" + 
+													"					\n" + 
+													"					</tr>\n" + 
+													"					\n" + 
+													"					\n" + 
+													"					</table>\n" + 
+													"				\n" + 
+													"			\n" + 
+													"			\n" + 
+													"				</td>\n" + 
+													"		\n" + 
+													"		</tr>\n" + 
+													"		\n" + 
+													"		\n" + 
+													"		\n" + 
+													"		</table>\n" + 
+													"\n" + 
+													"</body>\n" + 
+													"</html>";
+
+											
+											
+											frEmail=resp.get(i).getFrEmail();
+											mailSubject = "FDA  Expieres : ";
+											
+											flag = 1;
+											srno = srno + 1;
+										
+												System.err.println("fr  Email: "+ frEmail);
+												Info mailInfo = EmailUtility.sendEmailHtmlContent(senderEmail, senderPassword, frEmail,
+														mailSubject, userName, emailContent);
+											
+
+										// Franchise End
 						
 
-					// Franchise End
+								}
+										
+										
+										
+										
+									}
 	
 
 			
@@ -916,7 +1352,7 @@ System.err.println("In Shop Opening Cron");
 			Date date=new Date();
 			 Calendar c = Calendar.getInstance();
 		     c.setTime(date);
-		     c.add(Calendar.DAY_OF_MONTH, 30);
+		     c.add(Calendar.DAY_OF_MONTH, 1);
 		     Date currentDatePlusOne = c.getTime();
 			System.err.println("Date-->"+sdf.format(currentDatePlusOne)+"\t"+sdf.format(date));
 				List<Franchisee> resp=new ArrayList<>();

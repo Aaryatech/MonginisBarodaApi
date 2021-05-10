@@ -74,7 +74,6 @@ import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.PostBillHeaderRepository;
 import com.ats.webapi.repository.PostFrOpStockDetailRepository;
 import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
-import com.ats.webapi.repository.RegSpCakeOrListRepo;
 import com.ats.webapi.repository.RouteMasterRepository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SellBillDetailRepository;
@@ -2050,6 +2049,19 @@ public class RestApiController {
 		return spCakeOrderList;
 
 	}
+	
+	
+	// Search Special Cake Order History
+	@RequestMapping("/SpCakeOrderHistoryNew")
+	public @ResponseBody SpCkOrderHisListNew searchSpCakeOrderHistoryNew(@RequestParam List<String> catId,
+			@RequestParam String spDeliveryDt, String frCode) {
+
+		SpCkOrderHisListNew spCakeOrderList = spCakeOrdersService.searchOrderHistoryNEW(catId, spDeliveryDt, frCode);
+		return spCakeOrderList;
+
+	}
+	
+	
 
 	@RequestMapping(value = { "/getSpCkOrderByOrderNo" }, method = RequestMethod.POST)
 	@ResponseBody
@@ -2118,6 +2130,25 @@ public class RestApiController {
 		return orderList;
 
 	}
+	
+	
+	// Search Special Cake Order History
+		@RequestMapping("/orderHistoryNew")
+		public @ResponseBody ItemOrderListNew searchOrderHistoryNew(@RequestParam List<String> catId,
+				@RequestParam String deliveryDt, @RequestParam int frId) throws ParseException {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date date = sdf.parse(deliveryDt);
+			java.sql.Date deliveryDate = new java.sql.Date(date.getTime());
+
+			ItemOrderListNew orderList = orderService.searchOrderHistoryNew(catId, deliveryDate, frId);
+
+			return orderList;
+
+		}
+	
+	
+	
 
 	// UserLogin of AdminPanel
 	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
@@ -4705,37 +4736,6 @@ int FridInt=Integer.parseInt(frId);
 		return spCakeOrderList;
 
 	}
-	
-	
-	// getAllSpCakeList
-	@RequestMapping(value = { "/getSpCakeLists" }, method = RequestMethod.POST)
-	@ResponseBody
-	public SpCakeOrdersBeanList getSpCakeLists(@RequestParam List<Integer> spMenuId, @RequestParam List<Integer> frId,
-			@RequestParam String fromDate,@RequestParam String toDate) {
-		SpCakeOrdersBeanList spCakeOrderList = new SpCakeOrdersBeanList();
-		try {
-
-			String frmDate = Common.convertToYMD(fromDate);
-			System.out.println("Converted date " + frmDate);
-
-			String tDate = Common.convertToYMD(toDate);
-			System.out.println("Converted date " + tDate);
-			
-			List<SpCakeOrdersBean> jsonSpCakeOrderList = spCkOrdersService.findSpCakeList(spMenuId, frId, frmDate,tDate);
-
-			spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
-			Info info = new Info();
-			info.setError(false);
-			info.setMessage("Sp Cake Order list displayed Successfully");
-			spCakeOrderList.setInfo(info);
-
-		} catch (Exception e) {
-
-			System.out.println("exception in order list rest controller" + e.getMessage());
-		}
-		return spCakeOrderList;
-
-	}
 
 	// getAllFrSpCakeOrderList
 
@@ -4764,101 +4764,6 @@ int FridInt=Integer.parseInt(frId);
 		return spCakeOrderList;
 
 	}
-	
-		// getAllFrSpCakeList
-
-	@RequestMapping(value = { "/getAllFrSpCakeList1" }, method = RequestMethod.POST)
-	@ResponseBody
-	public SpCakeOrdersBeanList getAllFrSpCakeOrderList(@RequestParam List<Integer> spMenuId,
-			@RequestParam String fromDate,@RequestParam String toDate) {
-		SpCakeOrdersBeanList spCakeOrderList = new SpCakeOrdersBeanList();
-		try {
-
-			String frmDate = Common.convertToYMD(fromDate);
-			System.out.println("Converted date " + frmDate);
-
-           	String tDate = Common.convertToYMD(toDate);
-			System.out.println("Converted date " + tDate);
-			
-			List<SpCakeOrdersBean> jsonSpCakeOrderList = spCkOrdersService.findSpCakeOrderAllFr1(spMenuId, frmDate,tDate);
-
-			spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
-			Info info = new Info();
-			info.setError(false);
-			info.setMessage("Sp Cake Order list displayed Successfully");
-			spCakeOrderList.setInfo(info);
-
-		} catch (Exception e) {
-
-			System.out.println("exception in order list rest controller" + e.getMessage());
-		}
-		return spCakeOrderList;
-
-	}
-	
-	@Autowired
-	RegSpCakeOrListRepo reg; 
-	// getAllregSpCakeList 
-	@RequestMapping(value = { "/getRegSpCakeLists" }, method = RequestMethod.POST)
-	@ResponseBody
-	public RegularSpCake getRegSpCakeLists(@RequestParam List<Integer> spMenuId, @RequestParam List<Integer> frId,
-			@RequestParam String fromDate,@RequestParam String toDate) {
-		RegularSpCake spCakeOrderList = new RegularSpCake();
-		try {
-
-			String frmDate = Common.convertToYMD(fromDate);
-			System.out.println("Converted date " + frmDate);
-
-			String tDate = Common.convertToYMD(toDate);
-			System.out.println("Converted date " + tDate);
-			
-			List<RegularSpCake> jsonSpCakeOrderList = reg.getRegSpCakeList(spMenuId, frId, frmDate,tDate);
-
-			//spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
-			Info info = new Info();
-			info.setError(false);
-			info.setMessage("Sp Cake Order list displayed Successfully");
-			//spCakeOrderList.setInfo(info);
-
-		} catch (Exception e) {
-
-			System.out.println("exception in order list rest controller" + e.getMessage());
-		}
-		return spCakeOrderList;
-
-	}
-	
-
-
-//5
-@RequestMapping(value = { "/getAllFrRegSpCakeList1" }, method = RequestMethod.POST)
-@ResponseBody
-public RegularSpCake getAllFrRegSpCakeList1(@RequestParam List<Integer> spMenuId,
-		@RequestParam String fromDate,@RequestParam String toDate) {
-	RegularSpCake spCakeOrderList = new RegularSpCake();
-	try {
-
-		String frmDate = Common.convertToYMD(fromDate);
-		System.out.println("Converted date " + frmDate);
-
-       	String tDate = Common.convertToYMD(toDate);
-		System.out.println("Converted date " + tDate);
-		
-		List<RegularSpCake> jsonSpCakeOrderList = reg.getRegSpCakeList1(spMenuId, frmDate,tDate);
-
-		//spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
-		Info info = new Info();
-		info.setError(false);
-		info.setMessage("Sp Cake Order list displayed Successfully");
-		//RegularSpCake.setInfo(info);
-
-	} catch (Exception e) {
-
-		System.out.println("exception in order list rest controller" + e.getMessage());
-	}
-	return spCakeOrderList;
-
-}
 
 	@RequestMapping(value = { "/showEventList" }, method = RequestMethod.GET)
 	@ResponseBody

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.GetRegSpCakeOrders;
+import com.ats.webapi.model.GetRegSpCakeOrdersNew;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.RegSpCkOrderResponse;
 import com.ats.webapi.model.RegularSpCake;
@@ -25,5 +26,8 @@ public interface RegularSpCkOrderService {
 	Info deleteRegularSpOrder(int rspId);
 
 	List<GetRegSpCakeOrders> getRegSpCakeOrderHistory(String spDeliveryDt, int frId,List<String> catId);
+	
+	
+	List<GetRegSpCakeOrdersNew> getRegSpCakeOrderHistoryNew(String spDeliveryDt, int frId,List<String> catId);
 
 }

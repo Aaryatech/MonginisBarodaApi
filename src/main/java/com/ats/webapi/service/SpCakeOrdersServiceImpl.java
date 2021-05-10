@@ -16,8 +16,11 @@ import com.ats.webapi.model.SpCakeOrders;
 import com.ats.webapi.model.SpCakeOrdersList;
 import com.ats.webapi.model.SpCkOrderHis;
 import com.ats.webapi.model.SpCkOrderHisList;
+import com.ats.webapi.model.SpCkOrderHisListNew;
+import com.ats.webapi.model.SpCkOrderHisNew;
 import com.ats.webapi.repository.FranchiseSupRepository;
 import com.ats.webapi.repository.SpCakeOrderHisRepository;
+import com.ats.webapi.repository.SpCakeOrderHisRepositoryNEW;
 import com.ats.webapi.repository.SpCakeOrdersRepository;
 
 @Service
@@ -29,6 +32,10 @@ public class SpCakeOrdersServiceImpl implements SpCakeOrdersService {
 	
 	@Autowired
 	SpCakeOrderHisRepository spCakeOrderHisRepository;
+	
+	
+	@Autowired
+	SpCakeOrderHisRepositoryNEW spCakeOrderHisRepositoryNew;
 	
 	@Autowired
 	FranchiseSupRepository franchiseSupRepository;
@@ -114,6 +121,54 @@ public class SpCakeOrdersServiceImpl implements SpCakeOrdersService {
 		}
 		return spCakeOrderHisList;
 	}
+	
+	
+	//Akhilesh 2021-05-07
+	@Override
+	public SpCkOrderHisListNew searchOrderHistoryNEW(List<String> menuList,String spDeliveryDt,String frCode) {
+		List<SpCkOrderHisNew> spCakeOrders=null;
+		SpCkOrderHisListNew spCakeOrderHisList;
+		ErrorMessage errorMessage;
+		try {
+			if(menuList.contains("-1")) {
+				spCakeOrders=spCakeOrderHisRepositoryNew.findByMenuIdInAndSpDeliveryDt(spDeliveryDt,frCode);
+			}else
+			{
+			spCakeOrders=spCakeOrderHisRepositoryNew.findByMenuIdInAndSpDeliveryDtByMenu(menuList,spDeliveryDt,frCode);
+			}
+			if(spCakeOrders==null)
+			{
+				errorMessage=new ErrorMessage();
+				spCakeOrderHisList=new SpCkOrderHisListNew();
+				
+				errorMessage.setError(true);
+				errorMessage.setMessage("Orders Not Found");
+				
+				spCakeOrderHisList.setErrorMessage(errorMessage);
+			}
+			else
+			{
+				errorMessage=new ErrorMessage();
+				spCakeOrderHisList=new SpCkOrderHisListNew();
+				
+				errorMessage.setError(false);
+				errorMessage.setMessage("Orders found Successfully");
+				
+				spCakeOrderHisList.setSpOrderList(spCakeOrders);
+				spCakeOrderHisList.setErrorMessage(errorMessage);
+			}
+		}catch (Exception e) {
+			errorMessage=new ErrorMessage();
+			spCakeOrderHisList=new SpCkOrderHisListNew();
+
+			errorMessage.setError(true);
+			errorMessage.setMessage("Orders Not Found(EXC)");
+			spCakeOrderHisList.setErrorMessage(errorMessage);
+		}
+		return spCakeOrderHisList;
+	}
+	
+	
 	@Override
 	public int findCountOfSlotUsedByProduDate(String sqlSpProduDate) {
 		
