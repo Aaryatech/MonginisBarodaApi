@@ -74,6 +74,7 @@ import com.ats.webapi.repository.OrderRepository;
 import com.ats.webapi.repository.PostBillHeaderRepository;
 import com.ats.webapi.repository.PostFrOpStockDetailRepository;
 import com.ats.webapi.repository.PostFrOpStockHeaderRepository;
+import com.ats.webapi.repository.RegSpCakeOrListRepo;
 import com.ats.webapi.repository.RouteMasterRepository;
 import com.ats.webapi.repository.RouteRepository;
 import com.ats.webapi.repository.SellBillDetailRepository;
@@ -6234,5 +6235,77 @@ int FridInt=Integer.parseInt(frId);
 
 		}
 
+
+@Autowired 
+	RegSpCakeOrListRepo reg; 
+	// getAllregSpCakeList 
+	@RequestMapping(value = { "/getRegSpCakeLists" }, method = RequestMethod.POST)
+	@ResponseBody
+	public List<RegSpCakeReportResponse> getRegSpCakeLists(@RequestParam List<Integer> spMenuId, @RequestParam List<Integer> frId,
+			@RequestParam String fromDate,@RequestParam String toDate) {
+		List<RegSpCakeReportResponse> list =  new  ArrayList<RegSpCakeReportResponse>();
+		try {
+			 System.out.println("iiii subha");
+			String frmDate = Common.convertToYMD(fromDate);
+			System.out.println("Converted date1 " + frmDate);
+
+			String tDate = Common.convertToYMD(toDate);
+			
+			System.out.println("Converted date1 " + tDate);
+			
+			 System.out.println("spMenuId1" +spMenuId);
+			 System.out.println("frId1" +frId);
+			
+			 list = reg.getRegSpCakeList(spMenuId, frId, frmDate,tDate);
+			 System.out.println("list1" +list);
+			//spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
+			Info info = new Info();
+			info.setError(false);
+			info.setMessage("Sp Cake Order list displayed Successfully");
+			//spCakeOrderList.setInfo(info);
+
+		} catch (Exception e) {
+
+			System.out.println("exception in order list rest controller" + e.getMessage());
+		}
+		System.out.println("list" +list);
+		return list;
+
+	}
+	
+
+
+//5
+@RequestMapping(value = { "/getAllFrRegSpCakeList1" }, method = RequestMethod.POST)
+@ResponseBody
+public List<RegSpCakeReportResponse> getAllFrRegSpCakeList1(@RequestParam List<Integer> spMenuId,
+		@RequestParam String fromDate,@RequestParam String toDate) {
+	List<RegSpCakeReportResponse> spCakeOrderList =  new  ArrayList<RegSpCakeReportResponse>();
+	try {
+
+		String frmDate = Common.convertToYMD(fromDate);
+		System.out.println("Converted date as" + frmDate);
+
+       	String tDate = Common.convertToYMD(toDate);
+		System.out.println("Converted date as " + tDate);
+		System.out.println("list1" +spMenuId);
+		
+		 spCakeOrderList = reg.getRegSpCakeList1(spMenuId, frmDate,tDate);
+		 System.out.println("spCakeOrderList1" +spCakeOrderList);
+		//spCakeOrderList.setSpCakeOrdersBean(jsonSpCakeOrderList);
+		Info info = new Info();
+		info.setError(false);
+		info.setMessage("Sp Cake Order list displayed Successfully");
+		//RegularSpCake.setInfo(info);
+
+	} catch (Exception e) {
+
+		System.out.println("exception in order list rest controller" + e.getMessage());
+	}
+
+	System.out.println("list" +spCakeOrderList);
+	return spCakeOrderList;
+
+}
 
 }
