@@ -12,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,12 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.webapi.model.ConfigureFranchisee;
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.Franchisee;
 import com.ats.webapi.model.FranchiseeList;
 import com.ats.webapi.model.GetCurrentStockDetails;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
+import com.ats.webapi.model.MCategory;
 import com.ats.webapi.model.OpsCurStockAndShelfLife;
 import com.ats.webapi.model.OpsFrItemStock;
 import com.ats.webapi.model.PostFrItemStockDetail;
@@ -39,6 +43,8 @@ import com.ats.webapi.model.RegularSpecialStockCal;
 import com.ats.webapi.model.StockForAutoGrnGvn;
 import com.ats.webapi.model.StockRegSpPurchase;
 import com.ats.webapi.model.StockRegSpSell;
+import com.ats.webapi.repository.CategoryRepository;
+import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FrStockBetweenMonthRepository;
 import com.ats.webapi.repository.GetFrItemStockConfigurationRepository;
 import com.ats.webapi.repository.OpsCurStockAndShelfLifeRepo;
@@ -972,5 +978,188 @@ public class FrStockApiController {
 
 	}
 	
+	//SAC 10-08-2021
+	@Autowired CategoryRepository catRepo;
+	@Autowired
+	ConfigureFrRepository configureFrRepository;
 
+	public void autoMonthEnd() {
+		DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		System.out.println(dateFormat1.format(date));
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(date);
+		int dayOfMonth = cal1.get(Calendar.DATE);
+		int calCurrentMonth = cal1.get(Calendar.MONTH) + 1;
+		
+		List<MCategory> catList=catRepo.findByDelStatus(0);
+		int frId=112;
+		for(int c=0;c<catList.size();c++) {
+			
+			PostFrItemStockHeader stockHeader=postFrOpStockHeaderRepository.findByFrIdAndCatIdAndIsMonthClosed(frId,catList.get(c).getCatId(),0);
+				if(stockHeader.getMonth()==calCurrentMonth) {
+				//Month End Already done for catId 	
+				}else {
+					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
+					//	detailList = postFrOpStockDetailRepository.getFrDetail(stockHeader.getOpeningStockHeaderId());
+						
+						
+						List<GetCurrentStockDetails> currentStockDetailList = stockDetailRepository.getMinOpeningStock2(stockHeader.getMonth(), 2021, frId, catList.get(c).getCatId(), getMonthFirstDate(),
+								getCurDate(), 1, getItemList(frId,catList.get(c).getCatId()));
+						
+						
+						for (int i = 0; i < currentStockDetailList.size(); i++) {
+
+							GetCurrentStockDetails stockDetails = currentStockDetailList.get(i);
+
+							PostFrItemStockDetail postFrItemStockDetail = new PostFrItemStockDetail();
+							int intPhysicalStock =stockDetails.getCurrentRegStock();
+							postFrItemStockDetail.setItemId(stockDetails.getId());
+							postFrItemStockDetail.setItemName(stockDetails.getItemName());
+							postFrItemStockDetail.setRegOpeningStock(stockDetails.getRegOpeningStock());
+							postFrItemStockDetail.setOpeningStockDetailId(stockDetails.getStockDetailId());
+							postFrItemStockDetail.setOpeningStockHeaderId(stockDetails.getStockHeaderId());
+							postFrItemStockDetail.setPhysicalStock(intPhysicalStock);
+							postFrItemStockDetail.setRemark("Auto Month End");
+
+							int intStockDiff = 0;
+
+							int currentStock = (stockDetails.getCurrentRegStock() + stockDetails.getRegTotalPurchase())
+									- (stockDetails.getRegTotalGrnGvn() + stockDetails.getRegTotalSell());
+
+							if (currentStock > intPhysicalStock) {
+								intStockDiff = currentStock - intPhysicalStock;
+							} else {
+								intStockDiff = intPhysicalStock - currentStock;
+							}
+
+							postFrItemStockDetail.setStockDifference(intStockDiff);
+							postFrItemStockDetail.setRegTotalGrnGvn(stockDetails.getRegTotalGrnGvn());
+							postFrItemStockDetail.setRegTotalPurchase(stockDetails.getRegTotalPurchase());
+							postFrItemStockDetail.setRegTotalSell(stockDetails.getRegTotalSell());
+							
+							postFrOpStockDetailRepository.save(postFrItemStockDetail);
+							
+							postFrItemStockDetailList.add(postFrItemStockDetail);
+						}//end of currentStockDetailList loop
+						
+						int headerId = stockHeader.getOpeningStockHeaderId();
+
+						int updateResult = postFrOpStockHeaderRepository.endMonth(headerId);
+						// new opening month entry
+						PostFrItemStockHeader newHeader = new PostFrItemStockHeader();
+						if (stockHeader.getMonth() == 12) {
+							newHeader.setYear(stockHeader.getYear() + 1);
+							newHeader.setMonth(1);
+
+						} else {
+							newHeader.setMonth(stockHeader.getMonth() + 1);
+							newHeader.setYear(stockHeader.getYear());
+
+						}
+
+						newHeader.setFrId(stockHeader.getFrId());
+						newHeader.setCatId(stockHeader.getCatId());
+
+						newHeader.setIsMonthClosed(0);
+
+						PostFrItemStockHeader postFrItemStockHeaders = new PostFrItemStockHeader();
+
+						postFrItemStockHeaders = postFrOpStockHeaderRepository.save(newHeader);
+						
+						
+						for (int j = 0; j < postFrItemStockDetailList.size(); j++) {
+
+							PostFrItemStockDetail oldStockDetail = postFrItemStockDetailList.get(j);
+
+							PostFrItemStockDetail newStockDetail = new PostFrItemStockDetail();
+							newStockDetail.setOpeningStockHeaderId(postFrItemStockHeaders.getOpeningStockHeaderId());
+							newStockDetail.setItemId(oldStockDetail.getItemId());
+							newStockDetail.setItemName(oldStockDetail.getItemName());
+							newStockDetail.setRegOpeningStock(oldStockDetail.getPhysicalStock());
+							newStockDetail.setSpOpeningStock(oldStockDetail.getSpOpeningStock());
+							newStockDetail.setPhysicalStock(0);
+							newStockDetail.setRemark("new Entry Auto month end");
+							newStockDetail.setStockDifference(0);
+							newStockDetail.setRegTotalGrnGvn(0);
+							newStockDetail.setRegTotalPurchase(0);
+							newStockDetail.setSpTotalPurchase(0);
+							newStockDetail.setRegTotalSell(0);
+							newStockDetail.setSpTotalSell(0);
+
+							postFrOpStockDetailRepository.save(newStockDetail);
+
+						}//end of for postFrItemStockDetailList
+						
+						
+				}//end of else
+				
+			
+		}
+		
+	}
+	
+	public List<Integer> getItemList(int frId, int catId){
+		String itemShow = "";
+
+		List<ConfigureFranchisee> frConfList = null;
+		frConfList = configureFrRepository.getAllFrConfByFrIdAndCat(frId, catId);
+		StringBuilder itemIdStr = new StringBuilder();
+
+		if (frConfList != null) {
+			for (ConfigureFranchisee data : frConfList) {
+				itemIdStr.append(data.getItemShow());
+				itemIdStr.append(",");
+			}
+		}
+
+
+		if (itemIdStr.length() > 0) {
+			itemShow = itemIdStr.substring(0, itemIdStr.length() - 1);
+		}
+		List<Integer> itemList = Stream.of(itemShow.split(","))
+				  .map(String::trim)
+				  .map(Integer::parseInt)
+				  .collect(Collectors.toList());
+		return itemList;
+	}
+	public String getMonthFirstDate() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+		Date todaysDate = new Date();
+		System.out.println(dateFormat.format(todaysDate));
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todaysDate);
+
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+
+		Date firstDay = cal.getTime();
+
+		System.out.println("First Day of month " + firstDay);
+
+		String strFirstDay = dateFormat.format(firstDay);
+		return strFirstDay;
+	}
+
+	
+public String getCurDate() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+		Date todaysDate = new Date();
+		System.out.println(dateFormat.format(todaysDate));
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todaysDate);
+
+
+
+		System.out.println("todaysDate Day   " + todaysDate);
+
+		String strTodayDate = dateFormat.format(todaysDate);
+		return strTodayDate;
+	}
 }

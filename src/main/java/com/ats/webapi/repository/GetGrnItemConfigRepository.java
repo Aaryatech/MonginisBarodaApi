@@ -83,4 +83,102 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	
 	
+
+    
+    @Query(value = "	SELECT\n" + 
+    		"    t_bill_header.bill_no,\n" + 
+    		"    t_bill_header.bill_no as autoGrnQty,\n" + 
+    		"    t_bill_header.bill_date,\n" + 
+    		"    t_bill_header.bill_date_time,\n" + 
+    		"    t_bill_detail.item_id,\n" + 
+    		"    CASE \n" + 
+    		"        WHEN t_bill_detail.cat_id=5 THEN s.sp_name   \n" + 
+    		"        ELSE  m_item.item_name \n" + 
+    		"    END AS item_name,\n" + 
+    		"    t_bill_detail.grn_type,\n" + 
+    		"    t_bill_detail.rate,\n" + 
+    		"    t_bill_detail.mrp,\n" + 
+    		"    t_bill_detail.bill_qty,\n" + 
+    		"    t_bill_detail.bill_detail_no,\n" + 
+    		"    t_bill_detail.bill_no,\n" + 
+    		"    t_bill_detail.sgst_per,\n" + 
+    		"    t_bill_detail.cgst_per,\n" + 
+    		"    t_bill_detail.cess_per,\n" + 
+    		"    t_bill_detail.igst_per,\n" + 
+    		"    t_bill_header.fr_id,\n" + 
+    		"    t_bill_header.invoice_no,\n" + 
+    		"    t_bill_detail.cat_id,\n" + 
+    		"    t_bill_detail.menu_id ,\n" + 
+    		"    t_bill_detail.disc_per,\n" + 
+    		"    t_bill_detail.hsn_code   \n" + 
+    		"FROM\n" + 
+    		"    t_bill_header ,\n" + 
+    		"    t_bill_detail,\n" + 
+    		"    m_item ,\n" + 
+    		"    m_sp_cake s      \n" + 
+    		"WHERE\n" + 
+    		"\n" + 
+    		"    t_bill_header.bill_no=t_bill_detail.bill_no  and t_bill_header.fr_id=:frId \n" + 
+    		"    AND t_bill_header.status=2     \n" + 
+    		"    AND CASE \n" + 
+    		"        WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id \n" + 
+    		"        ELSE  t_bill_detail.item_id=m_item.id \n" + 
+    		"    END  \n" + 
+    		"and  t_bill_detail.item_id IN (:itemString)\n" + 
+    		"\n" + 
+    		"and t_bill_header.bill_date between :fd and :td\n" + 
+    		"group by\n" + 
+    		"    t_bill_detail.bill_detail_no" + "", nativeQuery = true)
+	
+	public List<GetGrnItemConfig> getGvnItemConfigByItems(@Param("itemString") List<Integer> itemString,
+			@Param("fd") String fd,@Param("td") String td,@Param("frId") int frId);
+	
+    @Query(value = "	SELECT\n" + 
+    		"    t_bill_header.bill_no,\n" + 
+    		"    t_bill_header.bill_no as autoGrnQty,\n" + 
+    		"    t_bill_header.bill_date,\n" + 
+    		"    t_bill_header.bill_date_time,\n" + 
+    		"    t_bill_detail.item_id,\n" + 
+    		"    CASE \n" + 
+    		"        WHEN t_bill_detail.cat_id=5 THEN s.sp_name   \n" + 
+    		"        ELSE  m_item.item_name \n" + 
+    		"    END AS item_name,\n" + 
+    		"    t_bill_detail.grn_type,\n" + 
+    		"    t_bill_detail.rate,\n" + 
+    		"    t_bill_detail.mrp,\n" + 
+    		"    t_bill_detail.bill_qty,\n" + 
+    		"    t_bill_detail.bill_detail_no,\n" + 
+    		"    t_bill_detail.bill_no,\n" + 
+    		"    t_bill_detail.sgst_per,\n" + 
+    		"    t_bill_detail.cgst_per,\n" + 
+    		"    t_bill_detail.cess_per,\n" + 
+    		"    t_bill_detail.igst_per,\n" + 
+    		"    t_bill_header.fr_id,\n" + 
+    		"    t_bill_header.invoice_no,\n" + 
+    		"    t_bill_detail.cat_id,\n" + 
+    		"    t_bill_detail.menu_id ,\n" + 
+    		"    t_bill_detail.disc_per,\n" + 
+    		"    t_bill_detail.hsn_code   \n" + 
+    		"FROM\n" + 
+    		"    t_bill_header ,\n" + 
+    		"    t_bill_detail,\n" + 
+    		"    m_item ,\n" + 
+    		"    m_sp_cake s      \n" + 
+    		"WHERE\n" + 
+    		"\n" + 
+    		"    t_bill_header.bill_no=t_bill_detail.bill_no and t_bill_header.fr_id=:frId \n" + 
+    		"    AND t_bill_header.status=2     \n" + 
+    		"    AND CASE \n" + 
+    		"        WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id \n" + 
+    		"        ELSE  t_bill_detail.item_id=m_item.id \n" + 
+    		"    END  \n" + 
+    		"and  t_bill_detail.cat_id IN (:catId)\n" + 
+    		"\n" + 
+    		"and t_bill_header.bill_date between :fd and :td\n" + 
+    		"group by\n" + 
+    		"    t_bill_detail.bill_detail_no" + "", nativeQuery = true)
+	
+	public List<GetGrnItemConfig> getGvnItemConfigByAllItemOfCatId(@Param("catId") int catId,
+			@Param("fd") String fd,@Param("td") String td,@Param("frId") int frId);
+	
 }

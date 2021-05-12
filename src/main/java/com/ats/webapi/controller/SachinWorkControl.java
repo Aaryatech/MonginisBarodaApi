@@ -29,6 +29,8 @@ import com.ats.webapi.model.FlavourConf;
 import com.ats.webapi.model.FlavourList;
 import com.ats.webapi.model.GetBillDetails;
 import com.ats.webapi.model.GetBillsForFrList;
+import com.ats.webapi.model.GetGrnItemConfig;
+import com.ats.webapi.model.GetGrnItemConfigList;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.ItemForMOrder;
@@ -41,6 +43,7 @@ import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
 import com.ats.webapi.repository.FlavourRepository;
 import com.ats.webapi.repository.GetBillDetailsRepository;
+import com.ats.webapi.repository.GetGrnItemConfigRepository;
 import com.ats.webapi.repository.ItemForMOrderRepository;
 import com.ats.webapi.repository.ItemRepository;
 import com.ats.webapi.repository.MainMenuConfigurationRepository;
@@ -469,4 +472,38 @@ public class SachinWorkControl {
 			return date;
 
 		}
+		
+		//Sac 11-05-2021
+		
+		
+		@Autowired GetGrnItemConfigRepository getGvnItemConfRepo;
+		
+		@RequestMapping(value = "/getGvnItemConfigAsPerProd", method = RequestMethod.POST)
+		public @ResponseBody GetGrnItemConfigList getGvnItemConfig(@RequestParam("catId") int catId,
+				@RequestParam("fd") String fd,@RequestParam("td") String td,@RequestParam("itemString") List<Integer>itemString,
+				@RequestParam("frId") int frId) {
+			GetGrnItemConfigList gvnItemConfigList = new GetGrnItemConfigList();
+			try {
+				List<GetGrnItemConfig> gvnList=new ArrayList<GetGrnItemConfig>(); 
+					if(itemString.get(0)==-1)
+				gvnList = getGvnItemConfRepo.getGvnItemConfigByAllItemOfCatId(catId, fd, td,frId);
+					else
+						gvnList = getGvnItemConfRepo.getGvnItemConfigByItems(itemString, fd, td,frId);
+
+				gvnItemConfigList.setGetGrnItemConfigs(gvnList);
+
+				System.out.println("List getGvnItemConfig " + gvnItemConfigList.toString());
+			} catch (Exception e) {
+				System.out.println("inside rest: getGvnItemConfig  Error " + e.getMessage());
+
+				e.printStackTrace();
+
+			}
+
+			return gvnItemConfigList;
+
+		}
 }
+		
+		
+
