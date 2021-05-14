@@ -53,18 +53,38 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	public List<GetGrnItemConfig> getItemForManGrn(@Param("billNo")int billNo,@Param("frId") int frId);
 
-	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_date_time," + 
-			"			t_bill_header.bill_date,t_bill_detail.item_id,m_item.item_name,m_item.item_grp2,t_bill_detail.grn_type," + 
+	/*@Query(value = " SELECT t_bill_header.bill_no,t_bill_header.bill_date_time," + 
+			"			t_bill_header.bill_date,t_bill_detail.item_id,CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name \\n\" + \n" + 
+			 			 " ELSE  m_item.item_name END AS item_name,m_item.item_grp2,t_bill_detail.grn_type," + 
 			"			round(t_bill_detail.base_rate,2) as rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no," + 
 			"			t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per," + 
 			"			t_bill_detail.cat_id,t_bill_detail.menu_id,t_bill_detail.disc_per,t_bill_detail.hsn_code," + 
-			"			t_bill_header.fr_id,t_bill_header.invoice_no FROM t_bill_header ,t_bill_detail,m_item " + 
+			"			t_bill_header.fr_id,t_bill_header.invoice_no FROM m_sp_cake s, t_bill_header ,t_bill_detail,m_item " + 
 			"			WHERE t_bill_header.fr_id=:frId AND t_bill_detail.bill_no=t_bill_header.bill_no AND t_bill_header.status=2 " + 
-			" AND t_bill_detail.item_id=m_item.id AND t_bill_detail.grn_type=0 AND " + 
+			" AND CASE WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id ELSE " + 
+			"			  t_bill_detail.item_id=m_item.id END   AND " + 
 			" t_bill_detail.bill_no=:billNo ", nativeQuery = true)
 	
 	public List<GetGrnItemConfig> getItemForManGvnAtAdmin(@Param("billNo")int billNo,@Param("frId") int frId);
+*/
+	
+	
+	@Query(value = " SELECT t_bill_header.bill_no,t_bill_header.bill_date_time,   " + 
+			"	t_bill_header.bill_date,t_bill_detail.item_id,CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name   " + 
+			"		  ELSE  m_item.item_name END AS item_name,m_item.item_grp2,t_bill_detail.grn_type,  \n" + 
+			"	round(t_bill_detail.base_rate,2) as rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no,  \n" + 
+			"	t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per,  \n" + 
+			"	t_bill_detail.cat_id,t_bill_detail.menu_id,t_bill_detail.disc_per,t_bill_detail.hsn_code,  \n" + 
+			"	t_bill_header.fr_id,t_bill_header.invoice_no FROM m_sp_cake s ,t_bill_header ,t_bill_detail,m_item   \n" + 
+			"	WHERE t_bill_header.fr_id=:frId AND t_bill_detail.bill_no=t_bill_header.bill_no AND t_bill_header.status=2   \n" + 
+			"and  CASE WHEN t_bill_detail.cat_id=5 THEN t_bill_detail.item_id=s.sp_id ELSE    " + 
+			"	  t_bill_detail.item_id=m_item.id END   AND   \n" + 
+			"t_bill_detail.bill_no=:billNo ", nativeQuery = true)
+	
+	public List<GetGrnItemConfig> getItemForManGvnAtAdmin(@Param("billNo")int billNo,@Param("frId") int frId);
 
+	
+	
 	
 	
 	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_no as autoGrnQty,t_bill_header.bill_date,t_bill_header.bill_date_time,t_bill_detail.item_id,"
