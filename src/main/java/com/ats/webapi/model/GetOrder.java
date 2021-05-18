@@ -59,6 +59,43 @@ public class GetOrder {
 	@Column(name="edit_qty")
 	private float editQty;
 
+	//3 added SAC 12-05-2021
+	
+	private int grnType;
+	private String menuTitle;
+	private float orderRate;
+	
+	
+
+	public int getGrnType() {
+		return grnType;
+	}
+
+
+	public void setGrnType(int grnType) {
+		this.grnType = grnType;
+	}
+
+
+	public String getMenuTitle() {
+		return menuTitle;
+	}
+
+
+	public void setMenuTitle(String menuTitle) {
+		this.menuTitle = menuTitle;
+	}
+
+
+	public float getOrderRate() {
+		return orderRate;
+	}
+
+
+	public void setOrderRate(float orderRate) {
+		this.orderRate = orderRate;
+	}
+
 
 	public int getOrderId() {
 		return orderId;
@@ -167,7 +204,8 @@ public class GetOrder {
 	public String toString() {
 		return "GetOrder [orderId=" + orderId + ", frName=" + frName + ", catName=" + catName + ", itemName=" + itemName
 				+ ", orderQty=" + orderQty + ", Id=" + Id + ", deliveryDate=" + deliveryDate + ", isEdit=" + isEdit
-				+ ", isPositive=" + isPositive + ", editQty=" + editQty + "]";
+				+ ", isPositive=" + isPositive + ", editQty=" + editQty + ", grnType=" + grnType + ", menuTitle="
+				+ menuTitle + ", orderRate=" + orderRate + "]";
 	}
 
 

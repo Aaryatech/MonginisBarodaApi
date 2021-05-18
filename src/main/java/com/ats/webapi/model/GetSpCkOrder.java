@@ -90,8 +90,21 @@ public class GetSpCkOrder {
 	@Column(name="ex_var1") 
 	private String exVar1;//new for alpha/num type
 	
+	private float extraCharges; //SAC 15-05-2021 for showing ex charges on slip
 	
 	
+	
+	
+	public float getExtraCharges() {
+		return extraCharges;
+	}
+
+
+	public void setExtraCharges(float extraCharges) {
+		this.extraCharges = extraCharges;
+	}
+
+
 	public String getExVar1() {
 		return exVar1;
 	}
