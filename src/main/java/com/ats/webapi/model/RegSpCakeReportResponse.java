@@ -6,17 +6,17 @@ import javax.persistence.Id;
 @Entity
 public class RegSpCakeReportResponse {
 	@Id
-	
-	private String itemName;
+	private int rspId;
 	private String frName;
-    private int qty;
+	private String itemName;
+    private String qty;
     private String rspCustMobileNo;
     private String rspCustName;
-	public String getItemName() {
-		return itemName;
+	public int getRspId() {
+		return rspId;
 	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public void setRspId(int rspId) {
+		this.rspId = rspId;
 	}
 	public String getFrName() {
 		return frName;
@@ -24,10 +24,16 @@ public class RegSpCakeReportResponse {
 	public void setFrName(String frName) {
 		this.frName = frName;
 	}
-	public int getQty() {
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+	public String getQty() {
 		return qty;
 	}
-	public void setQty(int qty) {
+	public void setQty(String qty) {
 		this.qty = qty;
 	}
 	public String getRspCustMobileNo() {
@@ -44,8 +50,8 @@ public class RegSpCakeReportResponse {
 	}
 	@Override
 	public String toString() {
-		return "RegSpCakeReportResponse [itemName=" + itemName + ", frName=" + frName + ", qty=" + qty
-				+ ", rspCustMobileNo=" + rspCustMobileNo + ", rspCustName=" + rspCustName + "]";
+		return "RegSpCakeReportResponse [rspId=" + rspId + ", frName=" + frName + ", itemName=" + itemName + ", qty="
+				+ qty + ", rspCustMobileNo=" + rspCustMobileNo + ", rspCustName=" + rspCustName + "]";
 	}
 	
     
