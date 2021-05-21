@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+//import com.ats.webapi.controller.ConfigureFrBean;
 import com.ats.webapi.model.ChangeOrderRecord;
+import com.ats.webapi.model.ConfigureFrBean;
 import com.ats.webapi.model.Info;
 import com.ats.webapi.repository.ChangeOrderRecordRepo;
+import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.RegSpCakeOrListRepo;
 
 @RestController
@@ -110,4 +113,17 @@ public class RegSpCakeOrderListReportController {
 		return resList;
 	}
 	
+	@Autowired
+	ConfigureFrListRepository typeRepo;
+	@RequestMapping(value = { "/callConfigMenuByType" }, method = RequestMethod.POST)
+	public @ResponseBody List<ConfigureFrBean> callConfigMenuByType(@RequestParam("catId") List<Integer> catId) {
+		//ConfigureFrBean beanList = new ConfigureFrBean();
+		
+		System.out.println("catId"+catId);
+		List<ConfigureFrBean> configBean = typeRepo.findConfiFrListByType(catId);
+
+		System.out.println("ConfigureFrBean"+configBean);
+
+		return configBean;
+	}
 }
