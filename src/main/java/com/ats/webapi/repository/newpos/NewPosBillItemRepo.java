@@ -54,10 +54,10 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			"        m_item.*,m_item_sup.item_uom as uom\n" + 
 			"    FROM\n" + 
 			"        m_item , m_item_sup \n" + 
-			"    WHERE\n" + 
+			"    WHERE " + 
 			"        m_item.id IN(:itemList) AND m_item.id=m_item_sup.item_id\n" + 
-			"    ORDER BY\n" + 
-			"        ORDER by m_item.item_grp2, m_item.item_name ASC " + 
+			"    ORDER BY " + 
+			"          m_item.item_grp2, m_item.item_name ASC " + 
 			") a\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT\n" + 
@@ -129,14 +129,14 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			") AS reg,\n" + 
 			"COALESCE(\n" + 
 			"    SUM(\n" + 
-			"        CASE WHEN bill_stock_type = 2 THEN qty ELSE 0\n" + 
-			"    END\n" + 
-			"),\n" + 
-			"0\n" + 
-			") AS sp\n" + 
-			"FROM\n" + 
-			"    t_sell_bill_detail\n" + 
-			"WHERE\n" + 
+			"        CASE WHEN bill_stock_type = 2 THEN qty ELSE 0 " + 
+			"    END " + 
+			"), " + 
+			" 0 " + 
+			" ) AS sp " + 
+			" FROM " + 
+			"    t_sell_bill_detail " + 
+			" WHERE\n" + 
 			"    t_sell_bill_detail.sell_bill_no IN(\n" + 
 			"    SELECT\n" + 
 			"        t_sell_bill_header.sell_bill_no\n" + 
@@ -144,22 +144,22 @@ public interface NewPosBillItemRepo extends JpaRepository<NewPosBillItem,Integer
 			"        t_sell_bill_header\n" + 
 			"    WHERE\n" + 
 			"        t_sell_bill_header.fr_id = :frId AND t_sell_bill_header.bill_date BETWEEN :fromDt AND :toDt\n" + 
-			")\n" + 
-			"GROUP BY\n" + 
+			" ) " + 
+			" GROUP BY\n" + 
 			"    t_sell_bill_detail.item_id\n" + 
-			") e\n" + 
-			"ON\n" + 
-			"    a.id = e.item_id\n" + 
-			"LEFT JOIN(\n" + 
+			" ) e\n" + 
+			" ON\n" + 
+			"    a.id = e.item_id " + 
+			" LEFT JOIN( " + 
 			"    SELECT\n" + 
 			"        m_fr_item_stock.item_id,\n" + 
-			"        COALESCE(m_fr_item_stock.reorder_qty, 0) re_order_qty\n" + 
+			"        COALESCE(m_fr_item_stock.reorder_qty, 0) re_order_qty " + 
 			"    FROM\n" + 
 			"        m_fr_item_stock\n" + 
 			"    WHERE\n" + 
-			"        m_fr_item_stock.type =:frStockType \n" + 
-			") f\n" + 
-			"ON\n" + 
+			"        m_fr_item_stock.type =:frStockType )  " + 
+			" f " + 
+			" ON " + 
 			"    a.id = f.item_id  \n" + 
 			" ",nativeQuery=true)
 	List<NewPosBillItem> getNewPosBillItems(@Param("frId") int frId,
