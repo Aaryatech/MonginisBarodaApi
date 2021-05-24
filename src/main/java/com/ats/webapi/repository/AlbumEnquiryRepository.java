@@ -18,8 +18,8 @@ public interface AlbumEnquiryRepository extends JpaRepository<AlbumEnquiry, Inte
 	
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE t_album_enquiry SET ex_var3=:orderNo , status=3 WHERE enquiry_no=:enqId AND del_status=0  ",nativeQuery=true)
-	int updateAddToProdFlag(@Param("enqId") int enqId,@Param("orderNo") String orderNo);
+	@Query(value="UPDATE t_album_enquiry SET ex_var3=:orderNo , status=3,flavour_id=:flavId WHERE enquiry_no=:enqId AND del_status=0  ",nativeQuery=true)
+	int updateAddToProdFlag(@Param("enqId") int enqId,@Param("orderNo") String orderNo,@Param("flavId") int flavId);
 	
 	
 	@Query(value="SELECT\n" + 

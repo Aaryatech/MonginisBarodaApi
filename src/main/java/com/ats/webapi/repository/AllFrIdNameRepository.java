@@ -39,6 +39,12 @@ public List<AllFrIdName> findNonOrders(@Param("orderDate") String orderDate, @Pa
 						" AND m_fr_menu_configure.fr_id=m_franchisee.fr_id AND m_fr_menu_configure.is_del=0 AND m_fr_menu_configure.menu_id=:menuId order by m_franchisee.fr_Id Asc",nativeQuery=true)
 				List<AllFrIdName> getAllFrIdNameByMenuId(@Param("menuId")int menuId);
 				
+				@Query(value=" SELECT fr_id,fr_name from m_franchisee where kg_1=:vehId",nativeQuery=true)
+				List<AllFrIdName> getAllFrIdNameByVehId(@Param("vehId")int vehId);
+				
+				@Query(value=" SELECT fr_id,fr_name from m_franchisee where 	stock_type=:stckId",nativeQuery=true)
+				List<AllFrIdName> getAllFrIdNameByStockId(@Param("stckId")int stckId);
+				
 				
 }
 

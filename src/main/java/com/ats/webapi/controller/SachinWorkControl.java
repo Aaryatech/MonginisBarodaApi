@@ -216,6 +216,62 @@ public class SachinWorkControl {
 			return allFrIdNameList;
 
 		}
+		
+		
+		
+		@RequestMapping(value = "/getAllFrIdNameByVehId", method = RequestMethod.POST)
+		public @ResponseBody AllFrIdNameList getAllFrIdNameByVehId(@RequestParam("vehId") int vehId) {
+
+			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			try {
+				List<AllFrIdName> allFrIdNames = frNameIdRepo.getAllFrIdNameByVehId(vehId);
+				Info info = new Info();
+
+				if (allFrIdNames != null) {
+					allFrIdNameList.setFrIdNamesList(allFrIdNames);
+					info.setError(false);
+					info.setMessage("Successfully displayed all fr Name and Id");
+					allFrIdNameList.setInfo(info);
+				} else {
+					info.setError(true);
+					info.setMessage("error in getting fr Id and Names");
+					allFrIdNameList.setInfo(info);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return allFrIdNameList;
+
+		}
+		
+		
+		
+		@RequestMapping(value = "/getAllFrIdNameByStckTypeId", method = RequestMethod.POST)
+		public @ResponseBody AllFrIdNameList getAllFrIdNameByStckTypeId(@RequestParam("stckId") int stckId) {
+
+			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			try {
+				List<AllFrIdName> allFrIdNames = frNameIdRepo.getAllFrIdNameByStockId(stckId);
+				Info info = new Info();
+
+				if (allFrIdNames != null) {
+					allFrIdNameList.setFrIdNamesList(allFrIdNames);
+					info.setError(false);
+					info.setMessage("Successfully displayed all fr Name and Id");
+					allFrIdNameList.setInfo(info);
+				} else {
+					info.setError(true);
+					info.setMessage("error in getting fr Id and Names");
+					allFrIdNameList.setInfo(info);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return allFrIdNameList;
+
+		}
 
 		
 		// Sachin 12-03-2021 25-01-2021 For ManualOrder page Menus

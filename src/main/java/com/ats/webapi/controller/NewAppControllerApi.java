@@ -442,7 +442,7 @@ FlavourConfRepository flavourConfRepository;
 				info.setMessage("Special Cake Order Placed Successfully");
 				int	updateResponse = frSetRepo.updateFrSettingSpNo(frid);
 				try {
-				flag=enquiryRepo.updateAddToProdFlag(enqId, String.valueOf(orederNo));
+				flag=enquiryRepo.updateAddToProdFlag(enqId, String.valueOf(orederNo),flavourId);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}

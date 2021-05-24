@@ -24,6 +24,11 @@ public interface DiscountRepository extends JpaRepository<Discount, Integer> {
 	@Modifying
 	@Query(value="update m_fr_discount set del_status = 1 where disc_id=:id",nativeQuery=true)
 	int deleteDiscId(@Param("id") int id);
+	
+	@Transactional
+	@Modifying
+	@Query(value="update m_fr_discount set del_status = 1 where disc_id IN (:id)",nativeQuery=true)
+	int deleteMultiDiscId(@Param("id") List<String> id);
 
 	Discount findByDiscIdAndDelStatus(int id, int i);
 	

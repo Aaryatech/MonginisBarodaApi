@@ -23,7 +23,7 @@ public class OPSAccessRightController {
 		
 		List<OpsAccessRight> opsModlList=new ArrayList<OpsAccessRight>();	
 		
-		opsModlList=opsAccessRepo.findAll();		
+		opsModlList=opsAccessRepo.finAccessRightsOrderByExint1();		
 		
 		return opsModlList;
 	}
@@ -34,9 +34,9 @@ public class OPSAccessRightController {
 		
 		List<OpsAccessRight> opsModlList=new ArrayList<OpsAccessRight>();	
 		if(isFrPosAppicale==1) {
-			opsModlList=opsAccessRepo.findAll();	
+			opsModlList=opsAccessRepo.finAccessRightsOrderByExint1();		
 		}else {
-			opsModlList=opsAccessRepo.findBySettingValue(isFrPosAppicale);	
+			opsModlList=opsAccessRepo.findBySettingValueorderbyExint1AccessRights(isFrPosAppicale);	
 		}
 		
 		return opsModlList;

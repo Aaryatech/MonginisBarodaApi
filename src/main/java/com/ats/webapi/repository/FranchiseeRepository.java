@@ -29,6 +29,50 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		public List<Franchisee> findAll();
 		
 		
+		@Query(value="SELECT\n" + 
+				"    `fr_id`,\n" + 
+				"    `fr_name`,\n" + 
+				"    `fr_code`,\n" + 
+				"    `fr_opening_date`,\n" + 
+				"    `fr_rate`,\n" + 
+				"    `fr_image`,\n" + 
+				"    `fr_route_id`,\n" + 
+				"    `fr_city`,\n" + 
+				"    `kg_1`,\n" + 
+				"    `kg_2`,\n" + 
+				"    `kg_3`,\n" + 
+				"    `kg_4`,\n" + 
+				"    `fr_email`,\n" + 
+				"    `fr_password`,\n" + 
+				"    `fr_mob`,\n" + 
+				"    m_stock_type.stock_type_name  AS   fr_rmn_1,\n" + 
+				"    `fr_owner`,\n" + 
+				"    `fr_rate_cat`,\n" + 
+				"    `show_items`,\n" + 
+				"    `not_show_items`,\n" + 
+				"    `grn_two`,\n" + 
+				"    `fr_opening`,\n" + 
+				"    `fr_password_key`,\n" + 
+				"    m_franchisee.del_status,\n" + 
+				"    `is_same_day_applicable`,\n" + 
+				"    `owner_birth_date`,\n" + 
+				"    `fba_license_date`,\n" + 
+				"    `fr_agreement_date`,\n" + 
+				"    `fr_gst_type`,\n" + 
+				"    `fr_gst_no`,\n" + 
+				"    `stock_type`,\n" + 
+				"    `fr_address`,\n" + 
+				"    `fr_target`,\n" + 
+				"    `is_same_state`\n" + 
+				"FROM\n" + 
+				"    `m_franchisee`,\n" + 
+				"    m_stock_type\n" + 
+				"WHERE\n" + 
+				"m_stock_type.id=m_franchisee.stock_type  ORDER BY\n" + 
+				"m_franchisee.fr_id DESC",nativeQuery=true)
+		public List<Franchisee> findAllWithStockType();
+		
+		
 
 		@Modifying
 		@Transactional
@@ -61,6 +105,13 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		int AddVehiceleNoToMultiFr(@Param("vehicleNo") int vehicleNo,@Param("frIds") List<String>  frIds);
 		
 		
+		//Akhilesh 2021-02-24  Add Stock Type  To  Multiple Franchisee 
+				@Modifying
+				@Transactional
+				@Query(value="Update Franchisee  SET stock_type=:stId WHERE fr_id IN:frIds")
+				int AddStockTypeToMultiFr(@Param("stId") int stId,@Param("frIds") List<String>  frIds);
+		
+		
 		
 		
 		//Akhilesh 2021-03-03  Get Franchisee By Route Id
@@ -91,6 +142,14 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 		
 		@Query(value="SELECT DISTINCT fr_route_id FROM `m_franchisee` WHERE del_status=0",nativeQuery=true)
 		public List<Integer> getfrRouteIds();
+		
+		
+		@Query(value="SELECT DISTINCT kg_1 FROM `m_franchisee` WHERE del_status=0",nativeQuery=true)
+		public List<Integer> getInUseVehicleList();
+		
+		@Query(value="SELECT DISTINCT stock_type FROM `m_franchisee` WHERE del_status=0",nativeQuery=true)
+		public List<Integer> getInUseStockType();
+		
 
 		@Query(value="SELECT\n" + 
 				"    fr.*\n" + 
@@ -102,5 +161,14 @@ public interface FranchiseeRepository extends JpaRepository<Franchisee, Integer>
 				"    m.menu_id=:menuId AND\n" + 
 				"    m.fr_id=fr.fr_id",nativeQuery=true)
 		public List<Franchisee> getFrListyMenuId(@Param("menuId") int menuId);
+		
+		@Transactional
+		@Modifying
+		@Query(value="UPDATE m_franchisee SET del_status=1 WHERE fr_id IN(:frIds)",nativeQuery=true)
+		public int deleteMultiFrByFrId(@Param("frIds") List<String> frids);
+		
+		
+		
+		
 		
 	}

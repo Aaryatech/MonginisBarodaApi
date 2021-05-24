@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.model.ErrorMessage;
 import com.ats.webapi.model.GetitemStockConfig;
+import com.ats.webapi.model.Info;
 import com.ats.webapi.model.Item;
 import com.ats.webapi.model.StockType;
 import com.ats.webapi.model.StockTypeConfigResponse;
@@ -45,6 +46,24 @@ public class StockTypeControllerApi {
 				
 			try {
 				StockTypeList=StockTypeRepo.findAllStockTypesBydelStatus();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				System.err.println("Exception In /getAllStockType");
+			}	
+				
+		return StockTypeList;
+	}
+	
+	
+	
+	
+	@RequestMapping(value="/getAllStockTypeWithFr",method=RequestMethod.GET)
+	public @ResponseBody List<StockType> getAllStockTypeWithFr(){
+		List<StockType> StockTypeList=new ArrayList<>();
+				
+			try {
+				StockTypeList=StockTypeRepo.findAllStockTypesBydelStatusWithFrname();
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -96,6 +115,26 @@ System.err.println("error");
 
 	int isUpdated = StockTypeRepo.deleteItems(rejectId);
 	if (isUpdated == 1) {
+
+		errorMessage.setError(false);
+		errorMessage.setMessage("Items Deleted Successfully");
+	} else {
+		errorMessage.setError(false);
+		errorMessage.setMessage("Items Deletion Failed");
+
+	}
+	return errorMessage;
+}
+
+
+
+@RequestMapping(value ="/deleteMultiStockType", method = RequestMethod.POST)
+public @ResponseBody Info deleteMultiStockType(@RequestParam List<String> stckIds) {
+System.err.println("error");
+Info errorMessage = new Info();
+int isUpdated =0;
+	isUpdated= StockTypeRepo.deleteMultipleStock(stckIds);
+	if (isUpdated >0) {
 
 		errorMessage.setError(false);
 		errorMessage.setMessage("Items Deleted Successfully");

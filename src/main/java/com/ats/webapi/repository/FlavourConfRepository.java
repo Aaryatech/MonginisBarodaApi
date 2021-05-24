@@ -18,6 +18,26 @@ public interface FlavourConfRepository extends JpaRepository<FlavourConf, Intege
 	FlavourConf findByDelStatusAndSpfIdAndSpId(int i, int spfId, int spId);
 
 	List<FlavourConf> findByDelStatus(int i);
+	
+	@Query(value="SELECT\n" + 
+			"    `sp_flav_conf_id`,\n" + 
+			"    `spf_id`,\n" + 
+			"    m_sp_flavour_conf.sp_id,\n" + 
+			"    `sp_type`,\n" + 
+			"    `rate`,\n" + 
+			"    `mrp1`,\n" + 
+			"    `mrp2`,\n" + 
+			"    `mrp3`,\n" + 
+			"   m_sp_flavour_conf.del_status,\n" + 
+			"    m_spcake_sup.cut_section AS `ex_var1`,\n" + 
+			"     `ex_int1`\n" + 
+			"FROM\n" + 
+			"    `m_sp_flavour_conf`,\n" + 
+			"    m_spcake_sup\n" + 
+			"WHERE\n" + 
+			"  m_sp_flavour_conf.del_status=0\n" + 
+			"  AND m_spcake_sup.sp_id=m_sp_flavour_conf.sp_id",nativeQuery=true)
+	List<FlavourConf> findByDelStatusWithCakeType();
 
 	FlavourConf findBySpIdAndSpfIdAndDelStatus(int spId, int spfId, int i);
 

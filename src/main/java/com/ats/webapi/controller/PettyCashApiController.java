@@ -316,6 +316,23 @@ public class PettyCashApiController {
 
 	}
 	
+	
+	
+	@RequestMapping(value = { "/getEmpByIdAndPass" }, method = RequestMethod.POST)
+	public FrEmpMaster getEmpByIdAndPass(@RequestParam int empId,@RequestParam String empPass) {
+		FrEmpMaster resp = new FrEmpMaster();
+		try {
+			resp = frEmpRepo.findByFrIdAndPass(empId, empPass);
+			
+			System.err.println("Resp-----------" + resp);
+		} catch (Exception e) {
+			System.err.println("Exception in getEmpByIdAndPass : " + e.getMessage());
+			e.printStackTrace();
+		}
+		return resp;
+
+	}
+	
 	@RequestMapping(value="/getCountOfEmpByFrid",method=RequestMethod.POST)
 	public @ResponseBody int getCountOfEmpByFrid(@RequestParam int frId) {
 		int res=0;

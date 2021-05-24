@@ -15,6 +15,9 @@ public interface CakeTypeRepo extends JpaRepository<CakeType, Integer> {
 
 	List<CakeType> findByDelStatusOrderByCakeTypeIdDesc(int del);
 	
+	@Query(value="SELECT * FROM m_cake_type WHERE del_status=0 AND is_active=0",nativeQuery=true)
+	List<CakeType> findByDelStatusOrderByCakeTypeIdDesc();
+	
 	CakeType findBycakeTypeId(int cakeTypeId);
 	
 	@Transactional

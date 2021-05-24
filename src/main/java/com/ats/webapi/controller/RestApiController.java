@@ -28,6 +28,7 @@ import com.ats.webapi.commons.Common;
 import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
+import com.ats.webapi.model.bill.Company;
 import com.ats.webapi.model.bill.GetBillAmtGroupByFr;
 import com.ats.webapi.model.bill.ItemListForCustomerBill;
 import com.ats.webapi.model.frsetting.FrSetting;
@@ -47,6 +48,9 @@ import com.ats.webapi.model.stock.FinishedGoodStock;
 import com.ats.webapi.model.stock.FinishedGoodStockDetail;
 import com.ats.webapi.repo.GetBillAmtGroupByFrRepo;
 import com.ats.webapi.repo.ItemListForCustomerBillRepo;
+import com.ats.webapi.repositories.MFrConfigRepository;
+import com.ats.webapi.repositories.NewGetOrderRepository;
+import com.ats.webapi.repository.CompanyRepository;
 import com.ats.webapi.repository.ConfigureFrListRepository;
 import com.ats.webapi.repository.ConfigureFrRepository;
 import com.ats.webapi.repository.FlavourConfRepository;
@@ -165,6 +169,17 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class RestApiController {
 	
 	
+	
+	@Autowired
+	MFrConfigRepository mFrConfigRepo;
+	
+	
+	@Autowired
+	CompanyRepository companyRepo;
+
+	@Autowired
+	NewGetOrderRepository newGetOrderRepo;
+	   
 	@Autowired
 	FlavourConfRepository flavConfigRepo;
 
@@ -2564,6 +2579,31 @@ public class RestApiController {
 	}
 	
 	
+	
+	//Add Stock Type To Multiple Franchisee 2021-02-24
+		@RequestMapping(value="/addStockTypeToMultiFrs",method=RequestMethod.POST)
+		public Info addStockTypeToMultiFrs(@RequestParam int stId, @RequestParam List<String> frIds) {
+			Info info=new Info();
+			int flag=0;
+			try {
+				flag=franchiseeRepository.AddStockTypeToMultiFr(stId, frIds);
+				if(flag>0) {
+					info.setError(false);
+					info.setMessage("Vehicle Mapped Succesfully");
+				}else {
+					info.setError(true);
+					info.setMessage("Unable To Map Vehicle ");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.err.println("Exception Occuered  In /addVehicleToMultiFrs");
+				e.printStackTrace();
+			}
+			
+			return info;
+		}
+	
+	
 
 	// Save Franchisee
 	@RequestMapping(value = { "/saveFranchisee" }, method = RequestMethod.POST)
@@ -4856,18 +4896,27 @@ int FridInt=Integer.parseInt(frId);
 	@RequestMapping(value = { "/showOrderCounts" }, method = RequestMethod.POST)
 	@ResponseBody
 	public OrderCountsList showOrderCounts(@RequestParam String cDate) {
-
+		List<OrderCounts> resp=new ArrayList<>();
 		/*
 		 * java.sql.Date cDate = new
 		 * java.sql.Date(Calendar.getInstance().getTime().getTime());
 		 */ System.out.println("date " + cDate);
 
 		List<OrderCounts> orderCountList = orderCountService.findOrderCount(cDate);
+		
+		List<OrderCounts> orderSpCakeCountList = orderCountService.getSpCakeOrderTotal(cDate);
+		
+		List<OrderCounts> orderBulkCountList = orderCountService.getBulkOrderTotal(cDate);
+		
+		resp.addAll(orderBulkCountList);
+		resp.addAll(orderSpCakeCountList);
+		resp.addAll(orderCountList);
 
 		System.out.println("order count  list" + orderCountList.toString());
 
 		OrderCountsList ordercountList = new OrderCountsList();
-		ordercountList.setOrderCount(orderCountList);
+		ordercountList.setOrderCount(resp);
+		
 
 		Info info = new Info();
 
@@ -4877,6 +4926,43 @@ int FridInt=Integer.parseInt(frId);
 		ordercountList.setInfo(info);
 
 		return ordercountList;
+	}	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="/NewgetOrderListForAllFr",method=RequestMethod.POST)
+	public @ResponseBody List<NewGetOrder> NewgetOrderListForAllFr(@RequestParam List<String> menuId, @RequestParam String date){
+		List<NewGetOrder> orderList=new ArrayList<>();
+	 String	fDate=Common.convertToYMD(date);
+	System.err.println("Converted Date"+fDate);	
+	 try {
+			orderList=newGetOrderRepo.getNewOrdersForAllFr(menuId, fDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception In /getOrderListForAllFr");
+			e.printStackTrace();
+		}
+		System.err.println("Resp Len-->"+orderList.size());
+		return orderList;
+	}
+	
+	
+	
+	@RequestMapping(value="/getAllConfigMenus",method=RequestMethod.GET)
+	public @ResponseBody List<MFrConfigBean> getAllConfigMenus(){
+		System.err.println("In /getAllConfigMenus");
+		List<MFrConfigBean> resp=new ArrayList<>();
+		try {
+			resp=mFrConfigRepo.getAllConfigMenus();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Exception In /getAllConfigMenus");
+		}
+		
+		return resp;
 	}
 
 	// Message news 9 sept front end
@@ -5798,7 +5884,7 @@ int FridInt=Integer.parseInt(frId);
 		OTPVerification.setOtp(null);
 		OTPVerification.setPass(null);
 		Info info = new Info();
-
+		Company companyInfo =companyRepo.findOne(1);
 		Franchisee franchisee = franchiseeService.getFranchiseeByFrCode(frCode);
 		System.out.println("JsonString" + franchisee);
 		if (franchisee != null) {
@@ -5815,8 +5901,117 @@ int FridInt=Integer.parseInt(frId);
 
 			mailsubject = " OTP  Verification ";
 			String text = "\n OTP for change your Password: ";
-
-			Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, text, otp1);
+			String textNew="<!doctype html>\n" + 
+					"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" + 
+					
+					"<head>\n" + 
+					"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" + 
+					"<title>:: Monginis ::</title>\n" + 
+					"</head>\n" + 
+					"<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"\n" + 
+					"	yahoo=\"fix\"\n" + 
+					"	style=\"font-family: Arial, sans-serif; background: #e3ebef;\">\n" + 
+					"	\n" + 
+					"		<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n" + 
+					"		align=\"center\" style=\"margin-top: 10px; margin-bottom: 10px;\">\n" + 
+					"		<tr>\n" + 
+					"			\n" + 
+					"				<td width=\"100%\" valign=\"top\" bgcolor=\"#e3ebef\">\n" + 
+					"				\n" + 
+					"					<table width=\"700\" id=\"tborder\" class=\"deviceWidth\"\n" + 
+					"					bgcolor=\"#f5f5f5\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+					"					style=\"position: relative; border: 2px solid #d8e0e4;\">\n" + 
+					"					\n" + 
+					"					<tr>\n" + 
+					"					\n" + 
+					"						<td cellspacing=\"0\" cellpadding=\"0\" style=\"padding: 0;\">\n" + 
+					"							\n" + 
+					"							<table\n" + 
+					"								width=\"100%\" id=\"\" class=\"\" cellspacing=\"0\" cellpadding=\"0\"\n" + 
+					"								align=\"center\" background=\"#000\" border=\"0\" style=\"padding: 0;\">\n" + 
+					"								\n" + 
+					"								<tr>\n" + 
+					"									<td align=\"center\" style=\"background: #FFF;\"><img\n" + 
+					"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/logo.png\" alt=\"logo\"\n" + 
+					"										style=\"border: none; max-width: 100%; padding: 15px 0; float: none;\">\n" + 
+					"									</td>\n" + 
+					"								</tr>\n" + 
+					"								<tr>\n" + 
+					"									<td style=\"background: #FFF;\"><img\n" + 
+					"										src=\"http://107.180.72.86:8080/uploads/baroda/MSPCAKE/seprator.jpg\" alt=\"seprator\"\n" + 
+					"										style=\"border: none; max-width: 100%; float: left; padding: 0 0 28px 0;\"></td>\n" + 
+					"								</tr>\n" + 
+					"								<tr>\n" + 
+					"									<td cellspacing=\"0\" cellpadding=\"0\"\n" + 
+					"										style=\"position: relative; padding: 0 40px 10px 40px; background: #FFF;\"\n" + 
+					"										border=\"0\">\n" + 
+					"										\n" + 
+					"										\n" + 
+					"										<table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+					"											cellpadding=\"0\" align=\"center\">\n" + 
+					"\n" + 
+					"											<tr>\n" + 
+					"												<td\n" + 
+					"													style=\"text-align: center; font-size: 14px; text-transform: uppercase; padding: 0 0 5px 0; color: #ec268f;\"><strong>Hey\n" + 
+					"														"+franchisee.getFrOwner()+"</strong></td>\n" + 
+					"											</tr>\n" + 
+					"											<tr>\n" + 
+					"												<td\n" + 
+					"													style=\"text-align: center; padding: 0 0 0 0; font-size: 14px; line-height: 22px; color: #333333;\">Here\n" + 
+					"													is the confirmation code for your online form:</td>\n" + 
+					"											</tr>\n" + 
+					"											<tr>\n" + 
+					"												<td style=\"text-align: center; padding: 30px 0 10px 0\"><a\n" + 
+					"													href=\"#\"\n" + 
+					"													style=\"background: #3a3c8b; padding: 9px 30px; color: #FFF; font-size: 30px; text-transform: uppercase; letter-spacing: 5px; text-decoration: none;\">"+otp1+"</a></td>\n" + 
+					"											</tr>\n" + 
+					"\n" + 
+					"										</table></td>\n" + 
+					"								</tr>\n" + 
+					"\n" + 
+					"								<tr>\n" + 
+					"									<td cellspacing=\"0\" cellpadding=\"0\" style=\"position: relative;\"\n" + 
+					"										border=\"0\"><table width=\"100%\" border=\"0\" cellspacing=\"0\"\n" + 
+					"											cellpadding=\"0\">\n" + 
+					"											<tr>\n" + 
+					"												<td\n" + 
+					"													style=\"line-height: 24px; padding: 10px 40px 40px 40px; color: #262626; text-align: center; font-size: 14px; background: #FFF;\">All\n" + 
+					"													you have to do is copy the confirmation code and paste it\n" + 
+					"													to your form to complete the email verification process.</td>\n" + 
+					"											</tr>\n" + 
+					"											<tr>\n" + 
+					"												<td\n" + 
+					"													style=\"background: #edf2f6; font-size: 12px; text-align: center; color: #66696c; padding: 10px 0; line-height: 20px;\">\n" + 
+					"													<!-- isn't that you? <a href=\"#\"\n" + 
+					"													style=\"text-decoration: underline; color: #33358f;\">Unsubscibe\n" + 
+					"														from this email</a> --> <br>"+companyInfo.getCompName()+"<br>"+companyInfo.getFactAddress()+companyInfo.getPhoneNo1()+"\n"+ 
+					"												</td>\n" + 
+					"											</tr>\n" + 
+					"								\n" + 
+					"							</table>\n" + 
+					"						\n" + 
+					"						\n" + 
+					"						</td>\n" + 
+					"					\n" + 
+					"					</tr>\n" + 
+					"					\n" + 
+					"					\n" + 
+					"					</table>\n" + 
+					"				\n" + 
+					"			\n" + 
+					"			\n" + 
+					"				</td>\n" + 
+					"		\n" + 
+					"		</tr>\n" + 
+					"		\n" + 
+					"		\n" + 
+					"		\n" + 
+					"		</table>\n" + 
+					"\n" + 
+					"</body>\n" + 
+					"</html>";
+			/*Info emailRes = EmailUtility.sendEmail(senderEmail, senderPassword, emailId, mailsubject, textNew, otp1);*/
+			Info emailRes = EmailUtility.sendOrderEmail(senderEmail, senderPassword, emailId, mailsubject, textNew);
 
 			OTPVerification.setConNumber(conNumber);
 			OTPVerification.setEmailId(emailId);
@@ -6169,10 +6364,10 @@ int FridInt=Integer.parseInt(frId);
 	
 	//Akhilesh 2021-03-18
 		@RequestMapping(value="/getMenusForSection",method=RequestMethod.POST)
-		public @ResponseBody  List<AllMenus> getMenusForSection(@RequestParam int isSameDayAppl){
+		public @ResponseBody  List<AllMenus> getMenusForSection(@RequestParam List<String> isSameDayAppl){
 			List<AllMenus> resp=new ArrayList<>();
 			try {
-				if(isSameDayAppl==-1) {
+				if(isSameDayAppl.get(0)=="-1") {
 					resp=menuService.findAllMenus();
 				}
 				else{

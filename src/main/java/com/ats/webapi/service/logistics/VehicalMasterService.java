@@ -18,6 +18,10 @@ public interface VehicalMasterService {
 
 	VehicalMaster getVehicalById(int vehicalId);
 
+	List<VehicalMaster> getAllVehicalListByDelStaus();
+	
+	int deleteMultipleVehicle(List<String> vehIds);
+
 	/*List<VehicalMaster> getAlertVehicleRecord();*/
 
 }

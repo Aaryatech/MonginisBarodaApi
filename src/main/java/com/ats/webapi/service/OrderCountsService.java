@@ -8,5 +8,10 @@ import com.ats.webapi.model.OrderCounts;
 public interface OrderCountsService {
 	
 	List<OrderCounts> findOrderCount(String cDate);
+	
+	
+	List<OrderCounts> getSpCakeOrderTotal(String cDate);
+	
+	List<OrderCounts> getBulkOrderTotal(String cDate);
 
 }

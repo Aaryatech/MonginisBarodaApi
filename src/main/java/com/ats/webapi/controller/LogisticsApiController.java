@@ -330,6 +330,51 @@ public class LogisticsApiController {
 		return getAllVehicalList;
 
 	}
+	
+	
+	
+	
+	@RequestMapping(value = { "/getAllVehicalListByDelStaus" }, method = RequestMethod.GET)
+	public @ResponseBody List<VehicalMaster> getAllVehicalListByDelStaus() {
+
+		List<VehicalMaster> getAllVehicalList = new ArrayList<VehicalMaster>();
+		try {
+
+			getAllVehicalList = vehicalMasterService.getAllVehicalListByDelStaus();
+			System.out.println(getAllVehicalList.toString());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return getAllVehicalList;
+
+	}
+	
+	@RequestMapping(value="/deleteMultipleVehicle",method=RequestMethod.POST)
+	public @ResponseBody Info deleteMultipleVehicle(@RequestParam List<String> vehIds) {
+		Info info=new Info();
+		int flag=0;
+		try {
+			flag=vehicalMasterService.deleteMultipleVehicle(vehIds);
+			if(flag>0) {
+				info.setError(false);
+				info.setMessage("Vehicals Deleted!!");
+			}else {
+				info.setError(true);
+				info.setMessage("Unable To Delete Vehical");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			info.setError(true);
+			info.setMessage("Unable To Delete Vehical Exception Occuered");
+			System.err.println("Excp In /deleteMultipleVehicle");
+			e.printStackTrace();
+		}
+		
+		return info;
+	}
+	
 
 	@RequestMapping(value = { "/getVehicalById" }, method = RequestMethod.POST)
 	public @ResponseBody VehicalMaster getVehicalById(@RequestParam("vehicalId") int vehicalId) {

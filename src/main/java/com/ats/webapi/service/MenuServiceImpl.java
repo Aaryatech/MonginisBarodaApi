@@ -106,7 +106,7 @@ public class MenuServiceImpl implements MenuService{
 
 
 	@Override
-	public List<AllMenus> getMenusByIsSameDayAppl(int isSameDayAppl) {
+	public List<AllMenus> getMenusByIsSameDayAppl(List<String> isSameDayAppl) {
 		// TODO Auto-generated method stub
 		List<AllMenus> resp=new ArrayList<>();
 		

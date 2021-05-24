@@ -33,7 +33,7 @@ public interface GrandTotalCreditnoteWiseRepository extends JpaRepository<GrandT
 			"    GROUP BY \n" + 
 			"        t_credit_note_details.crn_id  \n" + 
 			"    order by\n" + 
-			"        t_credit_note_header.crn_no", nativeQuery = true)
+			"        t_credit_note_header.crn_id", nativeQuery = true)
 	List<GrandTotalCreditnoteWise> getGrandTotalCreditnotewise(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("creditNoteType") int creditNoteType);
 
 }

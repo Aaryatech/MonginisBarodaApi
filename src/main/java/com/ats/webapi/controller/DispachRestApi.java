@@ -700,7 +700,29 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 			return sectionList;
 		}
 		
-		
+		@RequestMapping(value="/deleteMultipleSection",method=RequestMethod.POST)
+		public @ResponseBody Info deleteMultipleSection(@RequestParam List<String> secId) {
+			Info info=new Info();
+			int flag=0;
+			try {
+				flag=newSectionWithTypeRepo.deleteMultiSection(secId);
+				if(flag>0) {
+					info.setError(false);
+					info.setMessage("Section Deleted!!");
+				}else {
+					info.setError(true);
+					info.setMessage("Unable To Delete Section");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				info.setError(true);
+				info.setMessage("Unable To Delete Vehical Exception Occuered");
+				System.err.println("Excp In /deleteMultipleSection");
+				e.printStackTrace();
+			}
+			
+			return info;
+		}
 		
 		
 		//Akhilesh 2021-03-29

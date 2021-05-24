@@ -15,8 +15,45 @@ public interface SpecialCakeRepository extends JpaRepository<SpecialCake, Intege
 	public SpecialCake findOne(int spId);
 	//@Query(value="select * from m_sp_cake where m_sp_cake.del_status=:delStatus",nativeQuery=true)
 	public List<SpecialCake> findByDelStatus(int i);
-	//@Query(value="select * from m_sp_cake where m_sp_cake.del_status=:delStatus order by sp_name Asc",nativeQuery=true)
-	public List<SpecialCake> findByDelStatusOrderBySpNameAsc(int i);
+	@Query(value="SELECT\n" + 
+			"   m_sp_cake.sp_id,\n" + 
+			"    `sp_code`,\n" + 
+			"    `sp_name`,\n" + 
+			"    `sp_type`,\n" + 
+			"    `sp_min_wt`,\n" + 
+			"    `sp_max_wt`,\n" + 
+			"    `sp_book_b4`,\n" + 
+			"    `spr_id`,\n" + 
+			"    `sp_image`,\n" + 
+			"    `sp_tax1`,\n" + 
+			"    `sp_tax2`,\n" + 
+			"    `sp_tax3`,\n" + 
+			"    `spe_id_list`,\n" + 
+			"    `erp_link_code`,\n" + 
+			"    `is_used`,\n" + 
+			"    `sp_pho_upload`,\n" + 
+			"    `time_two_appli`,\n" + 
+			"  m_sp_cake.del_status,\n" + 
+			"    `base_code`,\n" + 
+			"    `sp_desc`,\n" + 
+			"    m_spcake_sup.cut_section AS order_qty,\n" + 
+			"    `order_discount`,\n" + 
+			"    `is_cust_choice_ck`,\n" + 
+			"    `is_addon_rate_appli`,\n" + 
+			"    `mrp_rate1`,\n" + 
+			"    `mrp_rate2`,\n" + 
+			"    `mrp_rate3`,\n" + 
+			"    `sp_rate1`,\n" + 
+			"    `sp_rate2`,\n" + 
+			"    `sp_rate3`,\n" + 
+			"    `is_slot_used`,\n" + 
+			"    `no_of_chars`\n" + 
+			"FROM\n" + 
+			"    `m_sp_cake`,\n" + 
+			"    m_spcake_sup\n" + 
+			"WHERE\n" + 
+			"    m_sp_cake.del_status=:delStatus  AND m_sp_cake.sp_id=m_spcake_sup.sp_id  order by sp_name Asc",nativeQuery=true)
+	public List<SpecialCake> findByDelStatusOrderBySpNameAsc(@Param("delStatus") int delStatus);
 	
 	//@Query(value="select * from m_sp_cake where m_sp_cake.sp_id IN(:spId)",nativeQuery=true)
 	public List<SpecialCake> findBySpIdIn(List<Integer> spId);
@@ -48,6 +85,10 @@ public interface SpecialCakeRepository extends JpaRepository<SpecialCake, Intege
 			"    )\n" + 
 			"    )",nativeQuery=true)
 	public List<SpecialCake> getSpcakeByFrId(@Param("frId") int frId);
+	
+	
+	
+
 	
 	
 	

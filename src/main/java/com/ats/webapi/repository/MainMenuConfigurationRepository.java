@@ -42,8 +42,8 @@ public interface MainMenuConfigurationRepository extends JpaRepository<AllMenus,
 		public List<AllMenus> findByFrIdAndSectionId(@Param("sectionId") int sectionId,@Param("frId") int frId);
 		
 		
-		@Query(value="SELECT * FROM m_fr_menu_show WHERE is_same_day_applicable=:isSameDayAppl AND del_status=0",nativeQuery=true)
-		public List<AllMenus>  getMenusByIsSameDayAppl(@Param("isSameDayAppl") int isSameDayAppl );
+		@Query(value="SELECT * FROM m_fr_menu_show WHERE is_same_day_applicable IN(:isSameDayAppl) AND del_status=0",nativeQuery=true)
+		public List<AllMenus>  getMenusByIsSameDayAppl(@Param("isSameDayAppl") List<String> isSameDayAppl );
 
 		@Query(value="SELECT\n" + 
 				"        m_fr_menu_show.* \n" + 

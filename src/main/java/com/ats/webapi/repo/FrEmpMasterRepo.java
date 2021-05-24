@@ -32,6 +32,9 @@ public interface FrEmpMasterRepo extends JpaRepository<FrEmpMaster, Integer> {
 	public int deleteEmpByfrEmpId(@Param("empId") int empId);
 	
 	public FrEmpMaster findByFrIdAndFrEmpContactAndPasswordAndDelStatus(int frId, String mobNo, String empPass, int del);
+	
+	@Query(value="SELECT * FROM `m_fr_emp` WHERE m_fr_emp.fr_emp_id=:empId AND m_fr_emp.password=:empPass",nativeQuery=true)
+	public FrEmpMaster findByFrIdAndPass(@Param("empId") int empId,@Param("empPass") String empPass);
 
 	public FrEmpMaster findByFrEmpId(int empId);
 	

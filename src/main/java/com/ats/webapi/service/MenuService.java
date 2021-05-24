@@ -13,7 +13,7 @@ public interface MenuService {
 	public AllMenuJsonResponse findAllMenu();
 	public AllMenuJsonResponse findMenuByCat(int catId);
 	public AllMenus findMenu(int menuId);
-	public List<AllMenus>  getMenusByIsSameDayAppl(int isSameDayAppl );
+	public List<AllMenus>  getMenusByIsSameDayAppl(List<String> isSameDayAppl );
 	public AllMenuJsonResponse findMenuByCatAndSectn(int catId, int sectionId);
 
 }

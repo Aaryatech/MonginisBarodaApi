@@ -83,6 +83,40 @@ public class FranchiseApiContoller {
 	}
 	
 	
+	
+	@RequestMapping("/getInUseVehicleList")
+	public @ResponseBody List<Integer> getInUseVehicleList() {
+
+		List<Integer> res = new ArrayList<Integer>();
+		try {
+			res = franchRepo.getInUseVehicleList();
+
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		return res;
+
+	}
+	
+	
+	@RequestMapping("/getInUseStockType")
+	public @ResponseBody List<Integer> getInUseStockType() {
+
+		List<Integer> res = new ArrayList<Integer>();
+		try {
+			res = franchRepo.getInUseStockType();
+
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		return res;
+
+	}
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "/validateRouteShortName" }, method = RequestMethod.POST)
 	public @ResponseBody RouteMaster validateRouteShortName(@RequestParam String shortName, @RequestParam int routeId) {
 
@@ -306,7 +340,7 @@ public class FranchiseApiContoller {
 			@ResponseBody
 			public List<CakeType> showCakeTypeList() {
 
-				List<CakeType> cakeType = cakeTypeRepo.findByDelStatusOrderByCakeTypeIdDesc(0);
+				List<CakeType> cakeType = cakeTypeRepo.findByDelStatusOrderByCakeTypeIdDesc();
 
 				return cakeType;
 			}
@@ -508,4 +542,35 @@ public class FranchiseApiContoller {
 			return info;
 
 		}
+		
+		@RequestMapping(value="/deleteMultiFr",method=RequestMethod.POST)
+		public @ResponseBody Info deleteMultiFr(@RequestParam List<String> frIds) {
+		Info info=new Info();
+		int flag=0;
+		try {
+			flag=franchRepo.deleteMultiFrByFrId(frIds);
+			if(flag>0) {
+				info.setError(false);
+				info.setMessage("Franchisees Deleted!!");
+			}else {
+				info.setError(true);
+				info.setMessage("Unable To  Delete Franchisees!!!");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			info.setError(true);
+			info.setMessage("Unable To  Delete Franchisees Exception Occuerd.!!!");
+			System.err.println("Excep In /deleteMultiFr");
+			e.printStackTrace();
+		}
+		return info;
+		
+		}
+		
+		
+		
+		
+		
+		
+		
 }

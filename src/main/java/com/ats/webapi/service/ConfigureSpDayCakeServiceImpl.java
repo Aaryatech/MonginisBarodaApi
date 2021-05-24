@@ -44,7 +44,7 @@ public class ConfigureSpDayCakeServiceImpl implements ConfigureSpDayCakeService{
 	@Override
 	public ConfiguredSpDayCkResponse getConfiguredSpDayCkList() {
 
-		List<GetConfiguredSpDayCk> configuredSpDayCkList=getConfSpDayCakeRepository.findAllByDelStatus(0);
+		List<GetConfiguredSpDayCk> configuredSpDayCkList=getConfSpDayCakeRepository.findAllByDelStatus();
 		ConfiguredSpDayCkResponse configuredSpDayCkResponse=new ConfiguredSpDayCkResponse();
 		ErrorMessage errorMessage=new ErrorMessage();
 		

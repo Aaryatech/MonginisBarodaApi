@@ -54,9 +54,27 @@ public class VehicalMasterServiceImpl implements VehicalMasterService{
 		
 		return info;
 	}
-
+	
 	@Override
 	public List<VehicalMaster> getAllVehicalList() {
+		List<VehicalMaster> getAllVehicalList = new ArrayList<VehicalMaster>();
+		try {
+			  
+			getAllVehicalList = vehicalMasterRepository.getAllVehicleWithFranchiseeName();
+			 
+			System.out.println(getAllVehicalList.toString());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return getAllVehicalList;
+	}
+	
+	
+	
+	
+	@Override
+	public List<VehicalMaster> getAllVehicalListByDelStaus() {
 		List<VehicalMaster> getAllVehicalList = new ArrayList<VehicalMaster>();
 		try {
 			  
@@ -83,6 +101,13 @@ public class VehicalMasterServiceImpl implements VehicalMasterService{
 			e.printStackTrace();
 		}
 		return getVehicalById;
+	}
+
+	@Override
+	public int deleteMultipleVehicle(List<String> vehIds) {
+		int flag=0;
+		flag=vehicalMasterRepository.deleteMultipleVehicle(vehIds);
+		return flag;
 	}
 
 	/*@Override

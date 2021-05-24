@@ -105,6 +105,41 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			@Param("itemTax2") double itemTax2, @Param("itemTax3") double itemTax3);
 
 	public List<Item> findByDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc(int i);
+	
+	
+	@Query(value="SELECT\n" + 
+			"    m_item.id,\n" + 
+			"    m_item.item_id,\n" + 
+			"   CONCAT(m_item.item_name,'(',m_item_sup.item_uom,')') AS item_name,\n" + 
+			"    `item_grp1`,\n" + 
+			"    `item_grp2`,\n" + 
+			"    `item_grp3`,\n" + 
+			"    `item_rate1`,\n" + 
+			"    `item_rate2`,\n" + 
+			"    `item_rate3`,\n" + 
+			"    `item_mrp1`,\n" + 
+			"    `item_mrp2`,\n" + 
+			"    `item_mrp3`,\n" + 
+			"      m_item_sup.item_hsncd AS item_image,\n" + 
+			"    `item_tax1`,\n" + 
+			"    `item_tax2`,\n" + 
+			"    `item_tax3`,\n" + 
+			"    `item_is_used`,\n" + 
+			"    `item_sort_id`,\n" + 
+			"    `grn_two`,\n" + 
+			"    m_item.del_status,\n" + 
+			"    `min_qty`,\n" + 
+			"    `item_shelf_life`\n" + 
+			"FROM\n" + 
+			"    `m_item`,\n" + 
+			"    m_item_sup\n" + 
+			"WHERE\n" + 
+			"  m_item.del_status=0  AND  m_item_sup.item_id=m_item.id \n" + 
+			" ORDER BY\n" + 
+			" m_item.item_grp1 ASC,m_item.item_grp2 ASC ,m_item.item_name ASC\n" + 
+			" \n" + 
+			"  ",nativeQuery=true)
+	public List<Item> findByDelStatusOrderByItemGrp1AscItemGrp2AscItemNameAsc();
 
 	public List<Item> findByItemGrp1InAndDelStatusOrderByItemGrp2AscItemNameAsc(List<String> catIdList, int i);
 

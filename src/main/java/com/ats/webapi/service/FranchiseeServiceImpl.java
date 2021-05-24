@@ -642,6 +642,6 @@ public class FranchiseeServiceImpl implements FranchiseeService {
 	@Override
 	public List<Franchisee> findAll() {
 		// TODO Auto-generated method stub
-		return  franchiseeRepository.findAll();
+		return  franchiseeRepository.findAllWithStockType();
 	}
 }

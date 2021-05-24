@@ -147,6 +147,25 @@ public class DiscountController {
 		
 	}
 	
+	
+	@RequestMapping(value="/deleteMultiDiscountId", method=RequestMethod.POST)
+	public @ResponseBody Info deleteMultiDiscount(@RequestParam List<String> id) {
+		
+		Info info =new Info();
+		int isDelete = discountRepository.deleteMultiDiscId(id);
+		
+		if(isDelete!=0) {
+			info.setError(false);
+			info.setMessage("sucess");
+		}else {
+			info.setError(true);
+			info.setMessage("Fail");
+		}
+		return info;
+		
+	}
+	
+	
 	/*	@RequestMapping(value = { "/deleteMultiDiscount" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteMultiDiscount(@RequestParam("discId") List<Integer> discId) {
 

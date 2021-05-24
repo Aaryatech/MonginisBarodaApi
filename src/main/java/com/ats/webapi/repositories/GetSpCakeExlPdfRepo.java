@@ -24,7 +24,7 @@ public interface GetSpCakeExlPdfRepo extends JpaRepository<GetSpCakeExlPdf, Inte
 			"        sp.sp_min_wt,\n" + 
 			"        sp.sp_max_wt,\n" + 
 			"        sp.sp_tax3,\n" + 
-			"        sp.is_slot_used AS increamented_by,\n" + 
+			"        sp.sp_rate2 AS increamented_by,\n" + 
 			"        sp.mrp_rate1,\n" + 
 			"        sp.mrp_rate2,\n" + 
 			"        sp.mrp_rate3,\n" + 
@@ -39,28 +39,26 @@ public interface GetSpCakeExlPdfRepo extends JpaRepository<GetSpCakeExlPdf, Inte
 			"        m_spcake_sup sup,\n" + 
 			"        m_rm_uom u\n" + 
 			"    WHERE\n" + 
-			"        sp.sp_id = sup.sp_id AND sup.cut_section = c.cake_type_id AND sp.del_status = 0 		AND u.uom_id = sup.uom_id\n" + 
+			"        sp.sp_id = sup.sp_id AND sup.cut_section = c.cake_type_id AND sp.del_status = 0 AND u.uom_id = sup.uom_id\n" + 
 			") t1\n" + 
 			"LEFT JOIN(\n" + 
-			"    SELECT\n" + 
-			"        m_spcake_sup.sp_id,\n" + 
+			"    SELECT m_sp_cake.sp_id,\n" + 
 			"        GROUP_CONCAT(m_shape.shape_name) AS shape_name\n" + 
 			"    FROM\n" + 
 			"        m_shape,\n" + 
-			"        m_spcake_sup\n" + 
+			"        m_sp_cake\n" + 
 			"    WHERE\n" + 
 			"        FIND_IN_SET(\n" + 
 			"            m_shape.shape_id,\n" + 
-			"            m_spcake_sup.sp_uom\n" + 
+			"            m_sp_cake.spe_id_list\n" + 
 			"        )\n" + 
 			"    GROUP BY\n" + 
-			"        m_spcake_sup.sp_id\n" + 
+			"        m_sp_cake.sp_id\n" + 
 			") t2\n" + 
 			"ON\n" + 
 			"    t1.sp_id = t2.sp_id\n" + 
 			"LEFT JOIN(\n" + 
-			"    SELECT\n" + 
-			"        m_sp_cake.sp_id,\n" + 
+			"    SELECT m_sp_cake.sp_id,\n" + 
 			"        GROUP_CONCAT(m_sp_event.spe_name) AS event_name\n" + 
 			"    FROM\n" + 
 			"        m_sp_event,\n" + 
@@ -76,8 +74,7 @@ public interface GetSpCakeExlPdfRepo extends JpaRepository<GetSpCakeExlPdf, Inte
 			"ON\n" + 
 			"    t1.sp_id = t3.sp_id\n" + 
 			"LEFT JOIN(\n" + 
-			"    SELECT\n" + 
-			"        m_sp_cake.sp_id,\n" + 
+			"    SELECT m_sp_cake.sp_id,\n" + 
 			"        GROUP_CONCAT(m_sp_flavour.spf_name) AS flavour\n" + 
 			"    FROM\n" + 
 			"        m_sp_flavour,\n" + 

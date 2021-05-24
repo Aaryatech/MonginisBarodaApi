@@ -1632,7 +1632,7 @@ public class MasterController {
 
 					List<FlavourConf> flList;
 					try {
-						flList = flavourConfRepository.findByDelStatus(0);
+						flList = flavourConfRepository.findByDelStatusWithCakeType();
 					}
 					catch (Exception e) {
 						flList=new ArrayList<>();

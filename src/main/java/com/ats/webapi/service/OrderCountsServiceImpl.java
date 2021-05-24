@@ -24,4 +24,18 @@ public class OrderCountsServiceImpl implements OrderCountsService {
 		return orderCounts;
 	}
 
+
+	@Override
+	public List<OrderCounts> getSpCakeOrderTotal(String cDate) {
+		 List<OrderCounts> orderCounts=orderCountRepository.getSpCakeOrderTotal(cDate);
+		 return orderCounts;
+	}
+
+
+	@Override
+	public List<OrderCounts> getBulkOrderTotal(String cDate) {
+		List<OrderCounts> orderCounts=orderCountRepository.getBulkOrderTotal(cDate);
+		 return orderCounts;
+	}
+
 }
