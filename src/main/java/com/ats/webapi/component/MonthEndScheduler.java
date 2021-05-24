@@ -47,9 +47,12 @@ public class MonthEndScheduler {
 	// Every month date 1 12 noon 0 0 12 1 1/1 ? *
 	// 0 0 1 * *
 //*/2 * * * *
+	
+	//0 0 2 * *
 	@Scheduled(cron = "2 * * * * *")
 	// @Scheduled(cron = "*/2 * * * *")
-	public void autoMonthEnd() {
+	public   void autoMonthEnd() {
+	
 		DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
 
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -70,20 +73,31 @@ public class MonthEndScheduler {
 		int frId = 0;
 
 		List<Franchisee> frList = new ArrayList<Franchisee>();
+		try {
 		frList = frRepo.findAllByDelStatusOrderByFrNameAsc(0);
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
 		for (int f = 0; f < frList.size(); f++) {
 			frId = frList.get(f).getFrId();
-
+			System.err.println("frId " + frId);
+			try {
 			for (int c = 0; c < catList.size(); c++) {
 
 				PostFrItemStockHeader stockHeader = postFrOpStockHeaderRepository
 						.findByFrIdAndCatIdAndIsMonthClosed(frId, catList.get(c), 0);
 				if (stockHeader == null) {
-
-				}
+					System.err.println("null stock header   "+frId + "catId " +catList.get(c));
+				}else {
 				if (stockHeader.getMonth() == calCurrentMonth) {
 					// Month End Already done for catId
+					System.err.println(" Month End Already done for  frId "+frId + "catId " +catList.get(c));
+
 				} else {
+					System.err.println("month end  franchise "+frId + "catId " +catList.get(c));
+
 					List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<PostFrItemStockDetail>();
 					// detailList =
 					// postFrOpStockDetailRepository.getFrDetail(stockHeader.getOpeningStockHeaderId());
@@ -99,13 +113,14 @@ public class MonthEndScheduler {
 					}
 
 					strDate = year + "-0" + runningMonth + "-01";
-					System.err.println("str date " + strDate);
-
+List<Integer> itemList= getItemList(frId, catList.get(c));
+System.err.println("itemList " + itemList);
+if(!itemList.isEmpty()) {
 					List<GetCurrentStockDetails> currentStockDetailList = stockDetailRepository.getMinOpeningStock2(
 							stockHeader.getMonth(), Integer.parseInt(currentYear), frId, catList.get(c), strDate,
 							getMonthFirstDate(), frList.get(f).getStockType(), getItemList(frId, catList.get(c)));
 
-					System.err.println("currentStockDetailList " + currentStockDetailList);
+					//System.err.println("currentStockDetailList " + currentStockDetailList);
 					for (int i = 0; i < currentStockDetailList.size(); i++) {
 
 						GetCurrentStockDetails stockDetails = currentStockDetailList.get(i);
@@ -140,7 +155,7 @@ public class MonthEndScheduler {
 
 						postFrItemStockDetailList.add(postFrItemStockDetail);
 					} // end of currentStockDetailList loop
-					System.err.println("postFrItemStockDetailList for update " + postFrItemStockDetailList);
+					//System.err.println("postFrItemStockDetailList for update " + postFrItemStockDetailList);
 
 					int headerId = stockHeader.getOpeningStockHeaderId();
 
@@ -188,10 +203,15 @@ public class MonthEndScheduler {
 						postFrOpStockDetailRepository.save(newStockDetail);
 
 					} // end of for postFrItemStockDetailList
+				}//end of itemlist not empty
 
-				} // end of else
+				}// End of catId For 
 
-			} // End of catId For
+			} // end of else
+			}//end of else
+		}catch (Exception e) {
+		e.printStackTrace();
+		}
 		} // End of frList For Loop
 	}// End of autoMonthEnd() function
 
@@ -214,7 +234,7 @@ public class MonthEndScheduler {
 		}
 		List<Integer> itemList = Stream.of(itemShow.split(",")).map(String::trim).map(Integer::parseInt)
 				.collect(Collectors.toList());
-		itemList.clear();
+		//itemList.clear();
 		// itemList.add(4);
 		return itemList;
 	}
@@ -224,7 +244,7 @@ public class MonthEndScheduler {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		Date todaysDate = new Date();
-		System.out.println(dateFormat.format(todaysDate));
+		//System.out.println(dateFormat.format(todaysDate));
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todaysDate);
@@ -233,7 +253,7 @@ public class MonthEndScheduler {
 
 		Date firstDay = cal.getTime();
 
-		System.out.println("First Day of month " + firstDay);
+		//System.out.println("First Day of month " + firstDay);
 
 		String strFirstDay = dateFormat.format(firstDay);
 		return strFirstDay;
@@ -244,15 +264,19 @@ public class MonthEndScheduler {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
 		Date todaysDate = new Date();
-		System.out.println(dateFormat.format(todaysDate));
+		//System.out.println(dateFormat.format(todaysDate));
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todaysDate);
 
-		System.out.println("todaysDate Day   " + todaysDate);
+		//System.out.println("todaysDate Day   " + todaysDate);
 
 		String strTodayDate = dateFormat.format(todaysDate);
 		return strTodayDate;
 	}
 
+	/*
+	 * public static void main(String [] args) { MonthEndScheduler ms=new
+	 * MonthEndScheduler(); ms.autoMonthEnd(); }
+	 */
 }
