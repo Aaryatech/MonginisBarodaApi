@@ -30,12 +30,22 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	int updateBillStatus(@Param("orderId") int orderId,@Param("status") int status);
 
 	
+	/*
+	 * @Transactional
+	 * 
+	 * @Modifying
+	 * 
+	 * @Query("UPDATE Orders t SET t.isBillGenerated =1  WHERE t.itemId IN(:orderItemId) and t.menuId IN(:menuIdList) AND production_date=:prodDate AND t.isBillGenerated=0"
+	 * ) int updateStatus(@Param("orderItemId")List<String>
+	 * orderItemId, @Param("prodDate")String
+	 * prodDate,@Param("menuIdList")List<String> menuIdList);
+	 */
+
 	@Transactional
 	@Modifying
-	@Query("UPDATE Orders t SET t.isBillGenerated =1  WHERE t.itemId IN(:orderItemId) AND production_date=:prodDate AND t.isBillGenerated=0")
-	int updateStatus(@Param("orderItemId")List<String> orderItemId, @Param("prodDate")String prodDate);
+	@Query(value="UPDATE t_order  SET is_bill_generated =1  WHERE item_id IN (:orderItemId) and menu_id IN (:menuIdList) AND production_date=:prodDate AND is_bill_generated=0",nativeQuery=true)
+	int updateStatus(@Param("orderItemId")List<String> orderItemId, @Param("prodDate")String prodDate,@Param("menuIdList")List<String> menuIdList);
 
-	
 	@Transactional
 	@Modifying
 	@Query("UPDATE Orders t SET t.deliveryDate=:delDate,t.productionDate=:prodDate  WHERE t.orderId IN(:orderIds)")

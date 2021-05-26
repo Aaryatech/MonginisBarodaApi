@@ -31,7 +31,7 @@ public interface PostProdPlanHeaderRepository extends JpaRepository<PostProdPlan
 	int updateisBom(@Param("productionId")int productionId);
 
 	
-	@Query(value="select * from t_production_plan_header where is_planned=1 and production_status IN(3,4) ",nativeQuery=true)
+	@Query(value="select * from t_production_plan_header where is_planned=1 and production_status IN(3,4) order by production_header_id desc",nativeQuery=true)
 	List<PostProdPlanHeader> planVariationList();
 	
 	@Query(value="select * from t_production_plan_header where production_header_id=:planHeaderId",nativeQuery=true)

@@ -8,6 +8,28 @@ public class UpdateOrderStatus {
 	List<String> orderItemId;
 	List<Integer> regOrderItemId;
 	String prodDate;
+	
+	String menuIdList;
+	
+List<String> menuIdListInteger;
+	
+	
+	public List<String> getMenuIdListInteger() {
+		return menuIdListInteger;
+	}
+	public void setMenuIdListInteger(List<String> menuIdListInteger) {
+		this.menuIdListInteger = menuIdListInteger;
+	}
+	
+	
+	public String getMenuIdList() {
+		return menuIdList;
+	}
+	public void setMenuIdList(String menuIdList) {
+		this.menuIdList = menuIdList;
+	}
+	
+	
 	public List<String> getOrderItemId() {
 		return orderItemId;
 	}

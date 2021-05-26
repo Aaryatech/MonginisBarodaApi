@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -260,12 +262,18 @@ public class ProductionServiceImpl implements ProductionService{
 	public Info updateBillStatus(UpdateOrderStatus updateOrderStatus) {
 		int res=0,res2=0;
 		Info info=new Info();
+		 
+		
+		List<String> menuIds = Stream.of(updateOrderStatus.getMenuIdList().split(","))
+                .collect(Collectors.toList());
 		
 		//if(updateOrderStatus.getOrderId()!=null || !updateOrderStatus.getOrderId().isEmpty())
-		 res2=  orderRepository.updateStatus(updateOrderStatus.getOrderItemId(), updateOrderStatus.getProdDate());
+		 res2=  orderRepository.updateStatus(updateOrderStatus.getOrderItemId(), updateOrderStatus.getProdDate(),
+				 updateOrderStatus.getMenuIdListInteger());
 		
 		//if(updateOrderStatus.getRegOrderId()!=null || !updateOrderStatus.getRegOrderId().isEmpty())
-			res=regularSpCkOrderRepository.updateRegSpCakeBillStatus(updateOrderStatus.getRegOrderItemId(), updateOrderStatus.getProdDate());
+			res=regularSpCkOrderRepository.updateRegSpCakeBillStatus(updateOrderStatus.getRegOrderItemId(), updateOrderStatus.getProdDate(),
+					updateOrderStatus.getMenuIdListInteger());
 		
 		if(res>0 || res2>0)
 		{
