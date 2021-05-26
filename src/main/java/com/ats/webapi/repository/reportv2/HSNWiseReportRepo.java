@@ -57,8 +57,8 @@ public interface HSNWiseReportRepo extends JpaRepository<HSNWiseReport, Integer>
 			"    GROUP BY\r\n" + 
 			"        item_hsncd,\r\n" + 
 			"        m_cat_sub.sub_cat_id\r\n" + 
-			"    UNION\r\n" + 
-			"    ALL               SELECT\r\n" + 
+			"    UNION    ALL \r\n" + 
+			"                  SELECT\r\n" + 
 			"        uuid() AS id,\r\n" + 
 			"        t_bill_detail.hsn_code AS item_hsncd,\r\n" + 
 			"        t_bill_detail.sgst_per AS item_tax1,\r\n" + 
@@ -83,13 +83,83 @@ public interface HSNWiseReportRepo extends JpaRepository<HSNWiseReport, Integer>
 			"        AND t_bill_header.del_status = 0\r\n" + 
 			"        AND t_bill_detail.del_status = 0\r\n" + 
 			"        AND t_bill_detail.item_id = m_sp_cake.sp_id\r\n" + 
-			"        AND 5=m_cat_sub.cat_id\r\n" + 
-			"        and m_category.cat_id=5\r\n" + 
-			"        and t_bill_detail.cat_id=5\r\n" + 
+			"         AND m_cat_sub.cat_id=m_category.cat_id          \r\n" + 
+			"        and m_category.cat_id=5          \r\n" + 
+			"        and t_bill_detail.cat_id= m_category.cat_id  " + 
 			"    GROUP BY\r\n" + 
 			"        item_hsncd,\r\n" + 
 			"        m_cat_sub.sub_cat_id",nativeQuery=true)
 	List<HSNWiseReport> getReportSubcat(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
+	
+	
+	
+	@Query(value=" SELECT\r\n" + 
+			"        uuid() AS id,\r\n" + 
+			"        t_bill_detail.hsn_code AS item_hsncd,\r\n" + 
+			"        t_bill_detail.sgst_per AS item_tax1,\r\n" + 
+			"        t_bill_detail.cgst_per AS item_tax2,\r\n" + 
+			"        t_bill_detail.cess_per,\r\n" + 
+			"        SUM(t_bill_detail.bill_qty) AS bill_qty,\r\n" + 
+			"        SUM(t_bill_detail.taxable_amt) AS taxable_amt,\r\n" + 
+			"        SUM(t_bill_detail.cgst_rs) AS cgst_rs,\r\n" + 
+			"        SUM(t_bill_detail.sgst_rs) AS sgst_rs,\r\n" + 
+			"        SUM(t_bill_detail.cess_rs) AS cess_rs,\r\n" + 
+			"        m_cat_sub.sub_cat_name,\r\n" + 
+			"        m_cat_sub.sub_cat_id      \r\n" + 
+			"    FROM\r\n" + 
+			"        t_bill_header,\r\n" + 
+			"        t_bill_detail,\r\n" + 
+			"        m_item,\r\n" + 
+			"        m_cat_sub,\r\n" + 
+			"        m_category      \r\n" + 
+			"    WHERE\r\n" + 
+			"        t_bill_header.bill_no = t_bill_detail.bill_no          \r\n" + 
+			"        AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate          \r\n" + 
+			"        AND t_bill_header.del_status = 0          \r\n" + 
+			"        AND t_bill_detail.del_status = 0          \r\n" + 
+			"        AND t_bill_detail.item_id = m_item.id          \r\n" + 
+			"        AND m_item.item_grp2 = m_cat_sub.sub_cat_id          \r\n" + 
+			"        AND m_category.cat_id=m_cat_sub.cat_id          \r\n" + 
+			"        and m_category.cat_id=t_bill_detail.cat_id          \r\n" + 
+			"        and t_bill_detail.cat_id !=5      \r\n" + 
+			"    GROUP BY\r\n" + 
+			"        item_hsncd,\r\n" + 
+			"        m_cat_sub.sub_cat_id ",nativeQuery=true)
+	List<HSNWiseReport> getBillReportSubcatForRegItem(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
+	
+	
+	@Query(value="    SELECT\r\n" + 
+			"        uuid() AS id,\r\n" + 
+			"        t_bill_detail.hsn_code AS item_hsncd,\r\n" + 
+			"        t_bill_detail.sgst_per AS item_tax1,\r\n" + 
+			"        t_bill_detail.cgst_per AS item_tax2,\r\n" + 
+			"        t_bill_detail.cess_per,\r\n" + 
+			"        SUM(t_bill_detail.bill_qty) AS bill_qty,\r\n" + 
+			"        SUM(t_bill_detail.taxable_amt) AS taxable_amt,\r\n" + 
+			"        SUM(t_bill_detail.cgst_rs) AS cgst_rs,\r\n" + 
+			"        SUM(t_bill_detail.sgst_rs) AS sgst_rs,\r\n" + 
+			"        SUM(t_bill_detail.cess_rs) AS cess_rs,\r\n" + 
+			"        m_cat_sub.sub_cat_name,\r\n" + 
+			"        m_cat_sub.sub_cat_id      \r\n" + 
+			"    FROM\r\n" + 
+			"        t_bill_header,\r\n" + 
+			"        t_bill_detail,\r\n" + 
+			"        m_sp_cake,\r\n" + 
+			"        m_cat_sub,\r\n" + 
+			"        m_category      \r\n" + 
+			"    WHERE\r\n" + 
+			"        t_bill_header.bill_no = t_bill_detail.bill_no          \r\n" + 
+			"        AND t_bill_header.bill_date BETWEEN :fromDate AND :toDate        \r\n" + 
+			"        AND t_bill_header.del_status = 0          \r\n" + 
+			"        AND t_bill_detail.del_status = 0          \r\n" + 
+			"        AND t_bill_detail.item_id = m_sp_cake.sp_id           \r\n" + 
+			"        AND m_cat_sub.cat_id=m_category.cat_id                    \r\n" + 
+			"        and m_category.cat_id=5                    \r\n" + 
+			"        and t_bill_detail.cat_id= m_category.cat_id      \r\n" + 
+			"    GROUP BY\r\n" + 
+			"        item_hsncd,\r\n" + 
+			"        m_cat_sub.sub_cat_id",nativeQuery=true)
+	List<HSNWiseReport> getBillReportSubcatForSpCake(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 	
 	
 	
@@ -204,8 +274,8 @@ public interface HSNWiseReportRepo extends JpaRepository<HSNWiseReport, Integer>
 			"    GROUP BY\r\n" + 
 			"        item_hsncd,\r\n" + 
 			"        m_cat_sub.sub_cat_id\r\n" + 
-			"    UNION\r\n" + 
-			"    ALL                  SELECT\r\n" + 
+			"    UNION  ALL \r\n" + 
+			"                     SELECT\r\n" + 
 			"        uuid() AS id,\r\n" + 
 			"        t_credit_note_details.hsn_code AS item_hsncd,\r\n" + 
 			"        t_credit_note_details.sgst_per AS item_tax1,\r\n" + 

@@ -12,10 +12,10 @@ import com.ats.webapi.model.ItemOrderHisNew;
 
 
 public interface ItemOrderHisRepositoryNew extends JpaRepository<ItemOrderHisNew,Long> {//o.menu_id= replaced by o.order_type 
-	@Query(value="select o.*,m.menu_title,i.item_name ,  m_fr_configure.disc_per, m_fr_configure.grn_per from t_order o,m_fr_menu_show m,m_item i,m_fr_configure where o.menu_id=m.menu_id AND o.item_id=i.id AND o.menu_id IN(:catId) AND o.delivery_date=:deliveryDate AND o.fr_id=:frId  AND o.menu_id=m_fr_configure.menu_id ",nativeQuery=true)
+	@Query(value="select o.*,m.menu_title,i.item_name ,  m_fr_configure.disc_per,o.grn_type AS grn_per from t_order o,m_fr_menu_show m,m_item i,m_fr_configure where o.menu_id=m.menu_id AND o.item_id=i.id AND o.menu_id IN(:catId) AND o.delivery_date=:deliveryDate AND o.fr_id=:frId  AND o.menu_id=m_fr_configure.menu_id ",nativeQuery=true)
 	List<ItemOrderHisNew> findByMenuIdInAndDeliveryDate(@Param("catId") List<String> catId,@Param("deliveryDate") Date deliveryDate,@Param("frId")int frId);
 
-	@Query(value="select o.*,m.menu_title,i.item_name,  m_fr_configure.disc_per, m_fr_configure.grn_per from t_order o,m_fr_menu_show m,m_item i,m_fr_configure where o.menu_id=m.menu_id AND o.item_id=i.id  AND o.delivery_date=:deliveryDate AND o.fr_id=:frId  AND o.menu_id=m_fr_configure.menu_id ",nativeQuery=true)
+	@Query(value="select o.*,m.menu_title,i.item_name,  m_fr_configure.disc_per, o.grn_type AS grn_per from t_order o,m_fr_menu_show m,m_item i,m_fr_configure where o.menu_id=m.menu_id AND o.item_id=i.id  AND o.delivery_date=:deliveryDate AND o.fr_id=:frId  AND o.menu_id=m_fr_configure.menu_id ",nativeQuery=true)
 	List<ItemOrderHisNew> findByMenuIdInAndDeliveryDateAll(@Param("deliveryDate")Date deliveryDate,@Param("frId") int frId);
 
 

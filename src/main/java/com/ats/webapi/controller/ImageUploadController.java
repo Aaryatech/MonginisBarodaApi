@@ -101,6 +101,43 @@ public class ImageUploadController {
 
 		return info;
 	}
+	
+	
+	
+	@RequestMapping(value = { "/photoUploadServ" }, method = RequestMethod.POST)
+	public @ResponseBody Info photoUploadServ(@RequestParam("file") List<MultipartFile> uploadfile,
+			@RequestParam("imageName") List<String> imageName, @RequestParam("type") String type) {
+
+		Info info = new Info();
+		//System.out.println("File Name " + uploadfile.getOriginalFilename());
+	//	String a=	imageName.replaceAll("^\"|\"$", "");//Akhilesh ," " In Image Name Problm 2021-03-11
+		//System.out.println("imageName Name1 " +a);
+		
+		
+		
+		try {
+			
+			for(int i=0;i<uploadfile.size();i++) {
+				String a=	imageName.get(i).replaceAll("^\"|\"$", "");
+				saveUploadedFiles(Arrays.asList(uploadfile.get(i)), a, type);	
+		}
+			//saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);//Akhilesh ," " In Image Name Problm 2021-03-11
+		//	saveUploadedFiles(Arrays.asList(uploadfile), a, type);
+
+			//saveUploadedFiles(Arrays.asList(uploadfile), imageName, type);
+
+			info.setError(false);
+			info.setMessage("File uploaded successfully");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("File upload failed");
+		}
+
+		return info;
+	}
 
 	// save file
 	private void saveUploadedFiles(List<MultipartFile> files, String imageName, String type) throws IOException {

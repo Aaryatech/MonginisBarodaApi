@@ -138,9 +138,16 @@ public class ReportControllerV2 {
 		public @ResponseBody List<HSNWiseReport> getHsnBillReportSubcat(@RequestParam("fromDate") String fromDate,
 				@RequestParam("toDate") String toDate) {
 			List<HSNWiseReport> saleList = new ArrayList<>();
+			List<HSNWiseReport> regResp = new ArrayList<>();
+			List<HSNWiseReport> spResp = new ArrayList<>();
 			try {
-
-				saleList = hSNWiseReportRepo.getReportSubcat(fromDate, toDate);
+				System.err.println("Frdt-->"+fromDate+"\t To Dt-->"+toDate);
+				//saleList = hSNWiseReportRepo.getReportSubcat(fromDate, toDate);
+				regResp=hSNWiseReportRepo.getBillReportSubcatForRegItem(fromDate, toDate);
+				spResp=hSNWiseReportRepo.getBillReportSubcatForSpCake(fromDate, toDate);
+				saleList.addAll(regResp);
+				saleList.addAll(spResp);
+				System.err.println("Api Resp-->"+saleList.toString());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
