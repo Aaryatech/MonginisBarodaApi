@@ -83,6 +83,19 @@ public class GetGrnItemConfig implements Serializable {
 	@Column(name="hsn_code")
 	private String hsnCode;
     
+	
+	private Date expiryDate;
+	
+	
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
 	public String getHsnCode() {
 		return hsnCode;
 	}

@@ -13,7 +13,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	
     
-	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_date_time," + 
+	@Query(value = "SELECT t_bill_detail.expiry_date, t_bill_header.bill_no,t_bill_header.bill_date_time," + 
 			"t_bill_header.bill_date,t_bill_detail.item_id,m_item.item_name,t_bill_detail.grn_type," + 
 			"t_bill_detail.rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no," + 
 			"t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per,"
@@ -41,7 +41,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 
 	*/
 	
-	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_date_time," + 
+	@Query(value = "SELECT t_bill_detail.expiry_date, t_bill_header.bill_no,t_bill_header.bill_date_time," + 
 			"			t_bill_header.bill_date,t_bill_detail.item_id,m_item.item_name,m_item.item_grp2,t_bill_detail.grn_type," + 
 			"			round(t_bill_detail.base_rate,2) as rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no," + 
 			"			t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per," + 
@@ -69,7 +69,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 */
 	
 	
-	@Query(value = " SELECT t_bill_header.bill_no,t_bill_header.bill_date_time,   " + 
+	@Query(value = " SELECT t_bill_detail.expiry_date, t_bill_header.bill_no,t_bill_header.bill_date_time,   " + 
 			"	t_bill_header.bill_date,t_bill_detail.item_id,CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name   " + 
 			"		  ELSE  m_item.item_name END AS item_name,m_item.item_grp2,t_bill_detail.grn_type,  \n" + 
 			"	round(t_bill_detail.base_rate,2) as rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no,  \n" + 
@@ -87,7 +87,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	
 	
-	@Query(value = "SELECT t_bill_header.bill_no,t_bill_header.bill_no as autoGrnQty,t_bill_header.bill_date,t_bill_header.bill_date_time,t_bill_detail.item_id,"
+	@Query(value = "SELECT t_bill_detail.expiry_date, t_bill_header.bill_no,t_bill_header.bill_no as autoGrnQty,t_bill_header.bill_date,t_bill_header.bill_date_time,t_bill_detail.item_id,"
 			+ " CASE WHEN t_bill_detail.cat_id=5 THEN s.sp_name \n" + 
 			" ELSE  m_item.item_name END AS item_name,\n" + 
 			"			 t_bill_detail.grn_type,t_bill_detail.rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no,\n" + 
@@ -105,7 +105,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 
     
-    @Query(value = "	SELECT\n" + 
+    @Query(value = "	SELECT t_bill_detail.expiry_date, \n" + 
     		"    t_bill_header.bill_no,\n" + 
     		"    t_bill_header.bill_no as autoGrnQty,\n" + 
     		"    t_bill_header.bill_date,\n" + 
@@ -153,7 +153,7 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	public List<GetGrnItemConfig> getGvnItemConfigByItems(@Param("itemString") List<Integer> itemString,
 			@Param("fd") String fd,@Param("td") String td,@Param("frId") int frId);
 	
-    @Query(value = "	SELECT\n" + 
+    @Query(value = "	SELECT t_bill_detail.expiry_date, \n" + 
     		"    t_bill_header.bill_no,\n" + 
     		"    t_bill_header.bill_no as autoGrnQty,\n" + 
     		"    t_bill_header.bill_date,\n" + 
