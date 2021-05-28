@@ -667,12 +667,13 @@ public class AdvanceOrderApiController {
 		System.out.println("getAllSellCustBillForCreditNote" + custId + "   " + frId);
 		List<SellBillHeader> orderList = new ArrayList<SellBillHeader>();
 
-		Customer cust = new Customer();
+		CustomerForOps cust = new CustomerForOps();
 		try {
 
 			orderList = sellBillHeaderRepository.getSellBillHeaderNotInCreditNotePos(custId, frId);
 
-			cust = customerRepo.findByCustIdAndDelStatus(custId, 0);
+			cust = customerForOpsRepo.getCustById(custId, 0);
+		
 
 			System.err.println("cust is " + cust.toString());
 			for (int i = 0; i < orderList.size(); i++) {
