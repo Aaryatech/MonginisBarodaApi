@@ -22,9 +22,9 @@ public interface PDispatchReportRepository extends JpaRepository<PDispatchReport
 			 */
 			+ " UNION ALL "
 			+ " SELECT " + 
-			"        'NA' AS slip_no, " + 
-			"        'NA' AS cake_no, " + 
-			"        t_regular_sp_cake.rsp_id, " + 
+			"        'reg' AS slip_no, " + 
+			"        'reg' AS cake_no, " + 
+			"        t_regular_sp_cake.rsp_id as order_id, " + 
 			"        m_category.cat_id, " + 
 			"        m_category.cat_name, " + 
 			"        m_cat_sub.sub_cat_id, " + 
@@ -67,7 +67,40 @@ public interface PDispatchReportRepository extends JpaRepository<PDispatchReport
 	@Query(value="select  'NA' AS slip_no, 'NA' AS cake_no, t_order.order_id,m_category.cat_id,m_category.cat_name,m_cat_sub.sub_cat_id,t_order.fr_id,m_franchisee.fr_name,t_order.item_id,m_item.item_name,SUM(t_order.order_qty) as order_qty,SUM(t_order.edit_qty) as edit_qty,t_order.is_bill_generated from t_order,m_category,m_franchisee,m_item,m_cat_sub\n" + 
 			"	where t_order.order_id In(select order_id from t_order where delivery_date=:productionDateYMD and fr_id in(:frId) And t_order.menu_id in(:menu) and t_order.item_id in(:ItemId) )  \n" + 
 			"	And (select cat_id from m_fr_menu_show where menu_id=t_order.menu_id)=m_category.cat_id And t_order.fr_id=m_franchisee.fr_id and m_item.id=t_order.item_id And m_cat_sub.sub_cat_id=m_item.item_grp2 \n" + 
-			"	group by t_order.item_id,t_order.fr_id order by t_order.fr_id,m_item.item_grp1 asc,m_item.item_grp2,m_item.item_name,m_item.item_sort_id asc,m_item.item_mrp2 asc" + 
+			"	group by t_order.item_id,t_order.fr_id "
+			+ " "
+			+ " UNION ALL  " + 
+			"		  SELECT  " + 
+			"			  'reg' AS slip_no,    " + 
+			"		  'reg' AS cake_no,     " + 
+			"		      t_regular_sp_cake.rsp_id as order_id,     " + 
+			"		       m_category.cat_id,  " + 
+			"		      m_category.cat_name,     " + 
+			"			       m_cat_sub.sub_cat_id,    " + 
+			"		         t_regular_sp_cake.fr_id,  " + 
+			"		        m_franchisee.fr_name,  " + 
+			"			        t_regular_sp_cake.item_id,   " + 
+			"			        m_item.item_name,  " + 
+			"			        SUM(t_regular_sp_cake.qty) as order_qty,     " + 
+			"			        SUM(t_regular_sp_cake.qty) as edit_qty,     " + 
+			"			        t_regular_sp_cake.is_bill_generated   " + 
+			"			          " + 
+			"			        " + 
+			"			         FROM  " + 
+			"			        t_regular_sp_cake,  " + 
+			"			        m_category,  " + 
+			"			        m_franchisee,  " + 
+			"			        m_item,  " + 
+			"			        m_cat_sub    " + 
+			"			          " + 
+			"			        WHERE   " + 
+			"			        t_regular_sp_cake.menu_id IN (:menu)  " + 
+			"			        and t_regular_sp_cake.rsp_delivery_dt=:productionDateYMD and t_regular_sp_cake.fr_id in (:frId)  " + 
+			"			        and t_regular_sp_cake.item_id=m_item.id and m_item.item_grp1=m_category.cat_id AND m_cat_sub.sub_cat_id=m_item.item_grp2 AND   t_regular_sp_cake.item_id IN (:ItemId)  " + 
+			"			        and t_regular_sp_cake.fr_id=m_franchisee.fr_id  " + 
+			"			         " + 
+			"			        GROUP BY  " + 
+			"			        t_regular_sp_cake.item_id, m_franchisee.fr_id " + 
 			"",nativeQuery=true)
 	List<PDispatchReport> getPDispatchItemReportMenuwise(@Param("productionDateYMD")String productionDateYMD,@Param("frId") List<String> frId,@Param("menu") List<Integer> menu,@Param("ItemId") List<Integer> ItemId);// cat_id changed to to sub_cat_id (select sub_cat_id from m_fr_menu_show where menu_id=)
 

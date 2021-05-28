@@ -596,6 +596,12 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 			
 			dispRes.setReportDataList(reportDataList);
 			
+			List<DispatchStationItem> regSpDataList = dispatchReportRepositoryForItemwiseMin
+					.getItemByFrIdAndDateMin1New_REGSP(date, frList, menuIds,catId);//Done
+			
+			dispRes.setRegSpDataList(regSpDataList);
+			
+			
 			List<RouteMaster> routeList = new ArrayList<>();
 			try {
 				//routeList = routeMasterRepository.findByRouteIdInAndDelStatusOrderByRouteNameAsc(routId,0);

@@ -12,6 +12,18 @@ public class DispTransferBean {
 	
 	List<DispatchStationItem> reportDataList;
 	
+	List<DispatchStationItem> regSpDataList;//Sac 28-05-2021
+	
+	
+	
+	public List<DispatchStationItem> getRegSpDataList() {
+		return regSpDataList;
+	}
+
+	public void setRegSpDataList(List<DispatchStationItem> regSpDataList) {
+		this.regSpDataList = regSpDataList;
+	}
+
 	List<RouteMaster> routeList;
 	
 	List<FranchiseForDispatch> frNameList;
