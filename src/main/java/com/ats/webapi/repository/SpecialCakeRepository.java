@@ -81,7 +81,7 @@ public interface SpecialCakeRepository extends JpaRepository<SpecialCake, Intege
 			"            `m_fr_menu_configure`,\n" + 
 			"            m_fr_configure\n" + 
 			"        WHERE\n" + 
-			"            m_fr_menu_configure.fr_id =:frId AND m_fr_configure.menu_id = m_fr_menu_configure.menu_id\n" + 
+			"            m_fr_menu_configure.fr_id =:frId AND m_fr_configure.menu_id = m_fr_menu_configure.menu_id  AND m_sp_cake.del_status=0  AND m_sp_cake.is_used=1\n" + 
 			"    )\n" + 
 			"    )",nativeQuery=true)
 	public List<SpecialCake> getSpcakeByFrId(@Param("frId") int frId);

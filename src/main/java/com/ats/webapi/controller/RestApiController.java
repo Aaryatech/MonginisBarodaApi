@@ -1539,6 +1539,7 @@ public class RestApiController {
 			toDate = Common.convertToYMD(toDate);
 
 			billHeaderList = getBillHeaderService.getBillHeaderForAllFr(fromDate, toDate);
+			System.err.println(billHeaderList.getGetBillHeaders().size());
 		} catch (Exception e) {
 			System.out.println("Exc in getBillHeader Rest Api " + e.getMessage());
 			e.printStackTrace();
