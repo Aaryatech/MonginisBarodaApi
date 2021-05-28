@@ -240,10 +240,11 @@ public class MasterController {
 	
 	@RequestMapping(value = "/getOtherItemsByCatIdAndFrId", method = RequestMethod.POST)
 	public @ResponseBody List<Item> getOtherItemsByCatIdAndFrId(@RequestParam String catId, @RequestParam double frId) {
-		
+		System.err.println("In /getOtherItemsByCatIdAndFrId");
 		List<Item> items = new ArrayList<Item>();
 		try {
-			 items = itemRepository.findByItemGrp1AndItemRate2AndDelStatus(catId, frId);		
+			 items = itemRepository.findByItemGrp1AndItemRate2AndDelStatus(catId, frId);	
+			 System.err.println("Resp  of getOtherItemsByCatIdAndFrId-->"+items);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -331,6 +332,29 @@ public class MasterController {
 			String j = "0";
 			itemCode.append(j);
 		}
+		itemCode.append(String.valueOf(cnt));
+
+	  return ""+itemCode;
+	}
+	
+	
+	@RequestMapping(value = { "/getItemCodeForOps" }, method = RequestMethod.POST)
+	public @ResponseBody String getItemCodeForOps(@RequestParam("catId") int catId,@RequestParam("subCatId") int subCatId,@RequestParam("frCode") String frCode) {
+		
+	  String code=itemSuppRepository.findItemPrefix(subCatId);
+	  
+	  int cnt=itemSuppRepository.findItemCount(catId,subCatId);
+	  
+	  int maxCodeLenth = String.valueOf(cnt).length();
+	  maxCodeLenth = 5 - maxCodeLenth;
+		StringBuilder itemCode = new StringBuilder(code);
+
+	/*	for (int i = 0; i < maxCodeLenth; i++) {
+			String j = "0";
+			itemCode.append(j);
+		}*/
+		String j = "-"+frCode+"-";
+		itemCode.append(j);
 		itemCode.append(String.valueOf(cnt));
 
 	  return ""+itemCode;
