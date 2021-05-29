@@ -26,6 +26,14 @@ public class TestFrImple implements TestFrService{
 		return list;
 	}
 
+	@Override
+	public List<ConfigureFranchisee> findFrMenusBuMenuIdsIn(List<String> menuIds) {
+		// TODO Auto-generated method stub
+		List<ConfigureFranchisee> resp=testFrRepository.findAllMenusWhereMenuidIn(menuIds);;
+	
+		return resp;
+	}
+
 
 
 }

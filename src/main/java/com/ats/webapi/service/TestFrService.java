@@ -10,6 +10,8 @@ public interface TestFrService {
 	
    public List<ConfigureFranchisee> findFrMenus();
    
+   public List<ConfigureFranchisee> findFrMenusBuMenuIdsIn(List<String> menuIds);
+   
    
 
 }

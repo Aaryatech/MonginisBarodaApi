@@ -3847,6 +3847,24 @@ public class RestApiController {
 
 	}
 
+	
+	@RequestMapping(value = "/getFrMenusMenuidsIn", method = RequestMethod.POST)
+	public @ResponseBody List<ConfigureFranchisee> getFrMenusMenuidsIn(@RequestParam List<String> menuIds) {
+
+		List<ConfigureFranchisee> ConfigureFranchisees = new ArrayList<>();
+		System.out.println("input param menuids= " + menuIds);
+		try {
+			ConfigureFranchisees = frService.findFrMenusBuMenuIdsIn(menuIds);
+			System.out.println("All Record" + ConfigureFranchisees.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exception in getFrMenusMenuidsIn " + e.getMessage());
+		}
+
+		return ConfigureFranchisees;
+
+	}
+	
 	// 3
 
 	@RequestMapping(value = "/getFrItems", method = RequestMethod.POST)
