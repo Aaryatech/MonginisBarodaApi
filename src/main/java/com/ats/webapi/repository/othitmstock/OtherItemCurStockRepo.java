@@ -29,8 +29,8 @@ public interface OtherItemCurStockRepo extends JpaRepository<OtherItemCurStock, 
 			" t_sell_bill_header.sell_bill_no=t_sell_bill_detail.sell_bill_no "
 			+ " AND t_sell_bill_header.fr_id=m_franchisee.fr_id AND t_sell_bill_header.bill_date BETWEEN :fromDate AND :toDate "
 			+ " AND t_sell_bill_detail.item_id=m_item.id),0) AS sell_qty " + 
-			" FROM m_item,m_franchisee " + 
-			" WHERE m_item.item_grp1=:catId AND m_franchisee.fr_id=:frId AND m_item.item_rate2=:frId and m_item.del_status=0 GROUP by m_item.id",nativeQuery=true)
+			" FROM m_item,m_franchisee,m_item_sup " + 
+			" WHERE m_item.item_grp1=:catId AND m_franchisee.fr_id=:frId  and m_item.del_status=0  AND m_item_sup.item_id=m_item.id      AND m_item_sup.is_gate_sale=:frId  GROUP by m_item.id",nativeQuery=true)
 	List<OtherItemCurStock> getCurOtherItemCurStock(@Param("catId") int catId,@Param("month") int month, @Param("frId") int frId, @Param("fromDate")String fromDate,@Param("toDate")String toDate);
 
 
