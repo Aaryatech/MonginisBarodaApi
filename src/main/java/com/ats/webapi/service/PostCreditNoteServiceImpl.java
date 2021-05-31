@@ -26,22 +26,22 @@ public class PostCreditNoteServiceImpl implements PostCreditNoteService {
 
 	@Autowired
 	PostCreditNoteDetailsRepository postCreditNoteDetailsRepository;
-	
+
 	@Autowired
 	UpdateGrnGvnForCreditNoteRepository updateGrnGvnForCreditNoteRepository;
-	
-	
+
 	@Autowired
 	UpdateGrnGvnHeaderForCNRepo updateGrnGvnHeaderForCNRepo;
-	
+
 	@Autowired
 	FrItemStockConfigureRepository frItemStockConfRepo;
-	
+
 	@Autowired
 	UpdateSeetingForPBRepo updateSeetingForPBRepo;
-	
+
 	@Autowired
 	CompanyRepository companyRepository;
+
 	@Override
 	public List<PostCreditNoteHeader> savePostCreditNote(List<PostCreditNoteHeader> postCreditNoteHeader) {
 
@@ -51,100 +51,126 @@ public class PostCreditNoteServiceImpl implements PostCreditNoteService {
 		for (int i = 0; i < postCreditNoteHeader.size(); i++) {
 
 			creditNoteHeader = new PostCreditNoteHeader();
-			int isgrn=postCreditNoteHeader.get(i).getIsGrn();
-			int crnSrNo=0;
+			int isgrn = postCreditNoteHeader.get(i).getIsGrn();
+			int crnSrNo = 0;
 			String invoiceNo = null;
-			
+
 			String pattern = "yyyy-MM-dd";
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-			
-			Company company=new Company();
+			Company company = new Company();
 			String date = simpleDateFormat.format(postCreditNoteHeader.get(i).getCrnDate());
-			 company=companyRepository.findByBillDate(date);
-			
-			
-			
-			
-			if(isgrn==1)
-			{
-				
-			 crnSrNo=frItemStockConfRepo.findBySettingKey("CRE_NOTE_NO");
-			
-			 invoiceNo=company.getExVar5();
-			 invoiceNo =invoiceNo+crnSrNo;
-			 
-			 postCreditNoteHeader.get(i).setCrnNo(""+invoiceNo);
+			company = companyRepository.findByBillDate(date);
+
+			if (isgrn == 1) {
+
+				crnSrNo = frItemStockConfRepo.findBySettingKey("CRE_NOTE_NO");
+
+				invoiceNo = company.getExVar5();
+				invoiceNo = invoiceNo + crnSrNo;
+
+				postCreditNoteHeader.get(i).setCrnNo("" + invoiceNo);
+			} else {
+
+				crnSrNo = frItemStockConfRepo.findBySettingKey("CRE_NOTE_NO_GVN");
+				invoiceNo = company.getExVar6();
+				invoiceNo = invoiceNo + crnSrNo;
+
+				postCreditNoteHeader.get(i).setCrnNo("" + invoiceNo);
 			}
-			else
-			{
-				
-			crnSrNo=frItemStockConfRepo.findBySettingKey("CRE_NOTE_NO_GVN");
-			invoiceNo=company.getExVar6();
-			invoiceNo =invoiceNo+crnSrNo;
-				
-			postCreditNoteHeader.get(i).setCrnNo(""+invoiceNo);
-			}
-			//System.err.println("crnSrNo"+crnSrNo);
-			
+			// System.err.println("crnSrNo"+crnSrNo);
 
 			creditNoteHeader = postCreditNoteHeaderRepository.save(postCreditNoteHeader.get(i));
 
-			if(creditNoteHeader.getCrnId()!=0) {
-				/*	
-					int result= updateGrnGvnForCreditNoteRepository.updateGrnGvnForCreditNoteInsert(
-							creditNoteHeader.getGrnGvnId(), 1);*/
-					System.err.println("crnSrNo  while update " +crnSrNo);
-					int result= 0;
-					if(isgrn==1)
-					{	
-					result= updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1, "CRE_NOTE_NO");
-					}	
-					else
-					{
-						result= updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1, "CRE_NOTE_NO_GVN");
-					}
-					
-					
-				}
+			/* sac comm 29-05-2021
+			 * if(creditNoteHeader.getCrnId()!=0) {
+			 * 
+			 * int result=
+			 * updateGrnGvnForCreditNoteRepository.updateGrnGvnForCreditNoteInsert(
+			 * creditNoteHeader.getGrnGvnId(), 1);
+			 * System.err.println("crnSrNo  while update " +crnSrNo); int result= 0;
+			 * if(isgrn==1) { result=
+			 * updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1, "CRE_NOTE_NO"); }
+			 * else { result= updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1,
+			 * "CRE_NOTE_NO_GVN"); }
+			 * 
+			 * 
+			 * }
+			 */
 
 			postCreditNoteHeaderList.add(creditNoteHeader);
-			
-			int res=0;
-			
+
+			int res = 0;
 
 			int crnId = creditNoteHeader.getCrnId();
 
 			List<PostCreditNoteDetails> postCreditNoteDetailsList = postCreditNoteHeader.get(i)
 					.getPostCreditNoteDetails();
-
+			int isHeaderSave = 0;
 			for (int j = 0; j < postCreditNoteDetailsList.size(); j++) {
-
+				boolean updateFlag = false;
 				PostCreditNoteDetails postCreditNoteDetails = postCreditNoteDetailsList.get(j);
+				PostCreditNoteDetails prevRecord = postCreditNoteDetailsRepository
+						.findByGrnGvnIdAndDelStatus(postCreditNoteDetails.getGrnGvnId(), 0);
+				System.err.println("prevRecord" + prevRecord);
 
-				postCreditNoteDetails.setCrnId(crnId);
+				if (prevRecord == null) {
+
+					postCreditNoteDetails.setCrnId(crnId);
+
+					postCreditNoteDetailsRepository.save(postCreditNoteDetails);
+					updateFlag = true;
+					isHeaderSave = 1;
+					if (updateFlag) {
+						int result = updateGrnGvnForCreditNoteRepository
+								.updateGrnGvnForCreditNoteInsert(postCreditNoteDetails.getGrnGvnId(), 1);
+
+						int isCrnNoPresent = 0;
+						try {
+							System.err.println(
+									"Grn Header Updated1" + crnSrNo + postCreditNoteDetails.getGrnGvnHeaderId());
+							isCrnNoPresent = updateGrnGvnHeaderForCNRepo.isCrnNoPresent(crnSrNo,
+									postCreditNoteDetails.getGrnGvnHeaderId());
+						} catch (Exception e) {
+							isCrnNoPresent = 0;
+						}
+						System.err.println("isCrnNoPresent" + isCrnNoPresent);
+						if (crnId > 0) {
+							System.err.println(
+									"Grn Header Updated2" + crnSrNo + postCreditNoteDetails.getGrnGvnHeaderId());
+							res = updateGrnGvnHeaderForCNRepo.updateGrnGvnHeaderForCN(crnId, 1,
+									postCreditNoteDetails.getGrnGvnHeaderId());
+						}
+					} // end of if updateFlag true
+				} // end of if prevRecord == null
+			} // end of for postCreditNoteDetailsList loop
+			System.err.println("isHeaderSave" +isHeaderSave + "creditNoteHeader" +creditNoteHeader);
+			if (isHeaderSave < 1) {
+				// delete header
+				postCreditNoteHeaderRepository.delete(crnId);
+			} else {
+				// keep header and update sr no in setting k
 				
-				postCreditNoteDetailsRepository.save(postCreditNoteDetails);
-				
-				int result= updateGrnGvnForCreditNoteRepository.updateGrnGvnForCreditNoteInsert(
-						postCreditNoteDetails.getGrnGvnId(), 1);
-				
-				int isCrnNoPresent=0;
-				try {
-					System.err.println("Grn Header Updated1"+crnSrNo+postCreditNoteDetails.getGrnGvnHeaderId());
-				isCrnNoPresent=updateGrnGvnHeaderForCNRepo.isCrnNoPresent(crnSrNo,postCreditNoteDetails.getGrnGvnHeaderId());
-				}
-				catch (Exception e) {
-					isCrnNoPresent=0;
-				}
-				System.err.println("isCrnNoPresent"+isCrnNoPresent);
-				if(crnId>0)
-				{
-					System.err.println("Grn Header Updated2"+crnSrNo+postCreditNoteDetails.getGrnGvnHeaderId());
-				res=updateGrnGvnHeaderForCNRepo.updateGrnGvnHeaderForCN(crnId, 1, postCreditNoteDetails.getGrnGvnHeaderId());
-				}
+				if(creditNoteHeader.getCrnId()!=0) {
+					/*	
+						int result= updateGrnGvnForCreditNoteRepository.updateGrnGvnForCreditNoteInsert(
+								creditNoteHeader.getGrnGvnId(), 1);*/
+						System.err.println("crnSrNo  while update " +crnSrNo);
+						int result= 0;
+						if(isgrn==1)
+						{	
+						result= updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1, "CRE_NOTE_NO");
+						}	
+						else
+						{
+							result= updateSeetingForPBRepo.updateSeetingForPurBill(crnSrNo+1, "CRE_NOTE_NO_GVN");
+						}
+						
+						
+					}
+
 			}
-		}
+		} // end of postCreditNoteHeader loop;
 
 		return postCreditNoteHeaderList;
 	}
@@ -158,11 +184,11 @@ public class PostCreditNoteServiceImpl implements PostCreditNoteService {
 		for (int i = 0; i < postCreditNoteHeader.size(); i++) {
 
 			creditNoteHeader = new PostCreditNoteHeader();
-	
+
 			creditNoteHeader = postCreditNoteHeaderRepository.save(postCreditNoteHeader.get(i));
 
 			postCreditNoteHeaderList.add(creditNoteHeader);
-			
+
 			int crnId = creditNoteHeader.getCrnId();
 
 			List<PostCreditNoteDetails> postCreditNoteDetailsList = postCreditNoteHeader.get(i)
@@ -173,9 +199,9 @@ public class PostCreditNoteServiceImpl implements PostCreditNoteService {
 				PostCreditNoteDetails postCreditNoteDetails = postCreditNoteDetailsList.get(j);
 
 				postCreditNoteDetails.setCrnId(crnId);
-				
+
 				postCreditNoteDetailsRepository.save(postCreditNoteDetails);
-				
+
 			}
 		}
 
