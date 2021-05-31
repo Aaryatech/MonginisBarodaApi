@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.webapi.commons.Common;
+import com.ats.webapi.commons.DateConvertor;
 import com.ats.webapi.commons.EmailUtility;
 import com.ats.webapi.commons.Firebase;
 import com.ats.webapi.model.*;
@@ -991,10 +992,12 @@ public class RestApiController {
 	}
 
 	@RequestMapping(value = "/getGrnItemConfig", method = RequestMethod.POST)
-	public @ResponseBody GetGrnItemConfigList getGrnItemConfig(@RequestParam("frId") int frId) {
-		System.out.println("inside rest");
+	public @ResponseBody GetGrnItemConfigList getGrnItemConfig(@RequestParam("frId") int frId,
+			@RequestParam("searchDate") String searchDate) {
+		System.out.println("inside rest searchDate" +searchDate);
 		GetGrnItemConfigList grnItemConfigList = null;
-
+		if(searchDate==null||searchDate=="") {
+			System.out.println("inside IF NULL" );
 		try {
 			// java.util.Date cDate = new
 			// java.util.Date(Calendar.getInstance().getTime().getTime());
@@ -1050,6 +1053,18 @@ public class RestApiController {
 
 			System.out.println("rest Exce for Getting grn Item Conf " + e.getMessage());
 			e.printStackTrace();
+		}
+		}else {
+			System.err.println("In ElSE");
+		try {	
+			DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+			grnItemConfigList = getGrnItemConfigService.getAllGrnItemConfiguration(Common.convertToYMD(searchDate),
+					frId);
+		} catch (Exception e) {
+
+			System.out.println("rest Exce for Getting grn Item Conf " + e.getMessage());
+			e.printStackTrace();
+		}
 		}
 
 		return grnItemConfigList;
