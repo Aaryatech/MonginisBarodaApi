@@ -1058,8 +1058,12 @@ public class RestApiController {
 			System.err.println("In ElSE");
 		try {	
 			DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-			grnItemConfigList = getGrnItemConfigService.getAllGrnItemConfiguration(Common.convertToYMD(searchDate),
+			String date=Common.convertToYMD(searchDate);
+			System.err.println("In ElSE " +date +"frid" +frId);
+
+			grnItemConfigList = getGrnItemConfigService.getAllGrnItemConfiguration(searchDate,
 					frId);
+			System.err.println("grnItemConfigList" +grnItemConfigList);
 		} catch (Exception e) {
 
 			System.out.println("rest Exce for Getting grn Item Conf " + e.getMessage());
