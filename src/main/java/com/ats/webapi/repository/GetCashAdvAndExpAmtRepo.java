@@ -17,6 +17,32 @@ public interface GetCashAdvAndExpAmtRepo extends JpaRepository<GetCashAdvAndExpA
 			+ "COALESCE((SELECT SUM(ch_amt) FROM m_expense WHERE fr_id =:frId AND del_status = 0 AND exp_date =:date AND exp_type=1 ),0) as exp_amt " + 
 			"",nativeQuery=true)
 	GetCashAdvAndExpAmt getAmt(@Param("frId") int frId, @Param("date") String date);
+	
+	
+	
+	@Query(value=" SELECT\r\n" + 
+			"        UUID() as id,\r\n" + 
+			"        0 AS tr_cash_amt,\r\n" + 
+			"        COALESCE(SUM(t_sp_cake.sp_advance),0) AS adv_amt,\r\n" + 
+			"        0 AS exp_amt\r\n" + 
+			"        FROM\r\n" + 
+			"        t_sp_cake\r\n" + 
+			"        WHERE\r\n" + 
+			"        t_sp_cake.order_date=:date AND t_sp_cake.fr_id=:frId",nativeQuery=true)
+	GetCashAdvAndExpAmt getSpAdvAmt(@Param("frId") int frId, @Param("date") String date);
+	
+	
+	
+	@Query(value=" SELECT\r\n" + 
+			"        UUID() as id,\r\n" + 
+			"        0 AS tr_cash_amt,\r\n" + 
+			"        0 AS adv_amt,\r\n" + 
+			"       COALESCE(SUM(t_sp_cake.sp_grand_total-t_sp_cake.sp_advance),0) AS exp_amt\r\n" + 
+			"        FROM\r\n" + 
+			"        t_sp_cake\r\n" + 
+			"        WHERE\r\n" + 
+			"        t_sp_cake.sp_delivery_date=:date AND t_sp_cake.fr_id=:frId",nativeQuery=true)
+	GetCashAdvAndExpAmt getSpRemainingAmt(@Param("frId") int frId, @Param("date") String date);
 
 	
 /*	@Query(value=" SELECT UUID() as id, COALESCE((SELECT SUM(t.cash_amt) as tr_cash_amt FROM t_transaction_detail as t,"

@@ -29,7 +29,9 @@ import com.ats.webapi.model.ItemWiseReportList;
 import com.ats.webapi.model.MonthWiseReportList;
 import com.ats.webapi.model.Orders;
 import com.ats.webapi.model.POrder;
+import com.ats.webapi.model.SellBillHeaderNew;
 import com.ats.webapi.model.SpecialCake;
+import com.ats.webapi.model.report.CRNSaleTaxBillReport;
 import com.ats.webapi.model.report.DispatchReport;
 import com.ats.webapi.model.report.GetCustBillTax;
 import com.ats.webapi.model.report.GetCustomerBill;
@@ -38,16 +40,20 @@ import com.ats.webapi.model.report.GetRepItemwiseSell;
 import com.ats.webapi.model.report.GetRepMenuwiseSell;
 import com.ats.webapi.model.report.GetRepMonthwiseSell;
 import com.ats.webapi.model.report.GetRepTaxSell;
+import com.ats.webapi.model.report.GetSellTaxRepSummary;
 import com.ats.webapi.model.report.PDispatchReport;
 import com.ats.webapi.model.report.SpDispatchReport;
 import com.ats.webapi.model.report.SpFlavourWiseSummaryDao;
 import com.ats.webapi.model.report.SpKgSummaryDao;
+import com.ats.webapi.repository.CRNSaleTaxBillReportRepo;
 import com.ats.webapi.repository.DispatchOrderRepository;
 import com.ats.webapi.repository.FranchiseForDispatchRepository;
+import com.ats.webapi.repository.GetSellTAxRepSummaryRepo;
 import com.ats.webapi.repository.ItemReportDetailRepo;
 import com.ats.webapi.repository.ItemReportRepo;
 import com.ats.webapi.repository.PDispatchReportRepository;
 import com.ats.webapi.repository.RouteMasterRepository;
+import com.ats.webapi.repository.SellBillHeaderNewRepo;
 import com.ats.webapi.repository.SpFlavourWiseSummaryRepo;
 import com.ats.webapi.repository.SpKgSummaryRepository;
 import com.ats.webapi.repository.SpecialCakeRepository;
@@ -83,6 +89,59 @@ public class ReportsController {
 
 	@Autowired
 	SpFlavourWiseSummaryRepo spFlavourWiseSummaryRepo;
+	
+	
+	@Autowired
+	GetSellTAxRepSummaryRepo sellTaxRepo;
+	
+	@Autowired
+	SellBillHeaderNewRepo sellBillHeaderNewRepo;
+	
+	
+	@Autowired
+	CRNSaleTaxBillReportRepo cRNSaleTaxBillReportRepo;
+
+	
+	@RequestMapping(value = "/getRepCRNBillwiseTaxSell", method = RequestMethod.POST)
+	public @ResponseBody List<CRNSaleTaxBillReport> getRepCRNBillwiseTaxSell(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("frId") List<String> frId) {
+
+		fromDate = Common.convertToYMD(fromDate);
+		toDate = Common.convertToYMD(toDate);
+		List<CRNSaleTaxBillReport> getRepTaxSellList = cRNSaleTaxBillReportRepo.getRepFrCrnwiseTaxSell(fromDate, toDate,
+				frId);
+		System.out.println("  List  :" + getRepTaxSellList);
+		return getRepTaxSellList;
+
+	}
+	
+	@RequestMapping(value = "/getRemainingAmtByCust", method = RequestMethod.POST)
+	public @ResponseBody List<SellBillHeaderNew> getRemainingAmtByCust(@RequestParam("frId") List<String> frId) {
+
+		List<SellBillHeaderNew> getSellBillHeaderList = new ArrayList<SellBillHeaderNew>();
+
+		getSellBillHeaderList = sellBillHeaderNewRepo.getRemainingAmtAllCust(frId);
+
+		System.out.println("Remaining Amt Of All Customers " + getSellBillHeaderList.toString());
+		return getSellBillHeaderList;
+
+	}
+	
+	
+	
+	@RequestMapping(value = "/getCustRemainingAmt", method = RequestMethod.POST)
+	public @ResponseBody List<SellBillHeaderNew> getCustRemainingAmt(@RequestParam("custId") int custId,
+			@RequestParam("frId") List<String> frId) {
+
+		List<SellBillHeaderNew> getSellBillHeaderList = new ArrayList<SellBillHeaderNew>();
+
+		getSellBillHeaderList = sellBillHeaderNewRepo.getRemainingAmtByCustId(custId, frId);
+
+		System.out.println("Remaining Amt Of Customers " + getSellBillHeaderList.toString());
+		return getSellBillHeaderList;
+
+	}
+	
 
 	@RequestMapping(value = { "/getItemDetailReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ItemReportDetail> getItemDetailReport(@RequestParam("fromDate") String fromDate,
@@ -104,6 +163,24 @@ public class ReportsController {
 		}
 
 		return saleList;
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/getCRNTaxSell", method = RequestMethod.POST)
+	public @ResponseBody List<GetSellTaxRepSummary> getCRNTaxSell(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("frId") List<String> frId) {
+
+		List<GetSellTaxRepSummary> tempList = null;
+
+		fromDate = Common.convertToYMD(fromDate);
+		toDate = Common.convertToYMD(toDate);
+		List<GetSellTaxRepSummary> getRepTaxSellList = sellTaxRepo.getCRNTaxSellSummaryReport(fromDate, toDate, frId);
+		System.out.println("  List  :" + getRepTaxSellList);
+		return getRepTaxSellList;
+
 	}
 
 	@RequestMapping(value = { "/getItemReport" }, method = RequestMethod.POST)

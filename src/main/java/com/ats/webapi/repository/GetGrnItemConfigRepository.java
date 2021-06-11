@@ -13,16 +13,41 @@ public interface GetGrnItemConfigRepository extends JpaRepository<GetGrnItemConf
 	
 	
     
-	@Query(value = "SELECT t_bill_detail.expiry_date, t_bill_header.bill_no,t_bill_header.bill_date_time," + 
-			"t_bill_header.bill_date,t_bill_detail.item_id,m_item.item_name,t_bill_detail.grn_type," + 
-			"t_bill_detail.rate,t_bill_detail.mrp,t_bill_detail.bill_qty,t_bill_detail.bill_detail_no," + 
-			"t_bill_detail.bill_no,t_bill_detail.sgst_per,t_bill_detail.cgst_per,t_bill_detail.igst_per,t_bill_detail.cess_per,"
-			+ "t_bill_detail.cat_id,t_bill_detail.menu_id,t_bill_detail.disc_per,t_bill_detail.hsn_code," + 
-			"t_bill_header.fr_id,t_bill_header.invoice_no FROM t_bill_header ,t_bill_detail,m_item " + 
-			" WHERE t_bill_header.fr_id=:frId AND t_bill_detail.bill_no=t_bill_header.bill_no AND t_bill_header.status=2 " + 
-			"AND t_bill_detail.item_id=m_item.id AND t_bill_detail.grn_type !=0 AND "
-			+ "t_bill_detail.expiry_date=:cDate AND t_bill_detail.is_grngvn_applied=0", nativeQuery = true)
-	
+	@Query(value ="SELECT\n" + 
+			"        t_bill_detail.expiry_date,\n" + 
+			"        t_bill_header.bill_no,\n" + 
+			"        t_bill_header.bill_date_time,\n" + 
+			"        t_bill_header.bill_date,\n" + 
+			"        t_bill_detail.item_id,\n" + 
+			"        m_item.item_name,\n" + 
+			"        t_bill_detail.grn_type,\n" + 
+			"        t_bill_detail.rate,\n" + 
+			"        t_bill_detail.mrp,\n" + 
+			"        t_bill_detail.bill_qty,\n" + 
+			"        t_bill_detail.bill_detail_no,\n" + 
+			"        t_bill_detail.bill_no,\n" + 
+			"        t_bill_detail.sgst_per,\n" + 
+			"        t_bill_detail.cgst_per,\n" + 
+			"        t_bill_detail.igst_per,\n" + 
+			"        t_bill_detail.cess_per,\n" + 
+			"        t_bill_detail.cat_id,\n" + 
+			"        t_bill_detail.menu_id,\n" + 
+			"        t_bill_detail.disc_per,\n" + 
+			"        t_bill_detail.hsn_code,\n" + 
+			"        t_bill_header.fr_id,\n" + 
+			"        t_bill_header.invoice_no \n" + 
+			"    FROM\n" + 
+			"        t_bill_header ,\n" + 
+			"        t_bill_detail,\n" + 
+			"        m_item  \n" + 
+			"    WHERE\n" + 
+			"        t_bill_header.fr_id=:frId\n" + 
+			"        AND t_bill_detail.bill_no=t_bill_header.bill_no \n" + 
+			"        AND t_bill_header.status=2 \n" + 
+			"        AND t_bill_detail.item_id=m_item.id \n" + 
+			"        AND t_bill_detail.grn_type !=0 \n" + 
+			"        AND t_bill_detail.expiry_date=:cDate\n" + 
+			"        AND t_bill_detail.is_grngvn_applied=0", nativeQuery = true)
 	public List<GetGrnItemConfig> getAllGrnItemConfig(@Param("cDate") String cDate,@Param("frId") int frId);
 
 	//21 March Front End Manual GRN

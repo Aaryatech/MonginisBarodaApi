@@ -761,7 +761,23 @@ System.err.println(" IN getAbcDepatchReportMin1New  sachin 23-12-2021");
 					return sectionList;
 				}
 	
-	
+				@RequestMapping(value = { "/updateAllSectionMenu" }, method = RequestMethod.POST)
+				public @ResponseBody int updateAllSectionMenu(@RequestBody List<NewSectionWithType> secList) {
+					
+					int flag=0;
+					System.err.println("In /saveAllSection");
+						try {
+						for(NewSectionWithType sec : secList) {
+							flag=sectionMasterNewRepository.updateMunu(sec.getSectionId(), sec.getMenuIds());
+						}
+						} catch (Exception e) {
+							// TODO: handle exception
+							System.err.println("Excp In /saveAllSection");
+							e.printStackTrace();
+						}	
+						
+					return flag;
+				}
 	
 	
 

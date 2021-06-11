@@ -32,7 +32,7 @@ public class GetGrnItemConfigServiceImpl implements GetGrnItemConfigService {
 		try {
 		
 		List<GetGrnItemConfig> getGrnItemConfigs=grnItemConfigRepository.getAllGrnItemConfig(cDate, frId);
-		
+		System.err.println("Serv Resp-->"+getGrnItemConfigs);
 		if(!getGrnItemConfigs.isEmpty()) {
 			
 			getGrnItemConfigList.setGetGrnItemConfigs(getGrnItemConfigs);

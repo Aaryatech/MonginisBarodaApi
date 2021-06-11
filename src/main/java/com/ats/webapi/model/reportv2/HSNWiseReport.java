@@ -28,6 +28,10 @@ public class HSNWiseReport {
 	private String subCatName;
 	
 	private int subCatId;
+	
+private String uom;
+	
+	private float uomFactor;
 
 	@Transient
 	private float grnGvnQty;
@@ -139,13 +143,36 @@ public class HSNWiseReport {
 		this.subCatId = subCatId;
 	}
 
+	
+
+	public float getUomFactor() {
+		return uomFactor;
+	}
+
+	public void setUomFactor(float uomFactor) {
+		this.uomFactor = uomFactor;
+	}
+
+	public String getUom() {
+		return uom;
+	}
+
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
+
 	@Override
 	public String toString() {
 		return "HSNWiseReport [id=" + id + ", itemHsncd=" + itemHsncd + ", itemTax1=" + itemTax1 + ", itemTax2="
 				+ itemTax2 + ", cessPer=" + cessPer + ", billQty=" + billQty + ", taxableAmt=" + taxableAmt
 				+ ", cgstRs=" + cgstRs + ", sgstRs=" + sgstRs + ", cessRs=" + cessRs + ", subCatName=" + subCatName
-				+ ", subCatId=" + subCatId + ", grnGvnQty=" + grnGvnQty + "]";
+				+ ", subCatId=" + subCatId + ", uom=" + uom + ", uomFactor=" + uomFactor + ", grnGvnQty=" + grnGvnQty
+				+ "]";
 	}
+
+	
+
+	
 
 
 

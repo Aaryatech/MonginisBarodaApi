@@ -14,11 +14,11 @@ public class GGReportGrpByFrId {
 	
 	private int isGrn;
 	
-	float aprGrandTotal;
-	float totalAmt;
+	Float aprGrandTotal;
+	Float totalAmt;
 	String frName;
 	int reqQty;
-	int aprQty ;
+	Float aprQty ;
 	public int getFrId() {
 		return frId;
 	}
@@ -31,16 +31,16 @@ public class GGReportGrpByFrId {
 	public void setIsGrn(int isGrn) {
 		this.isGrn = isGrn;
 	}
-	public float getAprGrandTotal() {
+	public Float getAprGrandTotal() {
 		return aprGrandTotal;
 	}
-	public void setAprGrandTotal(float aprGrandTotal) {
+	public void setAprGrandTotal(Float aprGrandTotal) {
 		this.aprGrandTotal = aprGrandTotal;
 	}
-	public float getTotalAmt() {
+	public Float getTotalAmt() {
 		return totalAmt;
 	}
-	public void setTotalAmt(float totalAmt) {
+	public void setTotalAmt(Float totalAmt) {
 		this.totalAmt = totalAmt;
 	}
 	public String getFrName() {
@@ -55,10 +55,14 @@ public class GGReportGrpByFrId {
 	public void setReqQty(int reqQty) {
 		this.reqQty = reqQty;
 	}
-	public int getAprQty() {
+	
+	
+	
+	
+	public Float getAprQty() {
 		return aprQty;
 	}
-	public void setAprQty(int aprQty) {
+	public void setAprQty(Float aprQty) {
 		this.aprQty = aprQty;
 	}
 	@Override
@@ -66,5 +70,7 @@ public class GGReportGrpByFrId {
 		return "GGReportGrpByFrId [frId=" + frId + ", isGrn=" + isGrn + ", aprGrandTotal=" + aprGrandTotal
 				+ ", totalAmt=" + totalAmt + ", frName=" + frName + ", reqQty=" + reqQty + ", aprQty=" + aprQty + "]";
 	}
+	
+	
 
 }

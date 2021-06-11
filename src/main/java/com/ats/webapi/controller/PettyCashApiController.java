@@ -76,6 +76,9 @@ public class PettyCashApiController {
 		PettyCashManagmt petty = new PettyCashManagmt();
 		try {
 			petty = pettyRepo.findByFrIdAndStatusLimit1(frId, 0);
+			if(petty==null) {
+				petty=new PettyCashManagmt();
+			}
 		} catch (Exception e) {
 			System.err.println("Exception in getPettyCashDetails : " + e.getMessage());
 			e.printStackTrace();
@@ -447,10 +450,20 @@ public class PettyCashApiController {
 	@RequestMapping(value = { "/getTrCashAmtAndAdvAmtAndExpAmt" }, method = RequestMethod.POST)
 	public GetCashAdvAndExpAmt getTrCashAmtAndAdvAmtAndExpAmt(int frId, String date) {
 		GetCashAdvAndExpAmt data = new GetCashAdvAndExpAmt();
+		GetCashAdvAndExpAmt SpAdvance = new GetCashAdvAndExpAmt();
+		GetCashAdvAndExpAmt SpRemaing = new GetCashAdvAndExpAmt();
 		System.err.println("PARAM------DATE---- " + date);
 		System.err.println("PARAM---------- " + frId + "---------------------------- " + date);
 		try {
 			data = getCashAdvAndExpAmtRepo.getAmt(frId, date);
+			SpAdvance=getCashAdvAndExpAmtRepo.getSpAdvAmt(frId, date);
+			SpRemaing=getCashAdvAndExpAmtRepo.getSpRemainingAmt(frId, date);
+			float totalAdv=data.getAdvAmt()+SpAdvance.getAdvAmt();
+			float totalRem=data.getExpAmt()+SpRemaing.getExpAmt();
+			data.setAdvAmt(totalAdv);
+			data.setExpAmt(totalRem);
+			
+			
 			System.err.println("AMT--------------" + data);
 		} catch (Exception e) {
 			System.err.println("Exception in getTrCashAmtAndAdvAmtAndExpAmt : " + e.getMessage());
