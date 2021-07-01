@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class RmItemGroup {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="grp_id")
 	private int grpId;
 	
@@ -21,6 +21,18 @@ public class RmItemGroup {
 	
 	@Column(name="grp_name")
 	private String grpName;
+	
+	@Column(name="ex_int1")
+	private int exInt1;//CATID SAC 10-07-2021
+	
+
+	public int getExInt1() {
+		return exInt1;
+	}
+
+	public void setExInt1(int exInt1) {
+		this.exInt1 = exInt1;
+	}
 
 	public int getGrpId() {
 		return grpId;
@@ -48,7 +60,8 @@ public class RmItemGroup {
 
 	@Override
 	public String toString() {
-		return "RmItemGroup [grpId=" + grpId + ", delStatus=" + delStatus + ", grpName=" + grpName + "]";
+		return "RmItemGroup [grpId=" + grpId + ", delStatus=" + delStatus + ", grpName=" + grpName + ", exInt1="
+				+ exInt1 + "]";
 	}
 	
 	

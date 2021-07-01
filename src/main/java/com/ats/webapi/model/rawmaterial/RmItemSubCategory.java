@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class RmItemSubCategory  implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="sub_cat_id")
 	private int subCatId;
 	

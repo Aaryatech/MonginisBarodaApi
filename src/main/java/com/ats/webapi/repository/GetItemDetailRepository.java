@@ -11,9 +11,14 @@ import com.ats.webapi.model.rawmaterial.GetItemDetail;
 
 @Repository
 public interface GetItemDetailRepository extends JpaRepository<GetItemDetail, Integer>{
+//
+//	@Query(value="select d.item_detail_id,d.item_id, d.rm_id, d.rm_name, i.item_name, d.no_pieces_per_item, d.rm_type, d.rm_uom_id, d.rm_qty,d.rm_weight,d.del_status from m_item_detail d,m_item i where i.id=d.item_id  AND d.item_id=:itemId AND d.del_status=0;",nativeQuery=true)
+//	List<GetItemDetail> findAllItemDetailByDelStatus(@Param("itemId")int itemId);
 
-	@Query(value="select d.item_detail_id,d.item_id, d.rm_id, d.rm_name, i.item_name, d.no_pieces_per_item, d.rm_type, d.rm_uom_id, d.rm_qty,d.rm_weight,d.del_status from m_item_detail d,m_item i where i.id=d.item_id  AND d.item_id=:itemId AND d.del_status=0;",nativeQuery=true)
+
+	@Query(value="select d.item_detail_id,d.item_id, d.rm_id, d.rm_name, i.item_name, d.no_pieces_per_item, d.rm_type, d.rm_uom_id, d.rm_qty,d.rm_weight,d.del_status,d.int_1,d.int_2,d.varchar_1 from m_item_detail d,m_item i where i.id=d.item_id  AND d.item_id=:itemId AND d.del_status=0;",nativeQuery=true)
 	List<GetItemDetail> findAllItemDetailByDelStatus(@Param("itemId")int itemId);
+
 
 	
 }

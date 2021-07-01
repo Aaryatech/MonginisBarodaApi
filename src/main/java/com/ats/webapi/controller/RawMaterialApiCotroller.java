@@ -67,7 +67,7 @@ public class RawMaterialApiCotroller {
 		List<GetRawMaterialByGroup> getRawMaterialByGroupList=getRawMaterialByGroupRepository.getRawMaterialDetailByGroupSupp(grpId,suppId);
 		return getRawMaterialByGroupList;
 		 
-		
+		 
 	}
 	@RequestMapping(value = { "/getRmItemGroup" }, method = RequestMethod.POST)
 	public @ResponseBody List<RmItemGroup> getRmItemGroup(@RequestParam("suppId")int suppId)
@@ -660,5 +660,29 @@ public class RawMaterialApiCotroller {
 					info.setMessage("Failed to Delete RM Uom");
 				}
 				return info;
+			}
+			
+			//SACHIN 10-07-2021
+			@RequestMapping(value = { "/saveRMGroup" }, method = RequestMethod.POST)
+			public @ResponseBody ErrorMessage saveRMGroup(@RequestBody RmItemGroup rmItemGroup)
+			{
+				ErrorMessage errorMessage = new ErrorMessage();
+				
+				RmItemGroup saveGroupRes=rmItemGroupRepostitory.saveAndFlush(rmItemGroup);
+				//List<RmItemGroup> rmItemGroupList=rmItemGroupRepostitory.getGroupBySupp(suppId);
+				
+				if(saveGroupRes==null)
+				{
+					errorMessage.setError(true);
+					errorMessage.setMessage("Error:Failed To Insert Raw Material Group.");
+					
+				}else
+				{
+					errorMessage.setError(false);
+					errorMessage.setMessage(" Raw Material Group Saved Successfully.");
+					
+				}
+				
+				return errorMessage;
 			}
 }

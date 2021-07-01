@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class RawMaterialDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="rm_id")
 	private int rmId;
 	

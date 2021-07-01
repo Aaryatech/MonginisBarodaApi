@@ -26,5 +26,6 @@ public interface ItemSfHeaderRepo extends JpaRepository<ItemSfHeader, Integer>{
 	
 	List<ItemSfHeader> getSfHeader();
 	*/
-	
+	List<ItemSfHeader> findItemSfHeaderByDelStatusAndInt1(int i, int deptId);
+
 }
