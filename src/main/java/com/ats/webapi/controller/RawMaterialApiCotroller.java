@@ -36,6 +36,7 @@ import com.ats.webapi.model.rawmaterial.RmItemSubCategory;
 import com.ats.webapi.model.rawmaterial.RmRateVerification;
 import com.ats.webapi.repository.GetRawMaterialByGroupRepository;
 import com.ats.webapi.repository.RawMaterialDetailsRepository;
+import com.ats.webapi.repository.RmItemCategoryRepository;
 import com.ats.webapi.repository.RmItemGroupRepostitory;
 import com.ats.webapi.repository.RmRateVerificationListRepository;
 import com.ats.webapi.service.ItemService;
@@ -299,6 +300,16 @@ public class RawMaterialApiCotroller {
 		
 		return rmItemCategorieList;
 	}
+	
+	//SAC 01-07-2021
+	@Autowired RmItemCategoryRepository rmItemCat;
+	@RequestMapping(value = { "/getRmItemCategoriesALL" }, method = RequestMethod.POST)
+	public @ResponseBody List<RmItemCategory> getRmItemCategoriesALL(@RequestParam("grpId")int grpId)
+	{
+		List<RmItemCategory> rmItemCategorieList=rmItemCat.findAll();
+		return rmItemCategorieList;
+	}
+	
 	//----------------------------getAllGroup----------------------------------------
 	@RequestMapping(value = { "/getAllRmItemGroup" }, method = RequestMethod.GET)
 	public @ResponseBody List<RmItemGroup> getAllRmItemGroup()
